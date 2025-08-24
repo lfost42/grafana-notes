@@ -1,2 +1,4 @@
-# grafana-notes
-Grafana learning path notes
+# My Grafana Learning Notes
+
+![logo](./logo.png)
+
