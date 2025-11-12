@@ -8,6 +8,6 @@ Kubernetes defines the metrics, labels, and lifecycles we’re trying to visuali
 
 ---
 
-11/11/2025 Update: I earned my [Certified Kubernetes Application Developer](https://www.credly.com/badges/2c5458e2-0c2f-4458-9ec2-401355ee6539) over the weekend! 
+11/11/2025 Update: I became a [Certified Kubernetes Application Developer](https://www.credly.com/badges/2c5458e2-0c2f-4458-9ec2-401355ee6539) over the weekend! 
 
 There's nothing like completing a full course in Kubernetes to learn how much I still needed to learn! I just completed CKAD, the first cert in my goal to Kubstronaut. While I'm sure I can get what I need without KCNA and KCSA, work will pay for it and I do want that jacket! I know it won't put me on the same level as an enterprise SRE but I work with them pretty often and I'd like to be able to contribute more when I'm sitting at the table. Here are my [CKAD Learning Notes](k8s/CKAD.md)
