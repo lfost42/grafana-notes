@@ -12,4 +12,4 @@ Kubernetes defines the metrics, labels, and lifecycles we’re trying to visuali
 
 ---
 
-[CKA Learning Notes](k8s/CKA.md) Since this one digs into the architecture, it was time to set up [Linux VMs](CKAlab.md). 
+[CKA Learning Notes](k8s/CKA.md) Since this one digs into the architecture, it was time to set up [Linux VMs](k8s/CKAlab.md). 
