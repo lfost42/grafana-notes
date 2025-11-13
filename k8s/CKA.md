@@ -1,3 +1,3 @@
 # CKA Learning Notes
 
-[CKA Lab Setup]()
+[CKA Lab Setup](CKAlab.md)
