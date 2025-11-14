@@ -250,14 +250,14 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 4. **Install the Flannel CNI plugin**
 
 ```bash
-kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+k apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 ```
 
 5. **Verify the cluster**
 
 ```bash
-kubectl get nodes
-kubectl get pods -n kube-system
+k get nodes
+k get pods -n kube-system
 ```
 
 ## Part 2: Cluster Architecture, Installation & Configuration (25%)
@@ -288,14 +288,14 @@ You’ll use it on the worker nodes.
 3. **Install Calico CNI plugin**
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+k apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
 ```
 
 4. **Verify cluster and CNI**
 
 ```bash
-kubectl get pods -n kube-system
-kubectl get nodes
+k get pods -n kube-system
+k get nodes
 ```
 
 ---
@@ -313,7 +313,7 @@ sudo kubeadm join <control-plane-private-ip>:6443 --token <token>   --discovery-
 Then, on the Control Plane VM, verify:
 
 ```bash
-kubectl get nodes -o wide
+k get nodes -o wide
 ```
 
 ---
@@ -368,7 +368,7 @@ sudo systemctl restart kubelet
 > CKA critical command for safe maintenance.
 
 ```bash
-kubectl drain node01 --ignore-daemonsets
+k drain node01 --ignore-daemonsets
 ```
 
 ---
@@ -403,7 +403,7 @@ sudo systemctl restart kubelet
 *Run on the Control Plane VM.*
 
 ```bash
-kubectl uncordon node01
+k uncordon node01
 ```
 
 ---
@@ -480,8 +480,8 @@ sudo kubeadm join load-balancer.example.com:6443 --token <token>   --discovery-t
 #### Step 1 – Create Namespace and ServiceAccount
 
 ```bash
-kubectl create namespace rbac-test
-kubectl create serviceaccount dev-user -n rbac-test
+k create namespace rbac-test
+k create serviceaccount dev-user -n rbac-test
 ```
 
 ---
@@ -505,7 +505,7 @@ verbs: ["get", "list", "watch"]
 Apply:
 
 ```bash
-kubectl apply -f role.yaml
+k apply -f role.yaml
 ```
 
 ---
@@ -533,21 +533,21 @@ apiGroup: rbac.authorization.k8s.io
 Apply:
 
 ```bash
-kubectl apply -f rolebinding.yaml
+k apply -f rolebinding.yaml
 ```
 
 ---
 
 #### Step 4 – Verify Permissions
 
-> CKA Note: `kubectl auth can-i` is the definitive way to check effective permissions.
+> CKA Note: `k auth can-i` is the definitive way to check effective permissions.
 
 ```bash
 # Should be YES
-kubectl auth can-i list pods   --as=system:serviceaccount:rbac-test:dev-user -n rbac-test
+k auth can-i list pods   --as=system:serviceaccount:rbac-test:dev-user -n rbac-test
 
 # Should be NO
-kubectl auth can-i delete pods   --as=system:serviceaccount:rbac-test:dev-user -n rbac-test
+k auth can-i delete pods   --as=system:serviceaccount:rbac-test:dev-user -n rbac-test
 ```
 
 ---
@@ -645,13 +645,13 @@ EOF
 4. **Apply the Overlay**
 
 ```bash
-kubectl apply -k my-app/overlays/production
+k apply -k my-app/overlays/production
 ```
 
 5. **Verify**
 
 ```bash
-kubectl get deployment my-app
+k get deployment my-app
 ```
 
 ## Part 3: Workloads & Scheduling (15%)
@@ -693,20 +693,20 @@ ports:
 Apply:
 
 ```bash
-kubectl apply -f deployment.yaml
+k apply -f deployment.yaml
 ```
 
 2. **Trigger a Rolling Update (change image)**
 
 ```bash
-kubectl set image deployment/nginx-deployment nginx=nginx:1.25.0
+k set image deployment/nginx-deployment nginx=nginx:1.25.0
 ```
 
 3. **Observe the Rollout**
 
 ```bash
-kubectl rollout status deployment/nginx-deployment
-kubectl get pods -l app=nginx -w
+k rollout status deployment/nginx-deployment
+k get pods -l app=nginx -w
 ```
 
 ---
@@ -716,19 +716,19 @@ kubectl get pods -l app=nginx -w
 1. **View Revision History**
 
 ```bash
-kubectl rollout history deployment/nginx-deployment
+k rollout history deployment/nginx-deployment
 ```
 
 2. **Roll Back to Previous Version**
 
 ```bash
-kubectl rollout undo deployment/nginx-deployment
+k rollout undo deployment/nginx-deployment
 ```
 
 3. **Roll Back to a Specific Revision**
 
 ```bash
-kubectl rollout undo deployment/nginx-deployment --to-revision=1
+k rollout undo deployment/nginx-deployment --to-revision=1
 ```
 
 ---
@@ -743,17 +743,17 @@ kubectl rollout undo deployment/nginx-deployment --to-revision=1
 
 ```bash
 # From literals
-kubectl create configmap app-config   --from-literal=app.color=blue   --from-literal=app.mode=production
+k create configmap app-config   --from-literal=app.color=blue   --from-literal=app.mode=production
 
 # From a file
 echo "retries = 3" > config.properties
-kubectl create configmap app-config-file --from-file=config.properties
+k create configmap app-config-file --from-file=config.properties
 ```
 
 **Secret (Imperative)** – sensitive data:
 
 ```bash
-kubectl create secret generic db-credentials   --from-literal=username=admin   --from-literal=password='s3cr3t'
+k create secret generic db-credentials   --from-literal=username=admin   --from-literal=password='s3cr3t'
 ```
 
 ---
@@ -789,8 +789,8 @@ restartPolicy: Never
 Apply and verify:
 
 ```bash
-kubectl apply -f pod-config.yaml
-kubectl logs config-demo-pod
+k apply -f pod-config.yaml
+k logs config-demo-pod
 ```
 
 ---
@@ -822,8 +822,8 @@ restartPolicy: Never
 Apply and verify:
 
 ```bash
-kubectl apply -f pod-volume.yaml
-kubectl logs volume-demo-pod
+k apply -f pod-volume.yaml
+k logs volume-demo-pod
 ```
 
 ---
@@ -835,14 +835,14 @@ kubectl logs volume-demo-pod
 1. **Install Metrics Server**
 
 ```bash
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+k apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 ```
 
 2. **Verify**
 
 ```bash
-kubectl top nodes
-kubectl top pods -A
+k top nodes
+k top pods -A
 ```
 
 ---
@@ -852,26 +852,26 @@ kubectl top pods -A
 1. **Create a Deployment with Resource Requests**
 
 ```bash
-kubectl create deployment php-apache --image=k8s.gcr.io/hpa-example --requests="cpu=200m"
-kubectl expose deployment php-apache --port=80
+k create deployment php-apache --image=k8s.gcr.io/hpa-example --requests="cpu=200m"
+k expose deployment php-apache --port=80
 ```
 
 2. **Create an HPA**
 
 ```bash
-kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
+k autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
 ```
 
 3. **Generate Load**
 
 ```bash
-kubectl run -it --rm load-generator --image=busybox -- /bin/sh -c      "while true; do wget -q -O- http://php-apache; done"
+k run -it --rm load-generator --image=busybox -- /bin/sh -c      "while true; do wget -q -O- http://php-apache; done"
 ```
 
 4. **Observe Scaling**
 
 ```bash
-kubectl get hpa -w
+k get hpa -w
 ```
 
 Stop the load generator and observe scale down.
@@ -885,7 +885,7 @@ Stop the load generator and observe scale down.
 1. **Label a Node**
 
 ```bash
-kubectl label node node01 disktype=ssd
+k label node node01 disktype=ssd
 ```
 
 2. **Create a Pod with Node Affinity**
@@ -893,7 +893,7 @@ kubectl label node node01 disktype=ssd
 > Assumes `affinity-pod.yaml` contains the appropriate `nodeAffinity` spec.
 
 ```bash
-kubectl apply -f affinity-pod.yaml
+k apply -f affinity-pod.yaml
 ```
 
 ---
@@ -903,7 +903,7 @@ kubectl apply -f affinity-pod.yaml
 1. **Taint a Node (`NoSchedule`)**
 
 ```bash
-kubectl taint node node02 app=gpu:NoSchedule
+k taint node node02 app=gpu:NoSchedule
 ```
 
 2. **Create a Pod with Matching Toleration**
@@ -911,13 +911,13 @@ kubectl taint node node02 app=gpu:NoSchedule
 > Assumes `toleration-pod.yaml` contains the matching `tolerations` spec.
 
 ```bash
-kubectl apply -f toleration-pod.yaml
+k apply -f toleration-pod.yaml
 ```
 
 3. **Verify Scheduling**
 
 ```bash
-kubectl get pod gpu-pod -o wide
+k get pod gpu-pod -o wide
 ```
 
 ## Part 4: Services & Networking (20%)
@@ -933,19 +933,19 @@ kubectl get pod gpu-pod -o wide
 1. **Create a Deployment**
 
 ```bash
-kubectl create deployment my-app --image=nginx --replicas=2
+k create deployment my-app --image=nginx --replicas=2
 ```
 
 2. **Expose as ClusterIP**
 
 ```bash
-kubectl expose deployment my-app --port=80 --target-port=80      --name=my-app-service --type=ClusterIP
+k expose deployment my-app --port=80 --target-port=80      --name=my-app-service --type=ClusterIP
 ```
 
 3. **Verify Access from a Temporary Pod**
 
 ```bash
-kubectl run tmp-shell --rm -it --image=busybox -- /bin/sh
+k run tmp-shell --rm -it --image=busybox -- /bin/sh
 # Inside the shell:
 # wget -O- my-app-service
 ```
@@ -957,14 +957,14 @@ kubectl run tmp-shell --rm -it --image=busybox -- /bin/sh
 1. **Expose Deployment as NodePort**
 
 ```bash
-kubectl expose deployment my-app --port=80 --target-port=80      --name=my-app-nodeport --type=NodePort
+k expose deployment my-app --port=80 --target-port=80      --name=my-app-nodeport --type=NodePort
 ```
 
 2. **Get Service and Node IPs**
 
 ```bash
-kubectl get service my-app-nodeport
-kubectl get nodes -o wide
+k get service my-app-nodeport
+k get nodes -o wide
 ```
 
 Access externally via: `http://<NodeIP>:<NodePort>`
@@ -978,17 +978,17 @@ Access externally via: `http://<NodeIP>:<NodePort>`
 1. **Install NGINX Ingress Controller**
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/cloud/deploy.yaml
+k apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/cloud/deploy.yaml
 ```
 
 2. **Deploy Two Sample Apps and Services**
 
 ```bash
-kubectl create deployment app-one --image=k8s.gcr.io/echoserver:1.4
-kubectl expose deployment app-one --port=8080
+k create deployment app-one --image=k8s.gcr.io/echoserver:1.4
+k expose deployment app-one --port=8080
 
-kubectl create deployment app-two --image=k8s.gcr.io/echoserver:1.4
-kubectl expose deployment app-two --port=8080
+k create deployment app-two --image=k8s.gcr.io/echoserver:1.4
+k expose deployment app-two --port=8080
 ```
 
 3. **Create an Ingress Resource**
@@ -996,13 +996,13 @@ kubectl expose deployment app-two --port=8080
 > Assumes `ingress.yaml` defines path-based routing to `app-one` and `app-two`.
 
 ```bash
-kubectl apply -f ingress.yaml
+k apply -f ingress.yaml
 ```
 
 4. **Test Ingress**
 
 ```bash
-INGRESS_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller      -o jsonpath='{.status.loadBalancer.ingress.ip}')
+INGRESS_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress.ip}')
 curl http://$INGRESS_IP/app1
 curl http://$INGRESS_IP/app2
 ```
@@ -1033,20 +1033,20 @@ policyTypes:
 Apply:
 
 ```bash
-kubectl apply -f deny-all.yaml
+k apply -f deny-all.yaml
 ```
 
 2. **Deploy a Web Server and Service**
 
 ```bash
-kubectl create deployment web-server --image=nginx
-kubectl expose deployment web-server --port=80
+k create deployment web-server --image=nginx
+k expose deployment web-server --port=80
 ```
 
 3. **Attempt Connection (should fail)**
 
 ```bash
-kubectl run tmp-shell --rm -it --image=busybox -- /bin/sh -c      "wget -O- --timeout=2 web-server"
+k run tmp-shell --rm -it --image=busybox -- /bin/sh -c      "wget -O- --timeout=2 web-server"
 ```
 
 4. **Create Allow Policy**
@@ -1077,13 +1077,13 @@ port: 80
 Apply:
 
 ```bash
-kubectl apply -f allow-web-access.yaml
+k apply -f allow-web-access.yaml
 ```
 
 5. **Test Allowed Access (should succeed)**
 
 ```bash
-kubectl run tmp-shell --rm -it --labels=access=true --image=busybox --      /bin/sh -c "wget -O- web-server"
+k run tmp-shell --rm -it --labels=access=true --image=busybox --      /bin/sh -c "wget -O- web-server"
 ```
 
 ---
@@ -1095,7 +1095,7 @@ kubectl run tmp-shell --rm -it --labels=access=true --image=busybox --      /bin
 1. **Edit CoreDNS ConfigMap**
 
 ```bash
-kubectl edit configmap coredns -n kube-system
+k edit configmap coredns -n kube-system
 ```
 
 2. **Add a New Server Block (inside `data.Corefile`)**
@@ -1141,7 +1141,7 @@ path: "/mnt/data"
 Apply:
 
 ```bash
-kubectl apply -f pv.yaml
+k apply -f pv.yaml
 ```
 
 ---
@@ -1167,13 +1167,13 @@ storage: 3Gi
 Apply:
 
 ```bash
-kubectl apply -f pvc.yaml
+k apply -f pvc.yaml
 ```
 
 Verify binding:
 
 ```bash
-kubectl get pv,pvc
+k get pv,pvc
 ```
 
 ---
@@ -1203,7 +1203,7 @@ claimName: task-pv-claim
 Apply:
 
 ```bash
-kubectl apply -f pod-storage.yaml
+k apply -f pod-storage.yaml
 ```
 
 ---
@@ -1213,7 +1213,7 @@ kubectl apply -f pod-storage.yaml
 #### Step 1 – Inspect StorageClasses
 
 ```bash
-kubectl get storageclass
+k get storageclass
 ```
 
 #### Step 2 – Create a PVC Without a PV (Dynamic Provisioning)
@@ -1236,13 +1236,13 @@ storage: 1Gi
 Apply:
 
 ```bash
-kubectl apply -f dynamic-pvc.yaml
+k apply -f dynamic-pvc.yaml
 ```
 
 Observe dynamic PV creation:
 
 ```bash
-kubectl get pv
+k get pv
 ```
 
 ## Part 6: Troubleshooting (30%)
@@ -1256,25 +1256,25 @@ kubectl get pv
 1. **Describe a Pod** (first command for debugging):
 
 ```bash
-kubectl describe pod <pod-name>
+k describe pod <pod-name>
 ```
 
 2. **Check Current Container Logs**
 
 ```bash
-kubectl logs <pod-name>
+k logs <pod-name>
 ```
 
 3. **Check Logs from Previous Crashed Container**
 
 ```bash
-kubectl logs <pod-name> --previous
+k logs <pod-name> --previous
 ```
 
 4. **Get a Shell Inside a Container**
 
 ```bash
-kubectl exec -it <pod-name> -- /bin/sh
+k exec -it <pod-name> -- /bin/sh
 ```
 
 ---
@@ -1284,19 +1284,19 @@ kubectl exec -it <pod-name> -- /bin/sh
 1. **Check Node Status**
 
 ```bash
-kubectl get nodes
+k get nodes
 ```
 
 2. **Describe a Node**
 
 ```bash
-kubectl describe node controlplane
+k describe node controlplane
 ```
 
 3. **View Node Resource Capacity (for scheduling)**
 
 ```bash
-kubectl describe node controlplane | grep Allocatable
+k describe node controlplane | grep Allocatable
 ```
 
 4. **Check `kubelet` Service (on Node VM via SSH)**
@@ -1309,7 +1309,7 @@ sudo journalctl -u kubelet -f
 5. **Re-enable Scheduling on a Cordoned Node**
 
 ```bash
-kubectl uncordon node01
+k uncordon node01
 ```
 
 ---
@@ -1319,19 +1319,19 @@ kubectl uncordon node01
 1. **Check Service and Endpoints**
 
 ```bash
-kubectl describe service <service-name>
+k describe service <service-name>
 ```
 
 2. **Check DNS Resolution from a Client Pod**
 
 ```bash
-kubectl exec -it client-pod -- nslookup <service-name>
+k exec -it client-pod -- nslookup <service-name>
 ```
 
 3. **Check Network Policies**
 
 ```bash
-kubectl get networkpolicy
+k get networkpolicy
 ```
 
 ---
@@ -1341,13 +1341,13 @@ kubectl get networkpolicy
 1. **Node Resource Usage (requires Metrics Server)**
 
 ```bash
-kubectl top nodes
+k top nodes
 ```
 
 2. **Pod Resource Usage**
 
 ```bash
-kubectl top pods -n <namespace>
+k top pods -n <namespace>
 ```
 
 
