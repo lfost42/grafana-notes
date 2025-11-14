@@ -195,7 +195,7 @@ sudo systemctl enable containerd
 ```bash
 sudo swapoff -a
 # Comment out swap in fstab to make it persistent:
-sudo sed -i '/ swap / s/^\(.*\)$/#\/g' /etc/fstab
+sudo sed -i '/\sswap\s/s/^/#/' /etc/fstab
 ```
 
 2. **Add Kubernetes apt repository (for v1.33)**  
