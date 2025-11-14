@@ -2,6 +2,8 @@
 
 I was following [FreeCodeCamp](https://www.youtube.com/watch?v=Fr9GqFwl6NM) and realized there is an insignificant number of people who will have a bad time trying to follow it. I'm hoping these instructions help more people create a CKA lab environment on a mac while following the video. 
 
+This was a heavy installation for my macbook air but I'll be setting up and sharing a slimmer version once I get what I need out of this one!
+
 ## Part 1.1: Lab VM Setup (Apple Silicon Mac)
 
 This guide requires three virtual machines: `control`, `node01`, and `node02`.  
