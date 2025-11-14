@@ -23,10 +23,8 @@ You’ll create them on an ARM-based MacBook using the free UTM app.
 
 2. **Download Ubuntu Server for ARM**
 
-- Go to the Ubuntu Server for ARM page:  
-<https://ubuntu.com/download/server/arm>  
-- Download the **Ubuntu Server for ARM (aarch64)** ISO.  
-- A “live server” ISO is a good choice.
+- Go to the [Ubuntu Desktop](https://ubuntu.com/download/desktop) for ARM page:  
+- Download the **Ubuntu Desktop for ARM (aarch64)** ISO.  
 
 ---
 
