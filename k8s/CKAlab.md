@@ -198,7 +198,7 @@ sudo swapoff -a
 sudo sed -i '/\sswap\s/s/^/#/' /etc/fstab
 ```
 
-2. **Add Kubernetes apt repository (for v1.33)**  
+2. **Add Kubernetes apt repository (for v1.31)**  
 
 > Note: You will later practice upgrading to v1.34 in Part 2, Section 2.2.
 
@@ -207,9 +207,11 @@ sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl gpg
 
 sudo mkdir -p -m 755 /etc/apt/keyrings
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key      | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /'      | sudo tee /etc/sources.list.d/kubernetes.list
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /" \
+  | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 
 3. **Install and hold binaries (`kubelet`, `kubeadm`, `kubectl`)**
