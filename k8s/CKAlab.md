@@ -2,7 +2,7 @@
 
 I was following [FreeCodeCamp](https://www.youtube.com/watch?v=Fr9GqFwl6NM) and realized there is an insignificant number of people who will have a bad time trying to follow it. I'm hoping these instructions help more people create a CKA lab environment on a mac while following the video. 
 
-This was a heavy installation for my macbook air but I'll be setting up and sharing a slimmer version once I get what I need out of this one!
+The video uses Ubuntu but it was too big for my Macbook Air so I converted the instructions to use Alpine. 
 
 ## Part 1.1: Lab VM Setup (Apple Silicon Mac)
 
@@ -20,13 +20,13 @@ You’ll create them on an ARM-based MacBook using the free UTM app.
 
 1. **Download UTM**
 
-- Download and install the latest version of UTM from:  
+- Download and install the latest version of UTM from: 
 <https://mac.getutm.app/>
 
 2. **Download Ubuntu Server for ARM**
 
-- Go to the [Ubuntu Desktop](https://ubuntu.com/download/desktop) for ARM page:  
-- Download the **Ubuntu Desktop for ARM (aarch64)** ISO.  
+- Go to the [Alpine Linux](https://www.alpinelinux.org/downloads/) download page: 
+- Download the **VIRTUAL armv7** iso. 
 
 ---
 
@@ -41,18 +41,18 @@ You’ll create them on an ARM-based MacBook using the free UTM app.
 
 2. **Allocate Resources** (minimum recommended for CKA lab):
 
-- CPUs: `2` or more  
-- Memory: `4096 MB` (4 GB) or more  
-- Storage: `25 GB` or more  
+- CPUs: `2` or more 
+- Memory: `4096 MB` (4 GB) or more 
+- Storage: `25 GB` or more 
 
-Click **Continue**, skip **Shared Directory**, and give your VM a name like `control`.  
+Click **Continue**, skip **Shared Directory**, and give your VM a name like `control`. 
 Click **Save**.
 
 3. **Configure Networking (Crucial)**
 
 - In the UTM sidebar, right-click the `control` VM and select **Edit**.
 - Go to the **Network** tab.
-- Change **Network Mode** from `Shared` to **Bridged (Advanced)**.  
+- Change **Network Mode** from `Shared` to **Bridged (Advanced)**. 
 > This is essential so nodes can communicate directly on your local network.
 - Click **Save**.
 
@@ -60,8 +60,8 @@ Click **Save**.
 
 ### Step 3 – Clone the VM Configurations
 
-1. In the UTM sidebar, right-click the `control` VM and select **Clone...**  
-2. Name the new VM **`node01`** and click **Clone**.  
+1. In the UTM sidebar, right-click the `control` VM and select **Clone...** 
+2. Name the new VM **`node01`** and click **Clone**. 
 3. Repeat the process, cloning `control` again to create **`node02`**.
 
 You now have three identical VM configurations, all sharing the correct network setting.
@@ -78,8 +78,8 @@ You now have three identical VM configurations, all sharing the correct network 
 2. Follow the Ubuntu Server installation prompts on each VM.
 3. During installation, set a unique hostname for each:
 
-- First VM: `control`  
-- Second VM: `node01`  
+- First VM: `control` 
+- Second VM: `node01` 
 - Third VM: `node02`
 
 4. After installation, find the VM’s IP address on each node:
@@ -99,8 +99,8 @@ Note each IP somewhere safe.
 Install helpful tools such as Vim and Tmux:
 
 ```bash
-sudo apt update
-sudo apt install -y vim tmux
+sudo apk update
+sudo apk install -y vim tmux
 ```
 
 ### Step 3 – Install Kubectl Alias
@@ -118,7 +118,7 @@ source ~/.bashrc
 
 ### Kubernetes Components Overview
 
-| Component                  | Node Type              | Role & Function                                                                                          |
+| Component                 | Node Type              | Role & Function                                                                                          |
 |---------------------------|------------------------|----------------------------------------------------------------------------------------------------------|
 | `kube-apiserver`          | Control Plane          | Front-end for the Control Plane. Exposes the Kubernetes API, performs authentication, validates data.   |
 | `etcd`                    | Control Plane          | Key-value store for cluster state, configuration data, and metadata. Critical for cluster health.       |
@@ -163,8 +163,8 @@ sudo sysctl --system
 3. **Install containerd** (container runtime):
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y containerd
+sudo apk update
+sudo apk install -y containerd
 ```
 
 4. **Configure containerd for `systemd` cgroup driver**  
@@ -198,13 +198,13 @@ sudo swapoff -a
 sudo sed -i '/\sswap\s/s/^/#/' /etc/fstab
 ```
 
-2. **Add Kubernetes apt repository (for v1.33)**  
+2. **Add Kubernetes apk repository (for v1.33)**  
 
 > Note: You will later practice upgrading to v1.34 in Part 2, Section 2.2.
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+sudo apk update
+sudo apk install -y apt-transport-https ca-certificates curl gpg
 
 sudo mkdir -p -m 755 /etc/apt/keyrings
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key \
@@ -217,8 +217,8 @@ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 3. **Install and hold binaries (`kubelet`, `kubeadm`, `kubectl`)**
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
+sudo apk update
+sudo apk install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
@@ -276,17 +276,13 @@ k get pods -n kube-system
 
 *Run on the Control Plane VM.*
 
-1. **Run `kubeadm init`**
-
-`--apiserver-advertise-address` is the IP other nodes use to reach the API server:
+1. Recall your kubeadm join command. 
 
 ```bash
-sudo kubeadm init --pod-network-cidr=192.168.0.0/16      --apiserver-advertise-address=<control-plane-private-ip>
+
 ```
 
 2. **Save the join command**  
-
-Copy the `kubeadm join ...` command printed at the end of `kubeadm init`.  
 You’ll use it on the worker nodes.
 
 3. **Install Calico CNI plugin**
@@ -331,7 +327,7 @@ k get nodes -o wide
 
 ```bash
 sudo apt-mark unhold kubeadm
-sudo apt-get update && sudo apt-get install -y kubeadm='1.34.0-1.1'
+sudo apk update && sudo apk install -y kubeadm='1.34.0-1.1'
 sudo apt-mark hold kubeadm
 ```
 
@@ -357,7 +353,7 @@ sudo kubeadm upgrade apply v1.34.0
 
 ```bash
 sudo apt-mark unhold kubelet kubectl
-sudo apt-get update && sudo apt-get install -y kubelet='1.34.0-1.1' kubectl='1.34.0-1.1'
+sudo apk update && sudo apk install -y kubelet='1.34.0-1.1' kubectl='1.34.0-1.1'
 sudo apt-mark hold kubelet kubectl
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
@@ -383,8 +379,8 @@ k drain node01 --ignore-daemonsets
 
 ```bash
 sudo apt-mark unhold kubeadm kubelet
-sudo apt-get update
-sudo apt-get install -y kubeadm='1.34.0-1.1' kubelet='1.34.0-1.1'
+sudo apk update
+sudo apk install -y kubeadm='1.34.0-1.1' kubelet='1.34.0-1.1'
 sudo apt-mark hold kubeadm kubelet
 ```
 
