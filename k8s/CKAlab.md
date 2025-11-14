@@ -101,6 +101,15 @@ sudo apt update
 sudo apt install -y vim tmux
 ```
 
+### Step 3 – Install Kubectl Alias
+
+*Add the alias to your bash config, then reload your shell config.*
+
+```bash
+echo 'alias k=kubectl' >> ~/.bashrc
+source ~/.bashrc
+```
+
 ---
 
 ## Part 1.3: Kubernetes Setup
