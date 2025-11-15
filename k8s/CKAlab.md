@@ -274,31 +274,7 @@ k get pods -n kube-system
 
 *Run on the Control Plane VM.*
 
-1. Recall your kubeadm join command. 
-
-```bash
-
-```
-
-2. **Save the join command**  
-You’ll use it on the worker nodes.
-
-3. **Install Calico CNI plugin**
-
-```bash
-k apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
-```
-
-4. **Verify cluster and CNI**
-
-```bash
-k get pods -n kube-system
-k get nodes
-```
-
----
-
-#### Step 2 – Joining Worker Nodes
+#### Step 1 – Joining Worker Nodes
 
 *Run on each Worker VM (e.g., `node01`, `node02`).*
 
@@ -443,31 +419,17 @@ sudo systemctl start kubelet
 
 #### Step 1 – Initialize the First Control-Plane Node
 
-*Run on the first Control Plane VM (e.g., `control`).*
-
-- `--control-plane-endpoint` : Address of the external load balancer.
-- `--upload-certs` : Uploads certs for additional control-plane nodes.
+*Run on the first Control Plane VM (e.g., `control`) to capture the join command.*
 
 ```bash
-sudo kubeadm init --control-plane-endpoint "load-balancer.example.com:6443" --upload-certs
+kubeadm token create --print-join-command
 ```
-
-Save:
-
-- The HA `kubeadm join` command for control-plane nodes  
-- The `--certificate-key` printed in the output
 
 ---
 
 #### Step 2 – Join Additional Control-Plane Nodes
 
-*Run on the second and third Control Plane VMs.*
-
-Use the HA join command from the previous step:
-
-```bash
-sudo kubeadm join load-balancer.example.com:6443 --token <token>   --discovery-token-ca-cert-hash sha256:<hash>   --control-plane --certificate-key <key>
-```
+*Paste the output from the previous step to the workder nodes*
 
 ---
 
