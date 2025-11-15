@@ -92,10 +92,12 @@ Setup Root and install helpful tools:
 
 ```bash
 su -
-<enter password>
+# <enter password>
+```
+
+```bash
 usermod -aG sudo control
 sudo -i
-
 sudo apt update
 sudo apt install -y vim tmux
 ```
