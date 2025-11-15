@@ -204,14 +204,23 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 ### Step 3 – Install CNI Binaries
 
+
+```bash
 sudo apt-get install -y kubernetes-cni
+```
 
 **DEBIAN ONLY: kubelet searches /usr/lib/cni but Debian installs to /opt/cni/bin**
+
+```bash
 sudo mkdir -p /usr/lib/cni
 sudo cp -a /opt/cni/bin/* /usr/lib/cni/
+```
 
+Restart kubelet (all distros). 
+
+```bash
 sudo systemctl restart kubelet
-
+```
 
 ## Part 2: Cluster Architecture, Installation & Configuration (25%)
 
