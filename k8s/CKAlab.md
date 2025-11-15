@@ -206,7 +206,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 sudo apt-get install -y kubernetes-cni
 
-# DEBIAN ONLY: kubelet searches /usr/lib/cni but Debian installs to /opt/cni/bin
+**DEBIAN ONLY: kubelet searches /usr/lib/cni but Debian installs to /opt/cni/bin**
 sudo mkdir -p /usr/lib/cni
 sudo cp -a /opt/cni/bin/* /usr/lib/cni/
 
