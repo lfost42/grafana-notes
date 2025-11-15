@@ -82,15 +82,20 @@ You now have three identical VM configurations, all sharing the correct network 
 - Second VM: `node01` 
 - Third VM: `node02`
 
+4. Once installation completes, shut down the terminal, then edit each instance so that the VirtIO Drive is above UBB Drive. Then start the machine. 
+
 ---
 
 ### Step 2 – Install Essential Utilities
 
-*Run on the Control Plane VM and all Worker VMs (via SSH).*
-
-Install helpful tools such as Vim and Tmux:
+Setup Root and install helpful tools:
 
 ```bash
+su -
+<enter password>
+usermod -aG sudo control
+sudo -i
+
 sudo apt update
 sudo apt install -y vim tmux
 ```
