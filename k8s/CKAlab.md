@@ -2,7 +2,7 @@
 
 I was following [FreeCodeCamp](https://www.youtube.com/watch?v=Fr9GqFwl6NM) and realized there is an insignificant number of people who will have a bad time trying to follow it. I'm hoping these instructions help more people create a CKA lab environment on a mac while following the video. 
 
-The video uses Ubuntu but it was too big for my Macbook Air so I converted the instructions to use Alpine. 
+The video uses Ubuntu but it was too big for my Macbook Air so I converted the instructions to use Debian. 
 
 ## Part 1.1: Lab VM Setup (Apple Silicon Mac)
 
@@ -25,8 +25,8 @@ You’ll create them on an ARM-based MacBook using the free UTM app.
 
 2. **Download Ubuntu Server for ARM**
 
-- Go to the [Alpine Linux](https://www.alpinelinux.org/downloads/) download page: 
-- Download the **VIRTUAL armv7** iso. 
+- Go to the [Debian arm64](https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/) download page: 
+- Download the **debian-xx.x.x-arm64-netinst.iso** image. 
 
 ---
 
@@ -99,8 +99,8 @@ Note each IP somewhere safe.
 Install helpful tools such as Vim and Tmux:
 
 ```bash
-sudo apk update
-sudo apk install -y vim tmux
+sudo apt update
+sudo apt install -y vim tmux
 ```
 
 ### Step 3 – Install Kubectl Alias
@@ -163,8 +163,8 @@ sudo sysctl --system
 3. **Install containerd** (container runtime):
 
 ```bash
-sudo apk update
-sudo apk install -y containerd
+sudo apt update
+sudo apt install -y containerd
 ```
 
 4. **Configure containerd for `systemd` cgroup driver**  
@@ -198,13 +198,13 @@ sudo swapoff -a
 sudo sed -i '/\sswap\s/s/^/#/' /etc/fstab
 ```
 
-2. **Add Kubernetes apk repository (for v1.33)**  
+2. **Add Kubernetes apt repository (for v1.33)**  
 
 > Note: You will later practice upgrading to v1.34 in Part 2, Section 2.2.
 
 ```bash
-sudo apk update
-sudo apk install -y apt-transport-https ca-certificates curl gpg
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl gpg
 
 sudo mkdir -p -m 755 /etc/apt/keyrings
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key \
@@ -217,8 +217,8 @@ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 3. **Install and hold binaries (`kubelet`, `kubeadm`, `kubectl`)**
 
 ```bash
-sudo apk update
-sudo apk install -y kubelet kubeadm kubectl
+sudo apt update
+sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
@@ -327,7 +327,7 @@ k get nodes -o wide
 
 ```bash
 sudo apt-mark unhold kubeadm
-sudo apk update && sudo apk install -y kubeadm='1.34.0-1.1'
+sudo apt update && sudo apt install -y kubeadm='1.34.0-1.1'
 sudo apt-mark hold kubeadm
 ```
 
@@ -353,7 +353,7 @@ sudo kubeadm upgrade apply v1.34.0
 
 ```bash
 sudo apt-mark unhold kubelet kubectl
-sudo apk update && sudo apk install -y kubelet='1.34.0-1.1' kubectl='1.34.0-1.1'
+sudo apt update && sudo apt install -y kubelet='1.34.0-1.1' kubectl='1.34.0-1.1'
 sudo apt-mark hold kubelet kubectl
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
@@ -379,8 +379,8 @@ k drain node01 --ignore-daemonsets
 
 ```bash
 sudo apt-mark unhold kubeadm kubelet
-sudo apk update
-sudo apk install -y kubeadm='1.34.0-1.1' kubelet='1.34.0-1.1'
+sudo apt update
+sudo apt install -y kubeadm='1.34.0-1.1' kubelet='1.34.0-1.1'
 sudo apt-mark hold kubeadm kubelet
 ```
 
