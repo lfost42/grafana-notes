@@ -96,7 +96,10 @@ su -
 ```
 
 ```bash
-usermod -aG sudo control
+usermod -aG sudo #hostname
+```
+
+```bash
 sudo -i
 sudo apt update
 sudo apt install -y vim tmux
