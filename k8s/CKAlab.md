@@ -207,8 +207,6 @@ sudo apt-mark hold kubelet kubeadm kubectl
 ```bash
 sudo apt-get update
 sudo apt-get install -y kubernetes-cni
-k get nodes
-k get pods -n kube-system
 ```
 
 ---
@@ -222,20 +220,37 @@ Note: we previously stored the IP address in $IP during setup.*
 
 ### Section 2.1: Bootstrapping a Multi-Node Cluster with kubeadm
 
-#### Step 1 – Capture the join command.
+#### Step 1 – Set up kubeconfig and capture the join command.
 
-Pod-network-cidr specifies the IP range for the CNI plugin (Flannel defaults to 10.244.0.0/16). Apiserver-advertise-address is the IP the API server uses to advertise itself to the rest of the cluster. Crucially, this command outputs the kubeadm join token—SAVE THIS for the worker nodes.
+Set up kubeconfig and check that it's up and running.
 
 ```bash
+#Control VM
+mkdir -p ~/.kube
+sudo cp /etc/kubernetes/admin.conf ~/.kube/config
+sudo chown $(id -u):$(id -g) ~/.kube/config
+k get nodes
+k get pods -n kube-system
+```
+
+Pod-network-cidr specifies the IP range for the CNI plugin (Flannel defaults to 10.244.0.0/16). Apiserver-advertise-address is the IP the API server uses to advertise itself to the rest of the cluster. Crucially, this command outputs the kubeadm join token—SAVE THIS for the worker nodes. (control plane only)
+
+```bash
+#Control VM
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$IP
 ```
-** Apply output to worker nodes. **
 
-#### Step 2 – Verify join
-
-On the Control Plane VM, check that nodes attached successfully:
+Apply OUTPUT from control node to worker nodes. 
 
 ```bash
+# Worker VMs
+# kubeadm join <control.ip.address> --token <token> --discovery-token-ca-cert-hash sha256:<hash> # example only, do not apply
+```
+
+Back on the Control Plane VM, check that nodes attached successfully:
+
+```bash
+# Control VM
 k get nodes
 ```
 
