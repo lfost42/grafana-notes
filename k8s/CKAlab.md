@@ -43,7 +43,7 @@ You’ll create them on an ARM-based MacBook using the free UTM app.
 
 - CPUs: `2` or more 
 - Memory: `4096 MB` (4 GB) or more 
-- Storage: `20 GB` or more 
+- Storage: `10 GB` or more 
 
 Click **Continue**, skip **Shared Directory**, and give your VM a name like `control`. 
 Click **Save**.
