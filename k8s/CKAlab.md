@@ -266,7 +266,7 @@ Apply OUTPUT from control node to worker nodes.
 # sudo kubeadm token create --print-join-command #on the control node
 ```
 
-Back on the Control Plane VM, check that nodes attached successfully:
+Back on the Control Plane VM, check that nodes attached successfully. This will not work on any of the worker nodes:
 
 ```bash
 # Control VM
