@@ -236,12 +236,6 @@ Note: we previously stored the IP address in $IP during setup.*
 
 Pod-network-cidr specifies the IP range for the CNI plugin (Flannel defaults to 10.244.0.0/16). Apiserver-advertise-address is the IP the API server uses to advertise itself to the rest of the cluster. Crucially, this command outputs the kubeadm join token—SAVE THIS for the worker nodes. (control plane only)
 
-**Control node only.**
-
-```bash
-kubectl -n kube-system get pods -o wide -w # watch system pods until they go Running
-```
-
 ```bash
 #Control VM
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$IP
@@ -254,6 +248,10 @@ Set up kubeconfig.
 mkdir -p ~/.kube
 sudo cp /etc/kubernetes/admin.conf ~/.kube/config
 sudo chown $(id -u):$(id -g) ~/.kube/config
+```
+
+```bash
+kubectl -n kube-system get pods -o wide -w # watch system pods until they go Running
 ```
 
 **Install Calico CNI Plugin
