@@ -23,7 +23,7 @@ You’ll create them on an ARM-based MacBook using the free UTM app.
 - Download and install the latest version of UTM from: 
 <https://mac.getutm.app/>
 
-2. **Download Ubuntu Server for ARM**
+2. **Download Debian iso for ARM**
 
 - Go to the [Debian arm64](https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/) download page: 
 - Download the **debian-xx.x.x-arm64-netinst.iso** image. 
@@ -37,7 +37,7 @@ You’ll create them on an ARM-based MacBook using the free UTM app.
 - Open **UTM** and click the **+** icon to create a new virtual machine.
 - Select **Virtualize**.
 - Select **Linux**.
-- Under **Boot ISO Image**, click **Browse** and select the Ubuntu Server ARM ISO you downloaded.
+- Under **Boot ISO Image**, click **Browse** and select the Debian ARM ISO you downloaded.
 
 2. **Allocate Resources** (minimum recommended for CKA lab):
 
@@ -75,20 +75,12 @@ You now have three identical VM configurations, all sharing the correct network 
 ### Step 1 – Install the OS and Set Hostnames
 
 1. Start all three VMs: `control`, `node01`, `node02` (one by one).
-2. Follow the Ubuntu Server installation prompts on each VM.
+2. Follow the Debian installation prompts on each VM.
 3. During installation, set a unique hostname for each:
 
 - First VM: `control` 
 - Second VM: `node01` 
 - Third VM: `node02`
-
-4. After installation, find the VM’s IP address on each node:
-
-```bash
-ip a
-```
-
-Note each IP somewhere safe.
 
 ---
 
@@ -105,11 +97,12 @@ sudo apt install -y vim tmux
 
 ### Step 3 – Install Kubectl Alias
 
-*Add the alias to your bash config, then reload your shell config.*
+*Add the alias to your bash config, reload your shell config, then save your IP address.*
 
 ```bash
 echo 'alias k=kubectl' >> ~/.bashrc
 source ~/.bashrc
+IP=$(hostname -I | awk '{print $1}')
 ```
 
 ---
