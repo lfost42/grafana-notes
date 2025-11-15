@@ -2,17 +2,18 @@
 
 I was following [FreeCodeCamp](https://www.youtube.com/watch?v=Fr9GqFwl6NM) and realized there is an insignificant number of people who will have a bad time trying to follow it. I'm hoping these instructions help more people create a CKA lab environment on a mac while following the video. 
 
-The video uses Ubuntu but it was too big for my Macbook Air so I converted the instructions to use Debian. 
+
 
 ## Part 1.1: Lab VM Setup (Apple Silicon Mac)
 
 This guide requires three virtual machines: `control`, `node01`, and `node02`.  
 To practice the entire guide, you will need:
 
+- 200GB free space
 - 1 × Control Plane VM  
 - 2 × Worker VMs (minimum)
 
-You’ll create them on an ARM-based MacBook using the free UTM app.
+I created this on an ARM-based MacBook using the free UTM app.
 
 ---
 
@@ -25,8 +26,8 @@ You’ll create them on an ARM-based MacBook using the free UTM app.
 
 2. **Download Debian iso for ARM**
 
-- Go to the [Debian arm64](https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/) download page: 
-- Download the **debian-xx.x.x-arm64-netinst.iso** image. 
+- Go to the [Ubuntu arm64](https://ubuntu.com/download/desktop) download page: 
+- Look for the **ARM 64-bit architecture** image. 
 
 ---
 
@@ -43,7 +44,7 @@ You’ll create them on an ARM-based MacBook using the free UTM app.
 
 - CPUs: `2` or more 
 - Memory: `4096 MB` (4 GB) or more 
-- Storage: `10 GB` or more 
+- Storage: `64 GB` or more 
 
 Click **Continue**, skip **Shared Directory**, and give your VM a name like `control`. 
 Click **Save**.
@@ -91,19 +92,7 @@ You now have three identical VM configurations, all sharing the correct network 
 Setup Root and install helpful tools:
 
 ```bash
-su -
-# <enter password>
-```
-
-```bash
-usermod -aG sudo #hostname
-```
-
-```bash
-sudo -i
-```
-```bash
-sudo apt update
+sudo apt update && upgrade
 sudo apt install -y vim tmux
 ```
 
@@ -140,20 +129,20 @@ IP=$(hostname -I | awk '{print $1}')
 *Run on the Control Plane VM and all Worker VMs.*
 
 1. **Load required kernel modules**  
-(Required for Kubernetes networking and CNI functionality):
+The first command uses cat and tee to create a
+configuration file (k8s.conf) that ensures the overlay (for container storage) and br_netfilter (for Kubernetes networking) kernel modules are loaded at boot. The modprobe commands immediately load these modules.
 
 ```bash
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
-
 sudo modprobe overlay
 sudo modprobe br_netfilter
 ```
 
 2. **Configure sysctl for networking**  
-(Enables IP forwarding and bridge settings needed by Kubernetes):
+These commands create a configuration file setting required kernel parameters. They ensure IP tables correctly see bridged traffic and enable IPv4 forwarding. The sysctl --system command immediately applies these network settings.
 
 ```bash
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
@@ -161,29 +150,20 @@ net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
-
 sudo sysctl --system
 ```
 
 3. **Install containerd** (container runtime):
+The sed command modifies the configuration to set SystemdCgroup = true. This is crucial because kubelet requires the systemd cgroup driver to interact correctly with containerd. The systemctl commands restart the service to apply the new
+configuration and enable it to start automatically on boot.
 
 ```bash
-sudo apt update
-sudo apt install -y containerd
-```
-
-4. **Configure containerd for `systemd` cgroup driver**  
-> CKA Note: This is required for consistent resource management between Kubernetes and containerd.
-
-```bash
+sudo apt-get update
+sudo apt-get install -y containerd
 sudo mkdir -p /etc/containerd
 sudo containerd config default | sudo tee /etc/containerd/config.toml
 sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
-```
-
-5. **Restart and enable containerd**
-
-```bash
+sudo sed -i 's#registry.k8s.io/pause:3.8#registry.k8s.io/pause:3.10#' /etc/containerd/config.toml
 sudo systemctl restart containerd
 sudo systemctl enable containerd
 ```
@@ -192,7 +172,7 @@ sudo systemctl enable containerd
 
 ### Step 2 – Install Kubernetes Binaries
 
-*Run on the Control Plane VM and all Worker VMs.*
+*Run on the Control Plane VM and all Worker VMs.* swapoff -a disables all swap, which is a strict requirement for Kubernetes. The sed command comments out (disables) swap entries in the /etc/fstab file, making the change persistent across reboots.
 
 1. **Disable swap**  
 > CKA Note: Kubernetes requires swap to be disabled.
@@ -210,16 +190,13 @@ sudo sed -i '/\sswap\s/s/^/#/' /etc/fstab
 ```bash
 sudo apt update
 sudo apt install -y apt-transport-https ca-certificates curl gpg
-
 sudo mkdir -p -m 755 /etc/apt/keyrings
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key \
-  | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /" \
-  | sudo tee /etc/apt/sources.list.d/kubernetes.list
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 
 3. **Install and hold binaries (`kubelet`, `kubeadm`, `kubectl`)**
+Kubelet (node agent), kubeadm (cluster bootstrap tool), and kubectl (CLI client) are installed. Apt-mark hold locks the package versions to prevent accidental upgrades that could destabilize the cluster.
 
 ```bash
 sudo apt update
@@ -227,53 +204,21 @@ sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
----
-
-### Step 3 – Configure a Single-Node Cluster ** CONTROL PLANE VM ONLY **
-
-*Run on the Control Plane VM only, do not run on worker nodes.*
-
-1. **Initialize the control-plane node**
-
-`--pod-network-cidr=10.244.0.0/16` reserves IP range for Flannel CNI:
+4. **Install standard CNI plugins (loopback, bridge, etc.)**
 
 ```bash
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16
-```
-
-2. **Configure `kubectl` for the current user**
-
-```bash
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-unset KUBECONFIG
-kubectl get nodes -o wide
-```
-
-3. **Remove the control-plane taint**  
-(So workloads can be scheduled on the control-plane node in this lab):
-
-```bash
-kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-```
-
-4. **Install the Flannel CNI plugin**
-
-```bash
-k apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
-```
-
-5. **Verify the cluster**
-
-```bash
+sudo apt-get update
+sudo apt-get install -y kubernetes-cni
 k get nodes
 k get pods -n kube-system
 ```
 
+---
+
 ## Part 2: Cluster Architecture, Installation & Configuration (25%)
 
-*All commands in this Part are run on the Control Plane VM unless otherwise noted.*
+*Initialize the Control Plane Node (Run on Control Plane Only)
+Note: we previously stored the IP address in $IP during setup.*
 
 ---
 
@@ -281,17 +226,16 @@ k get pods -n kube-system
 
 #### Step 1 – Capture the join command.
 
-*Run on the Control Plane VM.*
+Pod-network-cidr specifies the IP range for the CNI plugin (Flannel defaults to 10.244.0.0/16). Apiserver-advertise-address is the IP the API server uses to advertise itself to the rest of the cluster. Crucially, this command outputs the kubeadm join token—SAVE THIS for the worker nodes.
 
 ```bash
-sudo kubeadm token create --print-join-command
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$IP
 ```
-
-*Copy output from control, then paste to the worker nodes.*
+** Apply output to worker nodes. **
 
 #### Step 2 – Verify join
 
-On the Control Plane VM, check that nodes exist:
+On the Control Plane VM, check that nodes attached successfully:
 
 ```bash
 k get nodes
@@ -350,6 +294,7 @@ sudo systemctl restart kubelet
 
 ```bash
 k drain node01 --ignore-daemonsets
+k drain node02 --ignore-daemonsets
 ```
 
 ---
