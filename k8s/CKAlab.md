@@ -202,13 +202,6 @@ sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
-4. **Install standard CNI plugins (loopback, bridge, etc.)**
-
-```bash
-sudo apt-get update
-sudo apt-get install -y kubernetes-cni
-```
-
 ---
 
 ## Part 2: Cluster Architecture, Installation & Configuration (25%)
@@ -222,6 +215,13 @@ Note: we previously stored the IP address in $IP during setup.*
 
 #### Step 1 – Set up kubeconfig and capture the join command.
 
+Pod-network-cidr specifies the IP range for the CNI plugin (Flannel defaults to 10.244.0.0/16). Apiserver-advertise-address is the IP the API server uses to advertise itself to the rest of the cluster. Crucially, this command outputs the kubeadm join token—SAVE THIS for the worker nodes. (control plane only)
+
+```bash
+#Control VM
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$IP
+```
+
 Set up kubeconfig and check that it's up and running.
 
 ```bash
@@ -233,11 +233,13 @@ k get nodes
 k get pods -n kube-system
 ```
 
-Pod-network-cidr specifies the IP range for the CNI plugin (Flannel defaults to 10.244.0.0/16). Apiserver-advertise-address is the IP the API server uses to advertise itself to the rest of the cluster. Crucially, this command outputs the kubeadm join token—SAVE THIS for the worker nodes. (control plane only)
+**Install standard CNI plugins (loopback, bridge, etc.)**
 
 ```bash
-#Control VM
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$IP
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+sudo apt-get update
+sudo apt-get install -y kubernetes-cni
+kubectl get pods -n kube-system
 ```
 
 Apply OUTPUT from control node to worker nodes. 
