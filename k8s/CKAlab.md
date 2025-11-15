@@ -220,6 +220,7 @@ Restart kubelet (all distros).
 
 ```bash
 sudo systemctl restart kubelet
+kubectl -n kube-system get pods -o wide -w # watch system pods until they go Running
 ```
 
 ## Part 2: Cluster Architecture, Installation & Configuration (25%)
