@@ -2,7 +2,7 @@
 
 I was following [FreeCodeCamp](https://www.youtube.com/watch?v=Fr9GqFwl6NM) and realized there is an insignificant number of people who will have a bad time trying to follow it. I'm hoping these instructions help more people create a CKA lab environment on a mac while following the video. 
 
-
+The video somehow uses Ubuntu on a Macbook Air but I couldn't fit it so I created this lab using Debian images. 
 
 ## Part 1.1: Lab VM Setup (Apple Silicon Mac)
 
@@ -26,8 +26,8 @@ I created this on an ARM-based MacBook using the free UTM app.
 
 2. **Download Debian iso for ARM**
 
-- Go to the [Ubuntu arm64](https://ubuntu.com/download/desktop) download page: 
-- Look for the **ARM 64-bit architecture** image. 
+- Go to the [Debian arm64](https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/) download page: 
+- Look for the *debian-xx.x.x-arm64-netinst.iso** image. 
 
 ---
 
@@ -44,7 +44,7 @@ I created this on an ARM-based MacBook using the free UTM app.
 
 - CPUs: `2` or more 
 - Memory: `4096 MB` (4 GB) or more 
-- Storage: `64 GB` or more 
+- Storage: `20 GB` or more 
 
 Click **Continue**, skip **Shared Directory**, and give your VM a name like `control`. 
 Click **Save**.
@@ -76,11 +76,11 @@ You now have three identical VM configurations, all sharing the correct network 
 ### Step 1 – Install the OS and Set Hostnames
 
 1. Start all three VMs: `control`, `node01`, `node02` (one by one).
-2. Follow the Debian installation prompts on each VM.
-3. During installation, set a unique hostname for each:
+2. Follow the Debian installation prompts on each VM. 
+3. During installation, set the same domain name (i.e. domain) and a unique hostname for each:
 
 - First VM: `control` 
-- Second VM: `node01` 
+- Second VM: `node01`
 - Third VM: `node02`
 
 ---
@@ -202,7 +202,16 @@ sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
----
+### Step 3 – Install CNI Binaries
+
+sudo apt-get install -y kubernetes-cni
+
+# DEBIAN ONLY: kubelet searches /usr/lib/cni but Debian installs to /opt/cni/bin
+sudo mkdir -p /usr/lib/cni
+sudo cp -a /opt/cni/bin/* /usr/lib/cni/
+
+sudo systemctl restart kubelet
+
 
 ## Part 2: Cluster Architecture, Installation & Configuration (25%)
 
@@ -232,7 +241,7 @@ sudo chown $(id -u):$(id -g) ~/.kube/config
 k get nodes
 ```
 
-**Install standard CNI plugins (loopback, bridge, etc.)**
+**Install Calico CNI Plugin
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
@@ -244,7 +253,8 @@ Apply OUTPUT from control node to worker nodes.
 
 ```bash
 # Worker VMs
-# kubeadm join <control.ip.address> --token <token> --discovery-token-ca-cert-hash sha256:<hash> # example only, do not apply
+# kubeadm join <control.ip.address> --token <token> --discovery-token-ca-cert-hash sha256:<hash> # example only, do not apply. If you need control to print again, use:
+# sudo kubeadm token create --print-join-command #on the control node
 ```
 
 Back on the Control Plane VM, check that nodes attached successfully:
