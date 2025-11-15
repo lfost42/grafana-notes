@@ -277,24 +277,22 @@ k get pods -n kube-system
 
 ### Section 2.1: Bootstrapping a Multi-Node Cluster with kubeadm
 
-#### Step 1 – Initializing the Control Plane
+#### Step 1 – Capture the join command.
 
 *Run on the Control Plane VM.*
 
-#### Step 1 – Joining Worker Nodes
-
-*Run on each Worker VM (e.g., `node01`, `node02`).*
-
-Use the exact `kubeadm join` command from the control plane output:
-
 ```bash
-sudo kubeadm join <control-plane-private-ip>:6443 --token <token>   --discovery-token-ca-cert-hash sha256:<hash>
+sudo kubeadm token create --print-join-command
 ```
 
-Then, on the Control Plane VM, verify:
+*Copy output from control, then paste to the worker nodes.*
+
+#### Step 2 – Verify join
+
+On the Control Plane VM, check that nodes exist:
 
 ```bash
-k get nodes -o wide
+k get nodes
 ```
 
 ---
