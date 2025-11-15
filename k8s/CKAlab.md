@@ -101,6 +101,8 @@ usermod -aG sudo #hostname
 
 ```bash
 sudo -i
+```
+```bash
 sudo apt update
 sudo apt install -y vim tmux
 ```
