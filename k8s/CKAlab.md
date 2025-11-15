@@ -221,7 +221,6 @@ Restart kubelet (all distros).
 
 ```bash
 sudo systemctl restart kubelet
-kubectl -n kube-system get pods -o wide -w # watch system pods until they go Running
 ```
 
 ## Part 2: Cluster Architecture, Installation & Configuration (25%)
@@ -236,6 +235,12 @@ Note: we previously stored the IP address in $IP during setup.*
 #### Step 1 – Set up kubeconfig and capture the join command.
 
 Pod-network-cidr specifies the IP range for the CNI plugin (Flannel defaults to 10.244.0.0/16). Apiserver-advertise-address is the IP the API server uses to advertise itself to the rest of the cluster. Crucially, this command outputs the kubeadm join token—SAVE THIS for the worker nodes. (control plane only)
+
+**Control node only.**
+
+```bash
+kubectl -n kube-system get pods -o wide -w # watch system pods until they go Running
+```
 
 ```bash
 #Control VM
