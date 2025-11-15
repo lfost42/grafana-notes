@@ -230,7 +230,6 @@ mkdir -p ~/.kube
 sudo cp /etc/kubernetes/admin.conf ~/.kube/config
 sudo chown $(id -u):$(id -g) ~/.kube/config
 k get nodes
-k get pods -n kube-system
 ```
 
 **Install standard CNI plugins (loopback, bridge, etc.)**
@@ -238,8 +237,7 @@ k get pods -n kube-system
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
 sudo apt-get update
-sudo apt-get install -y kubernetes-cni
-kubectl get pods -n kube-system
+kubectl get pods -n kube-system -w #wait for pods to be up and running
 ```
 
 Apply OUTPUT from control node to worker nodes. 
