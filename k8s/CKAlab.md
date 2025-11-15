@@ -229,9 +229,9 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 ---
 
-### Step 3 – Configure a Single-Node Cluster
+### Step 3 – Configure a Single-Node Cluster ** CONTROL PLANE VM ONLY **
 
-*Run on the Control Plane VM only.*
+*Run on the Control Plane VM only, do not run on worker nodes.*
 
 1. **Initialize the control-plane node**
 
