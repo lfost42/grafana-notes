@@ -83,6 +83,7 @@ You now have three identical VM configurations, all sharing the correct network 
 - Second VM: `node01`
 - Third VM: `node02`
 
+4. After reboot, shut down vm and delete the USB Drive from Devices or move it below the VirtIO Drive. 
 ---
 
 ### Step 2 – Install Essential Utilities
