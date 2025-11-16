@@ -213,6 +213,8 @@ sudo cp -a /opt/cni/bin/* /usr/lib/cni/
 sudo systemctl restart kubelet
 ```
 
+--- end worker node commands until further notice ---
+
 ## Part 2: Cluster Architecture, Installation & Configuration (25%)
 
 *Initialize the Control Plane Node (Run on Control Plane Only)*
