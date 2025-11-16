@@ -250,10 +250,6 @@ sudo cp /etc/kubernetes/admin.conf ~/.kube/config
 sudo chown $(id -u):$(id -g) ~/.kube/config
 ```
 
-```bash
-kubectl -n kube-system get pods -o wide -w # watch system pods until they go Running
-```
-
 **Install Calico CNI Plugin
 
 ```bash
