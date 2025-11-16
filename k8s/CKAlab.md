@@ -243,8 +243,14 @@ sudo chown $(id -u):$(id -g) ~/.kube/config
 **Install Calico CNI Plugin
 
 ```bash
-sudo mkdir -p /usr/lib/cni
-sudo cp -a /opt/cni/bin/* /usr/lib/cni/
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+sudo systemctl restart kubelet
+```
+
+
+**Repeat install for Calico CNI Plugin** (I don't know why it works this way)
+
+```bash
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
 sudo systemctl restart kubelet
 ```
