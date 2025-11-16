@@ -102,7 +102,6 @@ sudo apt install -y vim tmux
 ```bash
 echo 'alias k=kubectl' >> ~/.bashrc
 source ~/.bashrc
-IP=$(hostname -I | awk '{print $1}')
 ```
 
 ---
@@ -126,6 +125,7 @@ IP=$(hostname -I | awk '{print $1}')
 ### Step 1 – Install a Container Runtime
 
 *Run on the Control Plane VM and all Worker VMs.*
+*I highly recommend working on cloning a machine prior to beginning the next part in case you want or need to repeat it.*
 
 1. **Load required kernel modules**  
 The first command uses cat and tee to create a
@@ -215,8 +215,7 @@ sudo systemctl restart kubelet
 
 ## Part 2: Cluster Architecture, Installation & Configuration (25%)
 
-*Initialize the Control Plane Node (Run on Control Plane Only)
-Note: we previously stored the IP address in $IP during setup.*
+*Initialize the Control Plane Node (Run on Control Plane Only)*
 
 ---
 
@@ -228,6 +227,7 @@ Pod-network-cidr specifies the IP range for the CNI plugin (Flannel defaults to 
 
 ```bash
 #Control VM
+IP=$(hostname -I | awk '{print $1}')
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$IP
 ```
 
