@@ -244,9 +244,6 @@ sudo chown $(id -u):$(id -g) ~/.kube/config
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
-sudo apt-get update
-sudo mkdir -p /usr/lib/cni
-sudo cp -a /opt/cni/bin/* /usr/lib/cni/
 kubectl get pods -n kube-system -w #wait for pods to be up and running
 ```
 
