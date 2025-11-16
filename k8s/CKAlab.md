@@ -2,7 +2,9 @@
 
 I was following [FreeCodeCamp](https://www.youtube.com/watch?v=Fr9GqFwl6NM) and realized there is an insignificant number of people who will have a bad time trying to follow it. I'm hoping these instructions help more people create a CKA lab environment on a mac while following the video. 
 
-The video somehow uses Ubuntu on a Macbook Air but I couldn't fit it so I created this lab using Debian images. 
+The video somehow uses Ubuntu on a Macbook Air but I couldn't find a way to make it fit so I created this lab using Debian images. 
+
+I'll circle back at a later date to create a version using servers rather than full desktop vm's. This will be a more beginner-friendly version though some knowledge of networking and linux is highly recommended!
 
 ## Part 1.1: Lab VM Setup (Apple Silicon Mac)
 
@@ -12,8 +14,6 @@ To practice the entire guide, you will need:
 - 200GB free space
 - 1 × Control Plane VM  
 - 2 × Worker VMs (minimum)
-
-I created this on an ARM-based MacBook using the free UTM app.
 
 ---
 
@@ -44,9 +44,7 @@ I created this on an ARM-based MacBook using the free UTM app.
 
 - CPUs: `2` or more 
 - Memory: `4096 MB` (4 GB) or more 
-- Storage: `20 GB` or more
-
-Note: I'll be creating a lighter (and slightly more advanced) version of this with server nodes in the future.  
+- Storage: `20 GB` or more  
 
 Click **Continue**, skip **Shared Directory**, and give your VM a name like `control`. 
 Click **Save**.
