@@ -208,18 +208,8 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 ```bash
 sudo apt-get install -y kubernetes-cni
-```
-
-**DEBIAN ONLY: kubelet searches /usr/lib/cni but Debian installs to /opt/cni/bin**
-
-```bash
 sudo mkdir -p /usr/lib/cni
 sudo cp -a /opt/cni/bin/* /usr/lib/cni/
-```
-
-Restart kubelet (all distros). 
-
-```bash
 sudo systemctl restart kubelet
 ```
 
@@ -255,6 +245,8 @@ sudo chown $(id -u):$(id -g) ~/.kube/config
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
 sudo apt-get update
+sudo mkdir -p /usr/lib/cni
+sudo cp -a /opt/cni/bin/* /usr/lib/cni/
 kubectl get pods -n kube-system -w #wait for pods to be up and running
 ```
 
