@@ -65,7 +65,7 @@ Click **Save**.
 2. Name the new VM **`node01`** and click **Clone**. 
 3. Repeat the process, cloning `control` again to create **`node02`**.
 
-You now have three identical VM configurations, all sharing the correct network setting.
+You now have three identical VM configurations, all sharing the correct network setting. Before proceeding furhter, start each node and ensure each has a different IP address. If not, refresh the mac address and recheck or delete and create a new node. 
 
 ---
 
