@@ -231,13 +231,6 @@ Pod-network-cidr specifies the IP range for the CNI plugin (Flannel defaults to 
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$IP
 ```
 
-
-**Install Calico CNI Plugin
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
-```
-
 Set up kubeconfig.
 
 ```bash
@@ -245,7 +238,13 @@ Set up kubeconfig.
 mkdir -p ~/.kube
 sudo cp /etc/kubernetes/admin.conf ~/.kube/config
 sudo chown $(id -u):$(id -g) ~/.kube/config
+```
 
+**Install Calico CNI Plugin
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+sudo systemctl restart kubelet
 kubectl get pods -n kube-system -w #wait for pods to be up and running
 ```
 
