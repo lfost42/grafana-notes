@@ -244,6 +244,11 @@ sudo chown $(id -u):$(id -g) ~/.kube/config
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
+sudo systemctl restart kubelet
+# wait a few minutes before the next block
+```
+
+```bash
 sudo cp -a /opt/cni/bin/* /usr/lib/cni/
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml
 sudo systemctl restart kubelet
