@@ -153,12 +153,11 @@ sudo sysctl --system
 ```
 
 3. **Install containerd** (container runtime):
-The sed command modifies the configuration to set SystemdCgroup = true. This is crucial because kubelet requires the systemd cgroup driver to interact correctly with containerd. The systemctl commands restart the service to apply the new
-configuration and enable it to start automatically on boot.
+The sed command modifies the configuration to set SystemdCgroup = true. This is crucial because kubelet requires the systemd cgroup driver to interact correctly with containerd. The systemctl commands restart the service to apply the new configuration and enable it to start automatically on boot. We're also instlling the etcd-client.
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y containerd
+sudo apt-get install -y containerd etcd-client
 sudo mkdir -p /etc/containerd
 sudo containerd config default | sudo tee /etc/containerd/config.toml
 sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
