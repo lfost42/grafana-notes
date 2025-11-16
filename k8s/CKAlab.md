@@ -364,6 +364,7 @@ sudo systemctl restart kubelet
 
 ```bash
 k uncordon node01
+k uncordon node02
 ```
 
 ---
