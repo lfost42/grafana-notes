@@ -27,6 +27,7 @@ Video link: [https://www.youtube.com/watch?v=8GzJ-x9ffE0](https://www.youtube.co
 ```# Step one add the repo
 helm repo add argocd https://argoproj.github.io/argo-helm
 ```
+
 ```# Check the repo is there
 helm repo list
 ```
