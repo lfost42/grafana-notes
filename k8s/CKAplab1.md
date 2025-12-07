@@ -2,7 +2,7 @@
 
 This is among the most highly recommended [Youtube playlist](https://www.youtube.com/playlist?list=PLkDZsCgo3Isr4NB5cmyqG7OZwYEx5XOjM) for CKA. 
 
-If you're using the sailor-sh environment, you won't be able to copy/paste these commands unless you navigate to this github within the testing environment. 
+If you're using the sailor-sh environment, you won't be able to copy/paste these commands but typing them in is good practice! 
 
 ## -1- ArgoCD (no setup needed)
 
