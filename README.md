@@ -22,4 +22,6 @@ Since this one digs into the architecture, it was time to set up [Linux VMs](k8s
 
 My computer wasn't hefty enough to maintain the VMs so I practiced using the remote dekstop by [sailor-sh on GitHub](k8s/CKAplab.md). 
 
-As for the labs itself, I'm starting off with [IT Kiddie](/itkiddie/README.md). 
+#### Labs
+- [IT Kiddie](/k8s/itkiddie.md)
+
