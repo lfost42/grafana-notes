@@ -23,18 +23,23 @@ Save the generated YAML manifest to `/home/argo/argo-helm.yaml`.
 Video link: [https://www.youtube.com/watch?v=8GzJ-x9ffE0](https://www.youtube.com/watch?v=8GzJ-x9ffE0)
 
 #### Solution
+<details>
 ```# Step one add the repo
-helm repo add argocd https://argoproj.github.io/argo-helm```
+helm repo add argocd https://argoproj.github.io/argo-helm
+```
 ```# Check the repo is there
-helm repo list```
+helm repo list
+```
 
 ```# Step two get the template using the parameters given
 mkdir /root/argo
 cat /root/argo/argo-helm.yaml
-helm template argocd argocd/argo-cd --version 7.7.3 --set crds.install=false --namespace argocd > /root/argo-helm.yaml```
+helm template argocd argocd/argo-cd --version 7.7.3 --set crds.install=false --namespace argocd > /root/argo-helm.yaml
+```
 
 ```#Step three verfiy
-cat /root/argo-helm.yaml```
+cat /root/argo-helm.yaml
+```
 </details>
 
 -2-
@@ -55,7 +60,8 @@ Video link: https://youtu.be/2diUcaV5TXw?si=ftqiW_E-4kswuis1
 
 -3-
 ```chmod +x Question-3/LabSetUp.bash
-./Question-3/LabSetUp.bash```
+./Question-3/LabSetUp.bash
+```
 
 You have an existing web application deployed in a Kubernetes cluster using an Ingress resource named web.
 You must migrate the existing Ingress configuration to the new Kubernetes Gateway API, maintaining the
@@ -105,7 +111,8 @@ Video lnk: https://youtu.be/WmbIrlbqjPw?si=bYSf9dDtb4hIfKG4
 
 -6-
 ```chmod +x Question-6/LabSetUp.bash
-./Question-6/LabSetUp.bash```
+./Question-6/LabSetUp.bash
+```
 
 ### Question
 You're working in a kubernetes cluster with an existing deployment named busybox-logger running
@@ -122,7 +129,8 @@ Video lnk: https://youtu.be/wiL_M9qbPX4?si=rOIyX45i5kON8Xr7
 
 -7-
 ```chmod +x Question-7/LabSetUp.bash
-./Question-7/LabSetUp.bash```
+./Question-7/LabSetUp.bash
+```
 
 ### Question Ingress
 
@@ -141,7 +149,8 @@ Video lnk: https://youtu.be/mtORnV8AlI4?si=6fZq-yd8Sezg0a7v
 
 -8-
 ```chmod +x Question-8/LabSetUp.bash
-./Question-8/LabSetUp.bash```
+./Question-8/LabSetUp.bash
+```
 
 ### Question CRDs
 
@@ -155,7 +164,8 @@ Video lnk: https://youtu.be/mKvkcjoYzOc?si=53ob4__-b242y4K_
 
 -9-
 ```chmod +x Question-9/LabSetUp.bash
-./Question-9/LabSetUp.bash```
+./Question-9/LabSetUp.bash
+```
 
 ### Question
 There are two deployments, Frontend and Backend
@@ -170,7 +180,8 @@ Video lnk: https://youtu.be/EIjpWA0AGG4?si=ih4IWm4wsDeIPzbM
 
 -10-
 ```chmod +x Question-10/LabSetUp.bash
-./Question-10/LabSetUp.bash```
+./Question-10/LabSetUp.bash
+```
 
 ### Question HPA
 Create a new HorizontalPodAutoScaler(HPA) named apache-server in the autoscale namespace
@@ -185,7 +196,8 @@ Video lnk: https://youtu.be/X0ISIy9Bd7U?si=h-GydG4EzPTug6Jt
 
 -11-
 ```chmod +x Question-11/LabSetUp.bash
-./Question-11/LabSetUp.bash```
+./Question-11/LabSetUp.bash
+```
 
 ### Question
 Install and configure a CNI of your choice tht meets the specified requirements,
@@ -208,7 +220,8 @@ Video lnk: https://youtu.be/SV3V5VwR2sk?si=47uiyuvMD1Vpqbm1
 
 -12-
 ```chmod +x Question-12/LabSetUp.bash
-./Question-12/LabSetUp.bash```
+./Question-12/LabSetUp.bash
+```
 
 ### Question
 A user accidentally deleted the MariaDB Deployment in the mariadb namespace. The deployment
@@ -228,7 +241,8 @@ Video lnk: https://youtu.be/0h2Dik_OTvw?si=9hU6-xzCW7AUsmEj
 
 -13-
 ```chmod +x Question-13/LabSetUp.bash
-./Question-13/LabSetUp.bash```
+./Question-13/LabSetUp.bash
+```
 
 ### Question Cri-Dockerd
 
@@ -246,7 +260,8 @@ Video lnk: https://youtu.be/u3kUI9lFPWE?si=Pkq74-rfFEp6dmfd
 
 -14-
 ```chmod +x Question-14/LabSetUp.bash
-./Question-14/LabSetUp.bash```
+./Question-14/LabSetUp.bash
+```
 
 ### Question
 After a cluster migration, the controlplane kube-apiserver is not coming up
@@ -259,7 +274,8 @@ Video lnk: https://youtu.be/p1vNc1GacpI?si=lbUxoj5jOeruLy7B
 
 -15-
 ```chmod +x Question-15/LabSetUp.bash
-./Question-15/LabSetUp.bash```
+./Question-15/LabSetUp.bash
+```
 
 ### Question Taints & Tolerances
 
@@ -271,7 +287,8 @@ Video lnk: https://youtu.be/-rs3AoAVyXE?si=nACYrGA5h_4WL-og
 
 -16-
 ```chmod +x Question-16/LabSetUp.bash
-./Question-16/LabSetUp.bash```
+./Question-16/LabSetUp.bash
+```
 
 ### Question
 There is a deployment named nodeport-deployment in the relative namespace
@@ -285,7 +302,8 @@ Video lnk: https://youtu.be/t1FxX3PmYDQ?si=ryASL-G9X2FCVApQ
 
 -17-
 ```chmod +x Question-17/LabSetUp.bash
-./Question-17/LabSetUp.bash```
+./Question-17/LabSetUp.bash
+```
 
 ### Question
 There is an existing deployment in the nginx-static namespace. The deployment contains a ConfigMap that supports
