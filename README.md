@@ -20,7 +20,9 @@ There's nothing like completing a full course in Kubernetes to learn how much I 
 
 Since this one digs into the architecture, it was time to set up [Linux VMs](k8s/CKAlab.md). 
 
-My computer wasn't hefty enough to maintain the VMs so I practiced using the remote dekstop by [sailor-sh on GitHub](k8s/CKAplab.md). 
+For lab practice, I spun up a local version of [sailor-sh](k8s/CKAplab.md) which is an exam simulator comparable to killer.sh. 
+
+They recently started hosting a paid [cloud](https://play.sailor.sh/dashboard) version if your computer isn't able to handle the laod. 
 
 #### Labs
 - [IT Kiddie](/k8s/itkiddie.md)

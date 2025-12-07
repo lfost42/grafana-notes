@@ -2,39 +2,54 @@
 
 This is among the most highly recommended [Youtube playlist](https://www.youtube.com/playlist?list=PLkDZsCgo3Isr4NB5cmyqG7OZwYEx5XOjM) for CKA. 
 
-Sailor doesn't block GitHub so you can navigate to this page in the browser if you'd like to copy/paste the commands in this file. I recommend typing them in as it would help with memory retention.
-
 Setup for sailor-sh
 <details>
 
+CK-X started a [hosted version](https://sailor.sh/) but I haven't touched it. These are instructions to run this on your local machine. 
+
+GitHub: https://github.com/sailor-sh/CK-X
+
+### Setup for CK-X
+
 If on Windows, enable `WSL2` in `docker destop` and run:
 
-```
+```bash
 irm https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install.ps1 | iex`
 ```
 
 Linux & macOS:
 
-```
+```bash
 curl -fsSL https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install.sh | bash
 ```
 
-Navigate to `http://localhost:30080` if the page doesn’t load automatically. Click `Start Exam` and `Start Exam`. It will default to the CKAD practice exam but it doesn’t really matter since we're loading our own labs!
+`http://localhost:30080` should load automatically. 
 
-Click `Start` 3 times. 
+Click `Start Exam` and `Start Exam`. It will default to the CKAD practice exam which is fine, we're not using it anyway. 
 
-Note: You won't be booted once the exam timer runs out. You can end the exam and navigate back to the session if you find it distracting but it's fine to just run it from here. 
+Wait until environment loads (will take a few minutes).
 
-```
-ssh ckad9999
-apt-get update
-```
+Click `Start` until the exam starts. 
+
+On the left side panel, click `ssh ckad9999` to copy and [ctrl+shift+v to] paste in a terminal. 
+
+Run `apt-get update`
+
+Now we need to do something about that timer ...
+
+Navigate to `Exam Controls` and click `End Exam` and `End Exam` (we're not using this!). 
+
+In the Evaluation page, click `Current Exam` and `Connect to Session`. 
+
+You are now free to use this environment uninterrupted!
+
+I am tinkering with the idea of loding these labs into CK-X. I just need a little more free time than I do right now!
 
 </details>
 
-In your lab terminal, run the following:
+In your lab terminal, run the following to download lab files:
 
-```
+```bash
 git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
 cd CKA-PREP
 ```
@@ -46,42 +61,42 @@ cd CKA-PREP
 Install `Argo CD` in a Kubernetes cluster using Helm while ensuring that CRDs are not installed (as they are pre-installed). 
 
 Task:
-1. Add the official Argo CD Helm repository with the name argo:
-[https://argoproj.github.io/argo-helm](https://argoproj.github.io/argo-helm)
-2. Generate a Helm template from the Argo CD chart version `7.7.3` for the `acgod` namespace.
+1. Add the official Argo CD Helm repository with the name argo: https://argoproj.github.io/argo-helm
+2. Generate a Helm template from the Argo CD chart version `7.7.3` for the `acgocd` namespace.
 3. Ensure that CRDs are not installed by configuring the chart accordingly.
 4. Save the generated YAML manifest to `/home/argo/argo-helm.yaml`.
 
-Video link: [https://www.youtube.com/watch?v=8GzJ-x9ffE0](https://www.youtube.com/watch?v=8GzJ-x9ffE0)
+Video link: https://www.youtube.com/watch?v=8GzJ-x9ffE0
 
 #### Solution
 <details>
 
-```
-# Step one add the repo
+Step one: add the repo
+
+```bash
 helm repo add argocd https://argoproj.github.io/argo-helm
 ```
 
-```
-# Check the repo is there
-helm repo list
-```
+Check the repo is there  
+`helm repo list`
 
-```
+```bash
 # Step two get the template using the parameters given
 mkdir /root/argo
 cat /root/argo/argo-helm.yaml
-helm template argocd argocd/argo-cd --version 7.7.3 --set crds.install=false --namespace argocd > /root/argo-helm.yaml
+k create ns argocd
 ```
 
-```
-#Step three verfiy
-cat /root/argo-helm.yaml
-```
+`helm -n argocd template argocd argocd/argo-cd --version 7.7.3 --set crds.install=false > /root/argo-helm.yaml`
+
+Step three: verify  
+`cat /root/argo-helm.yaml`
+
 </details>
 
 ## -2- Sidecar
-```
+
+```bash
 chmod +x Question-2/LabSetUp.bash
 ./Question-2/LabSetUp.bash
 ```
@@ -97,8 +112,92 @@ Task:
 
 Video link: https://youtu.be/2diUcaV5TXw?si=ftqiW_E-4kswuis1
 
-## -3- Gateway API
+#### Solution
+
+<details>
+
+Step 1: Verify secret and ingress exist and describe them
+
 ```
+k get secret -n web-app
+k describe secret -n web-app web-tls
+```
+
+```
+k get ingress -n web-app
+k describe ingress -n web-app web
+```
+
+Step 2: Create the Gateway (use the docs)
+`vim gw.yaml`
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: web-gateway
+  namespace: web-app
+spec:
+  gatewayClassName: nginx-class
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: gateway.web.k8s.local
+    tls:                              # This is the section we need to add to maintain the existing config
+      mode: Terminate                 # for the ingress resource
+      certificateRefs:
+       - kind: Secret
+         name: web-tls
+```
+
+Apply it
+`k apply -f gw.yaml`
+
+Verify it is there
+`k get gateway -n web-app`
+
+Step 3: create the HTTPRoute
+`vim http.yaml`
+
+Use the docs for reference
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-route
+spec:
+  parentRefs:
+  - name: web-gateway
+  hostnames:
+  - "gateway.web.k8s.local"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /                  # We see the path from the ingress description
+    backendRefs:
+    - name: web-service           # Name and port need to match the service we have
+      port: 80.
+```
+
+apply it. 
+`k apply -f http.yaml`
+
+```bash
+# Check
+k describe gateway, httproute -n web-app
+```
+
+Check all fields match as expected. In the exam you may be given a curl to run to check this
+
+
+</details>
+
+## -3- Gateway API
+
+```bash
 chmod +x Question-3/LabSetUp.bash
 ./Question-3/LabSetUp.bash
 ```
@@ -115,7 +214,8 @@ Note: A GatewayClass named `nginx-class` is already installed in the cluster.
 Video lnk: https://youtu.be/W-Rt_U8any4?si=KD_6oVewmhPgu1NZ
 
 ## -4- CPU and Memory
-```
+
+```bash
 chmod +x Question-4/LabSetUp.bash
 ./Question-4/LabSetUp.bash
 ```
@@ -136,7 +236,7 @@ Video lnk: https://youtu.be/Hkl9XgMKxic?si=v9yI1Rz10DELN4Mf
 
 ## -5- Storage Class
 
-```
+```bash
 chmod +x Question-5/LabSetUp.bash
 ./Question-5/LabSetUp.bash
 ```
@@ -154,7 +254,7 @@ Video link: https://youtu.be/WmbIrlbqjPw?si=bYSf9dDtb4hIfKG4
 
 ## -6- Priority Class
 
-```
+```bash
 chmod +x Question-6/LabSetUp.bash
 ./Question-6/LabSetUp.bash
 ```
@@ -168,14 +268,14 @@ Task:
 
 Video lnk: https://youtu.be/wiL_M9qbPX4?si=rOIyX45i5kON8Xr7
 
-## -7- 
+## -7- Ingress
 
-```
+```bash
 chmod +x Question-7/LabSetUp.bash
 ./Question-7/LabSetUp.bash
 ```
 
-### Question Ingress
+### Question
 
 Task:
 1. Expose the existing deployment with a service called echo-service using Service Port `8080` `type=NodePort`
@@ -190,7 +290,7 @@ Video lnk: https://youtu.be/mtORnV8AlI4?si=6fZq-yd8Sezg0a7v
 
 ## -8- CRDs
 
-```
+```bash
 chmod +x Question-8/LabSetUp.bash
 ./Question-8/LabSetUp.bash
 ```
@@ -207,7 +307,7 @@ Video lnk: https://youtu.be/mKvkcjoYzOc?si=53ob4__-b242y4K_
 
 ## -9- Network Policy
 
-```
+```bash
 chmod +x Question-9/LabSetUp.bash
 ./Question-9/LabSetUp.bash
 ```
@@ -222,7 +322,7 @@ Video lnk: https://youtu.be/EIjpWA0AGG4?si=ih4IWm4wsDeIPzbM
 
 ## -10- HPA
 
-```
+```bash
 chmod +x Question-10/LabSetUp.bash
 ./Question-10/LabSetUp.bash
 ```
@@ -240,7 +340,7 @@ Video lnk: https://youtu.be/X0ISIy9Bd7U?si=h-GydG4EzPTug6Jt
 
 ## -11- CNI
 
-```
+```bash
 chmod +x Question-11/LabSetUp.bash
 ./Question-11/LabSetUp.bash
 ```
@@ -266,7 +366,7 @@ Video lnk: https://youtu.be/SV3V5VwR2sk?si=47uiyuvMD1Vpqbm1
 
 ## -12- Persistent Volume
 
-```
+```bash
 chmod +x Question-12/LabSetUp.bash
 ./Question-12/LabSetUp.bash
 ```
@@ -287,14 +387,14 @@ Storage = 250Mi
 
 Video lnk: https://youtu.be/0h2Dik_OTvw?si=9hU6-xzCW7AUsmEj
 
-## -13-
+## -13- Cri-Dockerd
 
-```
+```bash
 chmod +x Question-13/LabSetUp.bash
 ./Question-13/LabSetUp.bash
 ```
 
-### Question Cri-Dockerd
+### Question
 
 Task:  
 - Set up `cri-dockerd`
@@ -310,7 +410,7 @@ Video lnk: https://youtu.be/u3kUI9lFPWE?si=Pkq74-rfFEp6dmfd
 
 ## -14- Kube-apiserver
 
-```
+```bash
 chmod +x Question-14/LabSetUp.bash
 ./Question-14/LabSetUp.bash
 ```
@@ -324,7 +424,8 @@ Task:
 Video lnk: https://youtu.be/p1vNc1GacpI?si=lbUxoj5jOeruLy7B
 
 ## -15- Taints and Tolerations
-```
+
+```bash
 chmod +x Question-15/LabSetUp.bash
 ./Question-15/LabSetUp.bash
 ```
@@ -339,7 +440,7 @@ Video lnk: https://youtu.be/-rs3AoAVyXE?si=nACYrGA5h_4WL-og
 
 ## -16- NodePort
 
-```
+```bash
 chmod +x Question-16/LabSetUp.bash
 ./Question-16/LabSetUp.bash
 ```
@@ -356,7 +457,7 @@ Video lnk: https://youtu.be/t1FxX3PmYDQ?si=ryASL-G9X2FCVApQ
 
 ## -17- TLS
 
-```
+```bash
 chmod +x Question-17/LabSetUp.bash
 ./Question-17/LabSetUp.bash
 ```
