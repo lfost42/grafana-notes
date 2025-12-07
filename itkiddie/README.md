@@ -2,10 +2,41 @@
 
 This is among the most highly recommended [Youtube playlist](https://www.youtube.com/playlist?list=PLkDZsCgo3Isr4NB5cmyqG7OZwYEx5XOjM) for CKA. 
 
-If you're using the sailor-sh environment, you won't be able to copy/paste these commands but typing them in is good practice! 
+Sailor doesn't block GitHub so you can navigate to this page in the browser if you'd like to copy/paste the commands in this file. I recommend typing them in as it would help with memory retention.
+
+Setup for sailor-sh
+<details>
+
+If on Windows, enable `WSL2` in `docker destop` and run:
+
+```
+irm https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install.ps1 | iex`
+```
+
+Linux & macOS:
+
+```
+curl -fsSL https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install.sh | bash
+```
+
+Navigate to `http://localhost:30080` if the page doesn’t load automatically. Click `Start Exam` and `Start Exam`. It will default to the CKAD practice exam but it doesn’t really matter since we're loading our own labs!
+
+Click `Start` 3 times. 
+
+Note: You won't be booted once the exam timer runs out. You can end the exam and navigate back to the session if you find it distracting but it's fine to just run it from here. 
+
+```
+ssh ckad9999
+apt-get update
+```
+
+</details>
+
+In your lab terminal, run the following:
 
 ```
 git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
+cd CKA-PREP
 ```
 
 ## -1- ArgoCD (no setup needed)
