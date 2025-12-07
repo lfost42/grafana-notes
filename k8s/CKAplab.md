@@ -2,11 +2,16 @@
 
 The CK-X provides the full remote desktop you will use on PSI, similar to killer.sh so you get very comfortable with navigation. 
 
-### Setting up CK-X
+They started a [hosted version](https://sailor.sh/) but I haven't touched it. We'll be running this locally.
 
-If on Windows, check instructions on GitHub: https://github.com/sailor-sh/CK-X
+GitHub: https://github.com/sailor-sh/CK-X
 
-The following is for MacOS:
+### Setup for CK-X
+
+If on Windows, enable WSL2 in docker destop and run:
+`irm https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install.ps1 | iex`
+
+Linux & macOS:
 
 `curl -fsSL https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install.sh | bash`
 
@@ -14,12 +19,12 @@ Navigate to `http://localhost:30080` if the page doesn’t load automatically. C
 
 Click `Start` 3 times. 
 
-Note: You won't be booted once the exam timer runs out. 
+Note: You won't be booted once the exam timer runs out. You can end the exam and navigate back to the session if you find it distracting but it's fine to just run it from here. 
 
 ```ssh ckad9999
 apt-get update```
 
-That's it, you have unlimited use to this environment!
+That's it, you have unlimited use to this environment! It's open source so if you have the time to load these labs into CK-X, I'm sure the community would be very grateful! I would love to contribute in this way but work is pretty intense right now. Maybe after I've completed Kubstronaut!
 
 It uses docker compose so you can navigate with the following commands:
 
