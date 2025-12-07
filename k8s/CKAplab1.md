@@ -44,7 +44,9 @@ cat /root/argo-helm.yaml
 
 -2-
 ```chmod +x Question-2/LabSetUp.bash
-./Question-2/LabSetUp.bash```
+./Question-2/LabSetUp.bash
+```
+
 WordPress deployment created in the default namespace. Edit the deployment to add a sidecar container with shared volume.
 
 #### Question SideCar
