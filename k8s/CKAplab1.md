@@ -4,7 +4,7 @@ This is among the most highly recommended [Youtube playlist](https://www.youtube
 
 If you're using the sailor-sh environment, you won't be able to copy/paste these commands unless you navigate to this github within the testing environment. 
 
--1- (no setup needed)
+## -1- (no setup needed)
 
 ### Question ArgoCD
 
@@ -24,27 +24,32 @@ Video link: [https://www.youtube.com/watch?v=8GzJ-x9ffE0](https://www.youtube.co
 
 #### Solution
 <details>
-```# Step one add the repo
+```
+# Step one add the repo
 helm repo add argocd https://argoproj.github.io/argo-helm
 ```
 
-```# Check the repo is there
+```
+# Check the repo is there
 helm repo list
 ```
 
-```# Step two get the template using the parameters given
+```
+# Step two get the template using the parameters given
 mkdir /root/argo
 cat /root/argo/argo-helm.yaml
 helm template argocd argocd/argo-cd --version 7.7.3 --set crds.install=false --namespace argocd > /root/argo-helm.yaml
 ```
 
-```#Step three verfiy
+```
+#Step three verfiy
 cat /root/argo-helm.yaml
 ```
 </details>
 
--2-
-```chmod +x Question-2/LabSetUp.bash
+## -2-
+```
+chmod +x Question-2/LabSetUp.bash
 ./Question-2/LabSetUp.bash
 ```
 
@@ -61,16 +66,18 @@ Use a volume mounted at /var/log to make the log file wordpress.log available to
 
 Video link: https://youtu.be/2diUcaV5TXw?si=ftqiW_E-4kswuis1
 
--3-
-```chmod +x Question-3/LabSetUp.bash
+## -3-
+```
+chmod +x Question-3/LabSetUp.bash
 ./Question-3/LabSetUp.bash
 ```
+### Question
 
 You have an existing web application deployed in a Kubernetes cluster using an Ingress resource named web.
 You must migrate the existing Ingress configuration to the new Kubernetes Gateway API, maintaining the
 existing HTTPS access configuration
 
-Task:s
+Task:
 1. Create a Gateway Resource named web-gateway with hostname gateway.web.k8s.local that maintains the
 exisiting TLS and listener configuration from the existing Ingress resource named web
 2. Create a HTTPRoute resource named web-route with hostname gateway.web.k8s.local that maintains the
@@ -79,15 +86,18 @@ Note: A GatewayClass named nginx-class is already installed in the cluster
 
 Video lnk: https://youtu.be/W-Rt_U8any4?si=KD_6oVewmhPgu1NZ
 
--4-
+## -4-
+```
 chmod +x Question-4/LabSetUp.bash
 ./Question-4/LabSetUp.bash
+```
 
 ### Question
+
 You are managing a WordPress application running in a Kubernetes cluster
 Your Task: is to adjust the Pod resource requests and limits to ensure stable operation
 
-Task:s
+Task:
 1. Scale down the wordpress deployment to 0 replicas
 2. Edit the deployment and divide the node resource evenly across all 3 pods
 3. Assign fair and equal CPU and memory to each Pod
@@ -97,13 +107,16 @@ After making the changes scale the deployment back to 3 replicas
 
 Video lnk: https://youtu.be/Hkl9XgMKxic?si=v9yI1Rz10DELN4Mf
 
--5-
+## -5-
+
+```
 chmod +x Question-5/LabSetUp.bash
 ./Question-5/LabSetUp.bash
+```
 
 ### Question Storage Class
 
-Task:s
+Task:
 1. Create a new StorageClass named local-storage with the provisioner rancher.io/local-path. Set
 the VolumeBindingMode to WaitForFirstCustomer. Do not make the SC default
 2. Patch the StorageClass to make it the default StorageClass
@@ -112,8 +125,10 @@ Do not modify any existing Deployments or PersistentVolumeClaims
 
 Video lnk: https://youtu.be/WmbIrlbqjPw?si=bYSf9dDtb4hIfKG4
 
--6-
-```chmod +x Question-6/LabSetUp.bash
+## -6-
+
+```
+chmod +x Question-6/LabSetUp.bash
 ./Question-6/LabSetUp.bash
 ```
 
@@ -130,8 +145,10 @@ high-priority class
 
 Video lnk: https://youtu.be/wiL_M9qbPX4?si=rOIyX45i5kON8Xr7
 
--7-
-```chmod +x Question-7/LabSetUp.bash
+## -7-
+
+```
+chmod +x Question-7/LabSetUp.bash
 ./Question-7/LabSetUp.bash
 ```
 
@@ -150,8 +167,10 @@ pointing to example.org
 
 Video lnk: https://youtu.be/mtORnV8AlI4?si=6fZq-yd8Sezg0a7v
 
--8-
-```chmod +x Question-8/LabSetUp.bash
+## -8-
+
+```
+chmod +x Question-8/LabSetUp.bash
 ./Question-8/LabSetUp.bash
 ```
 
@@ -165,8 +184,10 @@ You may use any output format that kubectl supports
 
 Video lnk: https://youtu.be/mKvkcjoYzOc?si=53ob4__-b242y4K_
 
--9-
-```chmod +x Question-9/LabSetUp.bash
+## -9-
+
+```
+chmod +x Question-9/LabSetUp.bash
 ./Question-9/LabSetUp.bash
 ```
 
@@ -181,8 +202,10 @@ frontend and the backend deployments in the least permissive way and deploy that
 
 Video lnk: https://youtu.be/EIjpWA0AGG4?si=ih4IWm4wsDeIPzbM
 
--10-
-```chmod +x Question-10/LabSetUp.bash
+## -10-
+
+```
+chmod +x Question-10/LabSetUp.bash
 ./Question-10/LabSetUp.bash
 ```
 
@@ -197,8 +220,10 @@ Task:
 
 Video lnk: https://youtu.be/X0ISIy9Bd7U?si=h-GydG4EzPTug6Jt
 
--11-
-```chmod +x Question-11/LabSetUp.bash
+## -11-
+
+```
+chmod +x Question-11/LabSetUp.bash
 ./Question-11/LabSetUp.bash
 ```
 
@@ -221,8 +246,10 @@ The CNI you choose must
 
 Video lnk: https://youtu.be/SV3V5VwR2sk?si=47uiyuvMD1Vpqbm1
 
--12-
-```chmod +x Question-12/LabSetUp.bash
+## -12-
+
+```
+chmod +x Question-12/LabSetUp.bash
 ./Question-12/LabSetUp.bash
 ```
 
@@ -242,8 +269,10 @@ Ensure the MariaDB Deployment is running and Stable
 
 Video lnk: https://youtu.be/0h2Dik_OTvw?si=9hU6-xzCW7AUsmEj
 
--13-
-```chmod +x Question-13/LabSetUp.bash
+## -13-
+
+```
+chmod +x Question-13/LabSetUp.bash
 ./Question-13/LabSetUp.bash
 ```
 
@@ -261,8 +290,10 @@ Configure these parameters:
 
 Video lnk: https://youtu.be/u3kUI9lFPWE?si=Pkq74-rfFEp6dmfd
 
--14-
-```chmod +x Question-14/LabSetUp.bash
+## -14-
+
+```
+chmod +x Question-14/LabSetUp.bash
 ./Question-14/LabSetUp.bash
 ```
 
@@ -275,8 +306,9 @@ Fix it
 
 Video lnk: https://youtu.be/p1vNc1GacpI?si=lbUxoj5jOeruLy7B
 
--15-
-```chmod +x Question-15/LabSetUp.bash
+## -15-
+```
+chmod +x Question-15/LabSetUp.bash
 ./Question-15/LabSetUp.bash
 ```
 
@@ -288,8 +320,9 @@ Task:
 
 Video lnk: https://youtu.be/-rs3AoAVyXE?si=nACYrGA5h_4WL-og
 
--16-
-```chmod +x Question-16/LabSetUp.bash
+## -16-
+```
+chmod +x Question-16/LabSetUp.bash
 ./Question-16/LabSetUp.bash
 ```
 
@@ -303,8 +336,10 @@ Task:
 
 Video lnk: https://youtu.be/t1FxX3PmYDQ?si=ryASL-G9X2FCVApQ
 
--17-
-```chmod +x Question-17/LabSetUp.bash
+## -17-
+
+```
+chmod +x Question-17/LabSetUp.bash
 ./Question-17/LabSetUp.bash
 ```
 
