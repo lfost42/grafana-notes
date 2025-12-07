@@ -21,8 +21,10 @@ Click `Start` 3 times.
 
 Note: You won't be booted once the exam timer runs out. You can end the exam and navigate back to the session if you find it distracting but it's fine to just run it from here. 
 
-```ssh ckad9999
-apt-get update```
+```
+ssh ckad9999
+apt-get update
+```
 
 That's it, you have unlimited use to this environment! It's open source so if you have the time to load these labs into CK-X, I'm sure the community would be very grateful! I would love to contribute in this way but work is pretty intense right now. Maybe after I've completed Kubstronaut!
 
