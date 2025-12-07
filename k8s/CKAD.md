@@ -8,7 +8,7 @@ I expected this to be my main resource but the scenarios are too limited in scop
 
 ---
 
-[killer.sh](https://killer.sh) - This is more challenging than the exam in that each question has many parts but the questions don't reach the complexity you'll see on the exam. It's free so I do recommend using it as well as going through the guidance solutions since it might cover something you haven't seen before, but I don't consider it a good gauge for readiness.
+[killer.sh](https://github.com/sailor-sh/CK-X) - This is more challenging than the exam in that each question has many parts but the questions don't reach the complexity you'll see on the exam. It's free so I do recommend using it as well as going through the guidance solutions since it might cover something you haven't seen before, but I don't consider it a good gauge for readiness.
 
 ---
 
