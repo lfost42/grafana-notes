@@ -4,6 +4,10 @@ This is among the most highly recommended [Youtube playlist](https://www.youtube
 
 If you're using the sailor-sh environment, you won't be able to copy/paste these commands but typing them in is good practice! 
 
+```
+git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
+```
+
 ## -1- ArgoCD (no setup needed)
 
 ### Question
