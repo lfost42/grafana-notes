@@ -206,12 +206,92 @@ chmod +x Question-3/LabSetUp.bash
 You have an existing web application deployed in a Kubernetes cluster using an Ingress resource named `web`. Migrate the existing Ingress configuration to the new Kubernetes Gateway API, maintaining the existing HTTPS access configuration. 
 
 Task:
-1. Create a Gateway Resource named `web-gateway` with hostname `gateway.web.k8s.local ` that maintains the exisiting TLS and listener configuration from the existing Ingress resource named `web`. 
+1. In the `web-app` namespace, create a Gateway Resource named `web-gateway` with hostname `gateway.web.k8s.local ` that maintains the exisiting TLS and listener configuration from the existing Ingress resource named `web`. 
 2. Create a HTTPRoute resource named `web-route` with hostname `gateway.web.k8s.local` that maintains the existing routing rules from the current Ingress resource named web.
 
-Note: A GatewayClass named `nginx-class` is already installed in the cluster.
+Note: A GatewayClass named `nginx-class` is already installed in the cluster. 
 
 Video lnk: https://youtu.be/W-Rt_U8any4?si=KD_6oVewmhPgu1NZ
+
+Solution:
+<details>
+
+Step 1: Verify secret and ingress exist and describe them. 
+
+```bash
+k get secret -n web-app
+k describe secret -n web-app
+k get ingress -n web-app
+k describe ingress -n web-app
+k get svc -n web-app
+k describe svc -n web-app
+```
+
+Step 2: Create the Gateway (use the docs)
+`vim gw.yaml`
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: web-gateway
+  namespace: web-app
+spec:
+  gatewayClassName: nginx-class # in question details
+  listeners:
+  - name: https # tls is only possible in https
+    protocol: HTTPS
+    port: 443 
+    hostname: gateway.web.k8s.local # from question details
+    tls:                            # This is the section we need to add to maintain the existing config
+      mode: Terminate                # for the ingress resource
+      certificateRefs:
+       - kind: Secret
+         name: web-tls
+```
+
+Apply it. 
+`k apply -f gw.yaml`
+
+Verify it's there.
+`k get gateway -n web-app`
+
+Step 3: create the HTTPRoute
+
+`vim http.yaml`
+
+Use the docs for reference
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-route
+  namespace: web-app
+spec:
+  parentRefs:
+  - name: web-gateway
+  hostnames:
+  - "gateway.web.k8s.local"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /                  # We see the path from the ingress description
+    backendRefs:
+    - name: web-service           # Name and port need to match the service we have
+      port: 80
+```
+
+apply it. 
+`k apply -f http.yaml`
+
+Check
+`k describe gateway,httproute -n web-app`
+
+Check all fields match as expected. In the exam you may be given a curl to run to check this. 
+
+</details>
 
 ## -4- CPU and Memory
 
