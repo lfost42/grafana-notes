@@ -20,6 +20,8 @@ There's nothing like completing a full course in Kubernetes to learn how much I 
 
 Since this one digs into the architecture, it was time to set up [Linux VMs](k8s/CKAlab.md). 
 
+I really enjoyed the CKA Certification Course by [Cloud With VarJosh](https://www.youtube.com/playlist?list=PLmPit9IIdzwRjqD-l_sZBDdPlcSfKqpAt). He does an excellent job at tying all the relevant concepts together instead of just throwing them at you. 
+
 For lab practice, I spun up a local version of [sailor-sh](k8s/CKAplab.md) which is an exam simulator comparable to killer.sh. 
 
 They recently started hosting a paid [cloud](https://play.sailor.sh/dashboard) version if your computer isn't able to handle the laod. 
@@ -27,3 +29,10 @@ They recently started hosting a paid [cloud](https://play.sailor.sh/dashboard) v
 #### Labs
 - [IT Kiddie](/k8s/itkiddie.md)
 
+Planned:
+- vj2201 - https://github.com/vj2201/CKA-PREP-2025-v2.git 
+- simonbbb - https://github.com/simonbbbb/CKA-Hand-on-lab
+
+Youtube:
+- JayDemy - https://www.youtube.com/playlist?list=PLSsEvm2nF_8nGkhMyD1sq-DqjwQq8fAii
+- Atla3 -  https://www.youtube.com/watch?v=eGv6iPWQKyo 

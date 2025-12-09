@@ -318,13 +318,13 @@ Solution:
 <details>
 
 Step 1: Check the deployment and scale it down to 0  
-`k get deployments`
+`k get deploy`
 
 Scale it down
 `k scale deployment wordpress --replicas 0`
 
 Check it has scaled  
-`k get deployments`
+`k get deploy`
 
 # Should see 0 replicas
 
@@ -379,7 +379,7 @@ Looking at this a 250m request with a 300m limit looks reasonable
 
 Step 3: Edit the deployment with the new requests and limits
 
-`k edit deployment wordpress`
+`k edit deploy wordpress`
 
 ```yaml
 # ensure you add the limits to containers AND init containers
@@ -393,13 +393,13 @@ Step 3: Edit the deployment with the new requests and limits
 ```
 
 Step 4: Scale the deployment back to 3 replicas  
-`k scale deployment wordpress --replicas 3`
+`k scale deploy wordpress --replicas 3`
 
 Describe the deployment and ensure you see the requests/limits there  
-`k describe deployment wordpress`
+`k describe deploy wordpress`
 
 Once the pods are up and running describe one of the pods and make sure you see the requests/limits there  
-`k describe pod wordpress-xxx-xxx-xxx`
+`k describe po wordpress-xxx-xxx-xxx`
 
 </details>
 
