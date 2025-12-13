@@ -2,7 +2,7 @@
 
 This is among the most highly recommended [Youtube playlist](https://www.youtube.com/playlist?list=PLkDZsCgo3Isr4NB5cmyqG7OZwYEx5XOjM) for CKA. 
 
-Setup for sailor-sh
+## Setup for sailor-sh
 </details>
 
 CK-X started a [hosted version](https://sailor.sh/) but I haven't touched it. These are instructions to run this on your local machine. 
@@ -87,7 +87,7 @@ Toggle back to notes page with `[ctrl+b] 0`
 
 Setup script is not needed for this question. 
 
-### Question
+### Question-1
 
 Install `Argo CD` in a Kubernetes cluster using Helm while ensuring that CRDs are not installed (as they are pre-installed). 
 
@@ -134,7 +134,7 @@ chmod +x Question-2/LabSetUp.bash
 
 WordPress deployment created in the `default` namespace. Edit the deployment to add a sidecar container with shared volume.
 
-### Question
+### Question-2
 
 Task:
 1. Update the existing wordpress deployment adding a sidecar container named `sidecar` using the `busybox:stable` image to the existing pod. 
@@ -232,7 +232,7 @@ Check all fields match as expected. In the exam you may be given a curl to run t
 chmod +x Question-3/LabSetUp.bash
 ./Question-3/LabSetUp.bash
 ```
-### Question 
+### Question-3 
 
 You have an existing web application deployed in a Kubernetes cluster using an Ingress resource named `web`. Migrate the existing Ingress configuration to the new Kubernetes Gateway API, maintaining the existing HTTPS access configuration. 
 
@@ -244,7 +244,7 @@ Note: A GatewayClass named `nginx-class` is already installed in the cluster.
 
 Video lnk: https://youtu.be/W-Rt_U8any4?si=KD_6oVewmhPgu1NZ
 
-Solution:
+#### Solution:
 <details>
 
 Step 1: Verify secret and ingress exist and describe them. 
@@ -331,7 +331,7 @@ chmod +x Question-4/LabSetUp.bash
 ./Question-4/LabSetUp.bash
 ```
 
-### Question
+### Question-4
 
 You are managing a WordPress application running in a Kubernetes cluster. Adjust the Pod resource requests and limits to ensure stable operation. 
 
@@ -345,7 +345,7 @@ Task:
 
 Video lnk: https://youtu.be/Hkl9XgMKxic?si=v9yI1Rz10DELN4Mf
 
-Solution:
+#### Solution:
 <details>
 
 The CK-X environment is huge so any number would work. I recommend trying this one at [killercoda]()
@@ -444,7 +444,7 @@ Once the pods are up and running describe one of the pods and make sure you see 
 
 Setup script is not needed for this question. 
 
-### Question
+### Question-5
 
 Task:
 1. Create a new StorageClass named `local-storage` with the provisioner `rancher.io/local-path`. Set the VolumeBindingMode to `WaitForFirstCustomer`. Do not make the SC default.
@@ -455,13 +455,13 @@ Do not modify any existing Deployments or PersistentVolumeClaims.
 
 Video link: https://youtu.be/WmbIrlbqjPw?si=bYSf9dDtb4hIfKG4
 
-Solution
+#### Solution:
 
 <details>
 
 Step 0 This lab assumes there is a default storage class so we need to create one. Copy one from the docs, update name to `local-path` and set is-default-class to "true" (the default in docs is "false").
 
-Note: In Normal Mode, `A` will move to the end of the line and switch to insert mode. 
+Note: In VIM Normal Mode, `A` will move to the end of the line and switch to insert mode. 
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -549,7 +549,7 @@ chmod +x Question-6/LabSetUp.bash
 ./Question-6/LabSetUp.bash
 ```
 
-### Question
+### Question-6
 You're working in a kubernetes cluster with an existing deployment named `busybox-logger` running in the `priority` namespace. The cluster already has at least one user defined Priority Class. 
 
 Task:
@@ -558,6 +558,78 @@ Task:
 
 Video lnk: https://youtu.be/wiL_M9qbPX4?si=rOIyX45i5kON8Xr7
 
+#### Solution
+
+<details>
+
+Step1 Find the user defined priority classes
+k get pc
+
+User defined PCs are appended with "user", we can see the highest is 1000 so we need to create a PC with value 999. 
+
+`k create pc high-priority --value=999 --description="high priority"`
+
+Check to see PC was created
+`k get pc`
+
+Step 2 Patch the deployment, we need to use the patch command for this for the exam, first we need to figure out where we want the priority class name to go.
+`k get deploy -n priority busybox-logger -oyaml | less`
+
+Note: Use `ctrl + u` to page down and `ctrl + d` to page up and `q` to quit. 
+
+We need to add priorityClassName in the following section:
+
+```yaml
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: busybox-logger
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: busybox-logger
+    spec:
+      # We want to add priorityClassName here
+      containers:
+      - command:
+        - sh
+        - -c
+        - while true; do echo 'logging...'; sleep 5; done
+        image: busybox
+        imagePullPolicy: Always
+        name: busybox
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      # priorityClassName: high-priority
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+```
+
+From this we can see this is under spec:template:spec so our command will look like this
+
+`k -n priority patch deploy busybox-logger -p '{"spec":{"template":{"spec":{"priorityClassName":"high-priority"}}}}'`
+
+Step 3 Check patch has applied successfully
+`k -n priority get deploy busybox-logger -oyaml`
+
+We should see the following
+> priorityClassName: high-priority
+
+</details>
+
 ## -7- Ingress
 
 ```bash
@@ -565,7 +637,7 @@ chmod +x Question-7/LabSetUp.bash
 ./Question-7/LabSetUp.bash
 ```
 
-### Question
+### Question-7
 
 Task:
 1. Expose the existing deployment with a service called echo-service using Service Port `8080` `type=NodePort`
@@ -585,7 +657,7 @@ chmod +x Question-8/LabSetUp.bash
 ./Question-8/LabSetUp.bash
 ```
 
-### Question CRDs
+### Question-8
 
 Task: 
 1. Create a list of all `cert-manager` CRDs and save it to `/root/resources.yaml`
@@ -602,7 +674,7 @@ chmod +x Question-9/LabSetUp.bash
 ./Question-9/LabSetUp.bash
 ```
 
-### Question
+### Question-9
 There are two deployments, `Frontend` and `Backend`. `Frontend` is in the `frontend` namespace, Backend is in the `backend` namespace.
 
 Task:
@@ -617,7 +689,7 @@ chmod +x Question-10/LabSetUp.bash
 ./Question-10/LabSetUp.bash
 ```
 
-### Question
+### Question-10
 Create a new HorizontalPodAutoScaler(HPA) named apache-server in the autoscale namespace
 
 Task:
@@ -635,7 +707,7 @@ chmod +x Question-11/LabSetUp.bash
 ./Question-11/LabSetUp.bash
 ```
 
-### Question
+### Question-11
 Install and configure a CNI of your choice tht meets the specified requirements,
 Choose one of the following:
 
@@ -661,7 +733,7 @@ chmod +x Question-12/LabSetUp.bash
 ./Question-12/LabSetUp.bash
 ```
 
-### Question
+### Question-12
 A user accidentally deleted the MariaDB Deployment in the mariadb namespace. The deployment was configured with persistent storage. Your responsibility is to re-establish the deployment while ensuring data is preserved by reusing the available PersistentVolume.
 
 Task: 
@@ -684,7 +756,7 @@ chmod +x Question-13/LabSetUp.bash
 ./Question-13/LabSetUp.bash
 ```
 
-### Question
+### Question-13
 
 Task:  
 - Set up `cri-dockerd`
@@ -705,7 +777,7 @@ chmod +x Question-14/LabSetUp.bash
 ./Question-14/LabSetUp.bash
 ```
 
-### Question
+### Question-14
 After a cluster migration, the controlplane kube-apiserver is not coming up. Before the migration, the etcd was external and in HA, after migration the kube-api server was pointing to etcd peer port `2380`.
 
 Task:
@@ -720,7 +792,7 @@ chmod +x Question-15/LabSetUp.bash
 ./Question-15/LabSetUp.bash
 ```
 
-### Question 
+### Question-15
 
 Task:
 1. Add a taint to node01 so that no normal pods can be scheduled in this node. `key=PERMISSION`, `value=granted`, `Type=NoSchedule`
@@ -735,7 +807,7 @@ chmod +x Question-16/LabSetUp.bash
 ./Question-16/LabSetUp.bash
 ```
 
-### Question
+### Question-16
 There is a deployment named nodeport-deployment in the relative namespace
 
 Task:
@@ -752,7 +824,7 @@ chmod +x Question-17/LabSetUp.bash
 ./Question-17/LabSetUp.bash
 ```
 
-### Question
+### Question-17
 There is an existing deployment in the nginx-static namespace. The deployment contains a ConfigMap that supports `TLSv1.2` and `TLSv1.3` as well as a `Secret` for `TLS`.
 
 There is a service called `nginx-service` in the `nginx-static` namespace that is currently exposing the deployment.
