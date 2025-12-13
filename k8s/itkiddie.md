@@ -34,6 +34,7 @@ Click `Start` until the exam starts.
 On the left side panel, click `ssh ckad9999` to copy and [ctrl+shift+v to] paste in a terminal. 
 
 Run `apt-get update`
+and `apt-get tmux`
 
 Now we need to do something about that timer ...
 
@@ -54,7 +55,37 @@ git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
 cd CKA-PREP
 ```
 
+`cd CKAD-PREP`
+`vim notes`
+
+```bash
+chmod +x Question-0/LabSetUp.bash
+./question-0/SolutionNotes.bash
+
+ls Question-0/ #in case you need to view the question directory
+cat Question-0/SolutionNotes.bash # to view solution notes
+
+%s/old_number/0/g
+```
+
+The above includes common commands you will or may need and the last line can be used to update the question.
+
+For example, to update the above to Question 1 you would use the following in VIM (be sure you are not in insert mode):
+
+```bash
+:%s/0/1/g
+```
+
+Once you hit enter, the page will be ready to copy/paste for use in the question. 
+
+Toggle back to the last page with `[ctrol + b] l`
+Toggle back to notes page with `[ctrl+b] 0`
+
+</details>
+
 ## -1- ArgoCD (no setup needed)
+
+Setup script is not needed for this question. 
 
 ### Question
 
@@ -409,12 +440,9 @@ Once the pods are up and running describe one of the pods and make sure you see 
 
 </details>
 
-## -5- Storage Class
+## -5- Storage Class (no setup needed)
 
-```bash
-chmod +x Question-5/LabSetUp.bash
-./Question-5/LabSetUp.bash
-```
+Setup script is not needed for this question. 
 
 ### Question
 
@@ -430,6 +458,27 @@ Video link: https://youtu.be/WmbIrlbqjPw?si=bYSf9dDtb4hIfKG4
 Solution
 
 <details>
+
+Step 0 This lab assumes there is a default storage class so we need to create one. Copy one from the docs, update name to `local-path` and set is-default-class to "true" (the default in docs is "false").
+
+Note: In Normal Mode, `A` will move to the end of the line and switch to insert mode. 
+
+```yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-path
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true" # update to true from the docs. 
+provisioner: csi-driver.example-vendor.example
+reclaimPolicy: Retain # default value is Delete
+allowVolumeExpansion: true
+mountOptions:
+  - discard # this might enable UNMAP / TRIM at the block storage layer
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  guaranteedReadWriteLatency: "true" # provider-specific
+```
 
 Step 1 Create the storage class
 `vim sc.yaml`
@@ -469,11 +518,10 @@ metadata:
     storageclass.kubernetes.io/is-default-class: "false" # This is what we want to change to true
 ```
 
-We can see this is under metadata.annotations.storageclass.kubernetes.io/is-default-class we can
-# now build our patch command
+We can see this is under metadata.annotations.storageclass.kubernetes.io/is-default-class we can now build our patch command
 
 ```bash
-k patch storageclasses.storage.k8s.io local-storage -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+k patch sc local-storage -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 ```
 
 Check
@@ -484,13 +532,13 @@ We should see our sc is now labelled as default
 Step 3 remove other default: We can also see the local-path SC is labelled as default, we don't want two defaults so we need to remove this. Use the command we built above to remove this editing it for the local-path SC and setting default to false. 
 
 ```bash
-k patch storageclasses.storage.k8s.io local-path -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+k patch sc local-path -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 ```
 
 Check
 `k get sc`
 
-We should now only see local-storage as the default
+We should now only see local-storage as the default!
 
 </details>
 
