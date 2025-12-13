@@ -60,7 +60,7 @@ cd CKA-PREP
 
 ```bash
 chmod +x Question-0/LabSetUp.bash
-./question-0/SolutionNotes.bash
+./Question-0/LabSetUp.bash
 
 ls Question-0/ #in case you need to view the question directory
 cat Question-0/SolutionNotes.bash # to view solution notes
@@ -78,8 +78,8 @@ For example, to update the above to Question 1 you would use the following in VI
 
 Once you hit enter, the page will be ready to copy/paste for use in the question. 
 
-Toggle back to the last page with `[ctrol + b] l`
-Toggle back to notes page with `[ctrl+b] 0`
+To create your working tab: `[ctrl + b] c`
+To toggle back and forth between tabs, `[ctrol + b] l`
 
 </details>
 
@@ -632,11 +632,14 @@ We should see the following
 
 ## -7- Ingress
 
+Note: The final curl command will not work in CK-X. The below is given to run in killercoda instead. 
+
 ```bash
+git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
+cd CKA-PREP
 chmod +x Question-7/LabSetUp.bash
 ./Question-7/LabSetUp.bash
 ```
-
 ### Question-7
 
 Task:
@@ -649,6 +652,87 @@ In the exam it may give you a command like `curl -o /dev/null -s -w "%{http_code
 This requires an ingress controller, to get this to work ensure your `/etc/hosts` file has an entry for your NodeIP pointing to example.org
 
 Video lnk: https://youtu.be/mtORnV8AlI4?si=6fZq-yd8Sezg0a7v
+
+#### Solution
+
+<details>
+
+Step 1 Expose the deployment with the given features
+`k -n echo-sound get deploy`
+
+`k -n echo-sound expose deploy echo --name echo-service --type NodePort --port 8080 --target-port 8080`
+
+Check the service has been created
+`k -n echo-sound get svc`
+
+Step 2 Create the ingress. Use the docs for a template
+`vim ingress.yaml`
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: echo
+  namespace: echo-sound
+spec:
+  rules:
+  - host: "example.org"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/echo"
+        backend:
+          service:
+            name: echo-service
+            port:
+              number: 8080
+```
+Apply
+`k apply -f ingress.yaml`
+
+Check
+`k -n echo-sound describe ingress`
+
+Step 3 Check curl command.
+
+Find the NodeIP:
+`k get nodes -owide`
+
+Find the NodePort:
+`k get svc -n echo-sound`
+
+Get the NodePort of the service (does not work in CX-X, run this in killercoda to practice this part)
+`curl NODEIP:NODEPORT/echo`
+
+Output
+
+```Hostname: echo-84897cb55d-lk675
+
+Pod Information:
+        -no pod information available-
+
+Server values:
+        server_version=nginx: 1.13.3 - lua: 10008
+
+Request Information:
+        client_address=172.30.2.2
+        method=GET
+        real path=/echo
+        query=
+        request_version=1.1
+        request_scheme=http
+        request_uri=http://172.30.2.2:8080/echo
+
+Request Headers:
+        accept=*/*
+        host=172.30.2.2:31999
+        user-agent=curl/8.5.0
+
+Request Body:
+        -no body in request-
+```
+
+</details>
 
 ## -8- CRDs
 
