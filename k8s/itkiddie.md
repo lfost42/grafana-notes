@@ -1208,18 +1208,81 @@ Check cert files are correct
 
 ## -15- Taints and Tolerations
 
-```bash
-chmod +x Question-15/LabSetUp.bash
-./Question-15/LabSetUp.bash
-```
+No setup required
 
 ### Question-15
 
 Task:
 1. Add a taint to node01 so that no normal pods can be scheduled in this node. `key=PERMISSION`, `value=granted`, `Type=NoSchedule`
-2. Schedule a Pod on `node01` adding the correct toleration to the spec so it can be deployed.
+2. Schedule a Pod on `node01` (on CK-X, use `k3d-cluster-agent-0`) adding the correct toleration to the spec so it can be deployed.
 
 Video lnk: https://youtu.be/-rs3AoAVyXE?si=nACYrGA5h_4WL-og
+
+#### Solution
+
+<details>
+
+Step One - First thing we need to do is add the taint to node01. You can use
+k taint --help
+
+Examples:
+  \# Update node 'foo' with a taint with key 'dedicated' and value 'special-user' and effect 'NoSchedule'. 
+  \# If a taint with that key and effect already exists, its value is replaced as specified 
+  `kubectl taint nodes foo dedicated=special-user:NoSchedule`
+
+For the question we have
+`k taint node k3d-cluster-agent-0 PERMISSION=granted:NoSchedule`
+Note: for CK-X, we also need to taint the second node or it will accept the second pod.
+`k taint node k3d-cluster-server-0 PERMISSION=granted:NoSchedule`
+
+Step Two: We need to create a pod with the appropriate tolerations to be scheduled on `k3d-cluster-agent-0` (or `node01` on killerkoda)
+`k run nginx --image nginx --dry-run=client -oyaml > pod.yaml`
+`vim pod.yaml`
+
+Add in spec:
+```yaml
+  tolerations:
+  - key: "PERMISSION"
+    operator: "Equal"
+    value: "granted"
+    effect: "NoSchedule"
+```
+
+apply
+`k apply -f pod.yaml`
+We should see the pod has created as expected
+
+Step 3: To test the taint is working as expected create a pod you know doesn't have the tolerations needed. 
+`k run nginx-fail --image nginx --dry-run=client -oyaml > fail.yaml`
+
+Add an alternate toleration.
+`vim fail.yaml`
+
+```yaml
+  tolerations:
+  - key: "PERMISSION"
+    operator: "Equal"
+    value: "granted"
+    effect: "NoSchedule"
+```
+
+check
+`k get po`
+
+We should see this pod in a pending state. 
+`k describe po nginx-fail | grep Events: -A10`
+
+You should see the following:
+
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  13s   default-scheduler  0/2 nodes are available ...
+
+Delete nginx-fail
+`k delete po nginx-fail --force`
+
+</details>
 
 ## -16- NodePort
 
