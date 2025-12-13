@@ -326,7 +326,13 @@ Check all fields match as expected. In the exam you may be given a curl to run t
 
 ## -4- CPU and Memory
 
+Note: While this lab will work on CK-X, it has a very generous CPU and memory allocation so any value you enter will be correct. For this reason, I recommend running in killercoda. 
+
+The below prep command given to run in killercoda. 
+
 ```bash
+git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
+cd CKA-PREP
 chmod +x Question-4/LabSetUp.bash
 ./Question-4/LabSetUp.bash
 ```
@@ -704,8 +710,7 @@ Find the NodePort:
 Get the NodePort of the service (does not work in CX-X, run this in killercoda to practice this part)
 `curl NODEIP:NODEPORT/echo`
 
-Output
-
+Example Output
 ```Hostname: echo-84897cb55d-lk675
 
 Pod Information:
@@ -750,6 +755,30 @@ Task:
 You may use any output format that `kubectl` supports
 
 Video lnk: https://youtu.be/mKvkcjoYzOc?si=53ob4__-b242y4K_
+
+#### Solution
+
+<detail>
+
+Step 1 list the cert-manager CRDs
+`k get crd | grep cert-manager`
+
+Check the list you get and then output it to the file location
+`k get crd | grep cert-manager > /root/resources.yaml`
+
+Check the file matches your first list
+`cat /root/resources.yaml`
+
+Step 2 extract the doc for subject spec, for this we want to use explain
+`k explain certificate.spec.subject`
+
+We should see the doc output for the subject spec of certificates, we now want output it to the file
+`k explain certificate.spec.subject > /root/subject.yaml`
+
+Check the file matches the explain command output
+`cat /root/subject.yaml`
+
+</detail>
 
 ## -9- Network Policy
 
