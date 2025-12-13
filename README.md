@@ -28,9 +28,9 @@ They recently started hosting a paid [cloud](https://play.sailor.sh/dashboard) v
 
 #### Labs
 - [IT Kiddie](/k8s/itkiddie.md)
+- [DumbItGuy](/k8s/dumbitguy.md)
 
 Planned:
-- vj2201 - https://github.com/vj2201/CKA-PREP-2025-v2.git 
 - simonbbb - https://github.com/simonbbbb/CKA-Hand-on-lab
 
 Youtube:
