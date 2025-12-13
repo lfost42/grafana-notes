@@ -1,4 +1,4 @@
-# CKAD Learning Notes
+# CKAD Resources
 
 [KodeKloud](https://kodekloud.com) - This is a great place to start, but I don't know how people pass with just KodeKloud and otherwise little or no background. There is info that is missing and a lot of extra info you don't need. I felt this way about both the course the mock exams. I would end up finding a handful of questions I wanted to practice in the mock exams, but navigating to them was a chore since you have to scroll and load each question before skipping to another question.
 

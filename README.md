@@ -10,29 +10,20 @@ Kubernetes defines the metrics, labels, and lifecycles we’re trying to visuali
 
 ---
 
-### [CKAD Learning Notes](k8s/CKAD.md) 
+### [Kubstronaut Adventures]
 
-There's nothing like completing a full course in Kubernetes to learn how much I still needed to learn! I just completed [Certified Kubernetes Application Developer](https://www.credly.com/badges/2c5458e2-0c2f-4458-9ec2-401355ee6539), the first cert in my goal to Kubstronaut. While I'm sure I can get what I need without KCNA and KCSA, work will pay for it and I do want that jacket! I work with them pretty often during sev1s and I'd like to be able to contribute more when I'm sitting at the table. 
+There's nothing like completing a course in Kubernetes to learn how much I still needed to learn! Upon completing CKAD, I decided that I also needed CKA and CKS. Then I thought, work will pay for KCNA and KCSA and Kubstronaut does come with a really nice jacket! 
+
+All joking aside, I work with Site Reliability Engineers pretty often during sev1s and I'd like to be able to contribute more when I'm sitting at the table. Work also has me moving into supporting MuleSoft so this is a good way to understand the Runtime Fabric and what actually goes on under all that abstraction. 
+
+#### [CKAD Resources](k8s/ckad/CKADresources.md) 
+
+[CKAD: Certified Kubernetes Application Developer](https://www.credly.com/badges/2c5458e2-0c2f-4458-9ec2-401355ee6539)
+
+#### [CKA Resources](k8s/cka/README.md)
+
+[KCNA: Kubernetes and Cloud Native Associate](https://www.credly.com/badges/233c3dab-168a-440d-a621-e4ffe65ab361/linked_in?t=t6u03c)
 
 ---
 
-### [CKA Learning Notes](k8s/CKA.md) 
-
-Since this one digs into the architecture, it was time to set up [Linux VMs](k8s/CKAlab.md). 
-
-I really enjoyed the CKA Certification Course by [Cloud With VarJosh](https://www.youtube.com/playlist?list=PLmPit9IIdzwRjqD-l_sZBDdPlcSfKqpAt). He does an excellent job at tying all the relevant concepts together instead of just throwing them at you. 
-
-For lab practice, I spun up a local version of [sailor-sh](k8s/CKAplab.md) which is an exam simulator comparable to killer.sh. 
-
-They recently started hosting a paid [cloud](https://play.sailor.sh/dashboard) version if your computer isn't able to handle the laod. 
-
-#### Labs
-- [IT Kiddie](/k8s/itkiddie.md)
-- [DumbItGuy](/k8s/dumbitguy.md)
-
-Planned:
-- simonbbb - https://github.com/simonbbbb/CKA-Hand-on-lab
-
-Youtube:
-- JayDemy - https://www.youtube.com/playlist?list=PLSsEvm2nF_8nGkhMyD1sq-DqjwQq8fAii
-- Atla3 -  https://www.youtube.com/watch?v=eGv6iPWQKyo 
+My reward for finishing Kubstronaut will be taking GROT's new [Technical Practitioner Path 101](https://learn.grafana.com/path/technical-practitioner-path). I'll be using this to start adding more detailed notes about Grafana and demystifying that learning process. 
