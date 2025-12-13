@@ -1078,18 +1078,15 @@ Volumes:
 
 </details>
 
-## -13- Cri-Dockerd
+## -13- Cri-Dockerd (no setup required)
 
-```bash
-chmod +x Question-13/LabSetUp.bash
-./Question-13/LabSetUp.bash
-```
+This does not work in CK-X. Run in killercoda. No setup required. 
 
 ### Question-13
 
 Task:  
 - Set up `cri-dockerd`
-- Install the debian package `~/cri-dockerd.deb` using `dpkg`
+- Install the debian package `~/cri-dockerd.deb` using `dpkg` from https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.20/cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb
 - Enable and start the `cri-docker` service
 - Configure these parameters:
 1. Set `net.bridge.bridge-nf-call-iptables` to 1
@@ -1098,6 +1095,54 @@ Task:
 4. Set `net.netfilter.nf_conntrack_max` to 131072
 
 Video lnk: https://youtu.be/u3kUI9lFPWE?si=Pkq74-rfFEp6dmfd
+
+#### Solution
+
+<details>
+
+Step 1 install and start cri-dockerd. First we need to use dpkg to install the package
+`wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.20/cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb`
+
+Find installation file
+`ls -l | grep cri-dockerd`
+
+install
+`sudo dpkg -i cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb`
+
+Enable the service
+`sudo systemctl enable --now cri-docker.service`
+
+Start the service
+`sudo systemctl start cri-docker.service`
+
+Verify the service is running
+`sudo systemctl status cri-docker.service`
+It should show as active (running)
+
+Step 2 set the system parameters. Run the following commands to set the parameters
+
+sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
+sudo sysctl -w net.ipv6.conf.all.forwarding=1
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo sysctl -w net.ipv4.ip_forward=1
+
+This isn't persistent however so would be lost on reboot, to make it persistent
+`vim /etc/sysctl.d/kube.conf`
+
+add the config
+```
+net.bridge.bridge-nf-call-iptables=1
+net.ipv6.conf.all.forwarding=1
+net.ipv4.ip_forward=1
+net.netfilter.nf_conntrack_max=131072
+```
+
+Check the output and ensure it is correct
+`sudo sysctl --system`
+
+You may need to add/edit files in the /etc/sysctl.d directory, if you create a file and there are still overrides check to see if there re additional conf files there. You can give your config a lexically later name e.g. zz-cridocker.conf so it is ran last or you can edit those values in the other files.
+
+</details>
 
 ## -14- Kube-apiserver
 
