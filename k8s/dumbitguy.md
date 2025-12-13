@@ -2,14 +2,12 @@
 
 This is another highly recommended [Youtube playlist](https://www.youtube.com/playlist?list=PLkDZsCgo3Isr4NB5cmyqG7OZwYEx5XOjM) for CKA. 
 
-## Setup for sailor-sh
+### Setup for sailor-sh
 </details>
 
 CK-X started a [hosted version](https://sailor.sh/) but I haven't touched it. These are instructions to run this on your local machine. 
 
 GitHub: https://github.com/sailor-sh/CK-X
-
-### Setup for CK-X
 
 If on Windows, enable `WSL2` in `docker destop` and run:
 
@@ -24,6 +22,8 @@ curl -fsSL https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install
 ```
 
 `http://localhost:30080` should load automatically. 
+
+### Setting up CK-X for labwork
 
 Click `Start Exam` and `Start Exam`. It will default to the CKAD practice exam which is fine, we're not using it anyway. 
 
@@ -107,6 +107,9 @@ Video Link - https://youtu.be/aXvvc1EB1zg
 
 Step 1: create PVC with no storageClass (PV is pre-reset by LabSetUp.bash)
 
+Review pv to determine storage class.
+`k -n mariadb describe pv mariadb-pv`
+
 ```bash
 cat <<'EOF' > pvc.yaml
 apiVersion: v1
@@ -120,16 +123,20 @@ spec:
   resources:
     requests:
       storage: 250Mi
+  storageClassName: standard
 EOF
 ```
 
 `k apply -f pvc.yaml`
-`k -n mariadb` get pvc mariadb
+`k -n mariadb get pvc mariadb`
 `k get pv mariadb-pv`     # should show Bound to mariadb
 
 Step 2: ensure deployment uses the PVC
 mariadb-deploy.yaml should mount claimName: mariadb
 (LabSetUp.bash leaves claimName blank for practice)
+`vim mariadb-deploy.yaml`
+
+Add claimName and apply
 `k apply -f mariadb-deploy.yaml`
 `k -n mariadb get pods`
 
