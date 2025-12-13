@@ -1401,7 +1401,13 @@ working. Further configuration is required.</p>
 
 ## -17- TLS
 
+Since curl doesn't work in CK-X, I'm sending you back to killercoda for this one. 
+
+The below prep command given to run in killercoda. 
+
 ```bash
+git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
+cd CKA-PREP
 chmod +x Question-17/LabSetUp.bash
 ./Question-17/LabSetUp.bash
 ```
@@ -1419,3 +1425,36 @@ Task:
     `curl -vk --tlsv1.3 https://ckaquestion.k8s.local` # should work
 
 Video lnk: https://youtu.be/-6QTAhprvTo?si=Rx81y2lHvK2Y_jBF
+
+#### Solution
+
+<details>
+
+Step 1: We need to get the IP of the service
+`k -n nginx-static get svc`
+
+We need to add this IP with the host name to /etc/hosts
+`echo 'x.x.x.x ckaquestion.k8s.local' >> /etc/hosts`
+
+Check the hosts file has been updated the IP and host should be added to the bottom of the file
+`cat /etc/hosts`
+
+Curl both tls versions
+`curl -vk --tls-max 1.2 https://ckaquestion.k8s.local`
+`curl -vk --tlsv1.3 https://ckaquestion.k8s.local`
+Both should currently work.
+
+Step 2: We want to edit the config map to remove all references to tls v1.2
+`k -n nginx-static edit cm nginx-config` # remove TLSv1.2 from SSL protocols (remove from last applied configuration for safety)
+
+Step 3: If we run the check commands now we see v1.2 is still working, this is because we need to restart the deployment to use the new CM config
+`k -n nginx-static rollout restart deploy/nginx-static`
+
+Test the commands again and the v1.2 should no longer work
+`curl -vk --tls-max 1.2 https://ckaquestion.k8s.local`
+You should see: `curl: (35) OpenSSL/3.0.13: error:0A00042E:SSL routines::tlsv1 alert protocol version`
+
+`curl -vk --tlsv1.3 https://ckaquestion.k8s.local`
+Should continue to work as expected
+
+</details>
