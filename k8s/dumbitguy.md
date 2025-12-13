@@ -105,6 +105,8 @@ Video Link - https://youtu.be/aXvvc1EB1zg
 
 #### Solution-1
 
+<details>
+
 Step 1: create PVC with no storageClass (PV is pre-reset by LabSetUp.bash)
 
 Review pv to determine storage class.
@@ -139,4 +141,7 @@ mariadb-deploy.yaml should mount claimName: mariadb
 Add claimName and apply
 `k apply -f mariadb-deploy.yaml`
 `k -n mariadb get pods`
+
+</details>
+
 
