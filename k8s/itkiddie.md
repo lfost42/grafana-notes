@@ -937,8 +937,6 @@ We should see pods, deployments and replicasets
 
 ## -12- Persistent Volume
 
-Something happened with the deployment so I had to create and apply it from the setup file. 
-
 ```bash
 chmod +x Question-12/LabSetUp.bash
 ./Question-12/LabSetUp.bash
@@ -1017,39 +1015,8 @@ Double check it has bound to the PV
 `k -n mariadb get pv`
 This should show as bound with mariadb claim name
 
-Note: in case you're not accessing this doc from your lab, you can grab the deployment yaml by running `cat Question-12/LabSetUp.bash`. I recommend doing this from a separate terminal sincen tmux doesn't scroll. 
+`cp ~/mariadb-deploy.yaml mariadb-deploy.yaml`
 `vim maria-deploy.yaml`
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mariadb
-  namespace: mariadb
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mariadb
-  template:
-    metadata:
-      labels:
-        app: mariadb
-    spec:
-      containers:
-      - name: mariadb
-        image: mariadb:10.6
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: rootpass
-        volumeMounts:
-        - name: mariadb-storage
-          mountPath: /var/lib/mysql
-      volumes:
-      - name: mariadb-storage
-        persistentVolumeClaim:
-          claimName: mariadb
-```
 
 Step 4 Ensure the deployment looks as expected and specifically it uses your PVC
 ```yaml
