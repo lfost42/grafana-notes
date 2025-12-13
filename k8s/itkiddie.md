@@ -758,7 +758,7 @@ Video lnk: https://youtu.be/mKvkcjoYzOc?si=53ob4__-b242y4K_
 
 #### Solution
 
-<detail>
+<details>
 
 Step 1 list the cert-manager CRDs
 `k get crd | grep cert-manager`
@@ -778,7 +778,7 @@ We should see the doc output for the subject spec of certificates, we now want o
 Check the file matches the explain command output
 `cat /root/subject.yaml`
 
-</detail>
+</details>
 
 ## -9- Network Policy
 
@@ -794,6 +794,33 @@ Task:
 Look at the Network Policy YAML files in `/root/network-policies`. Decide which of the policies provides the functionality to allow interaction between the `frontend` and the `backend` deployments in the least permissive way and deploy that yaml.
 
 Video lnk: https://youtu.be/EIjpWA0AGG4?si=ih4IWm4wsDeIPzbM
+
+#### Solution
+
+<details>
+
+Step 1 Inspect file one
+`cat /root/network-policies/network-policy-1.yaml`
+
+We can see file one allows all ingress traffic which is too permissive
+
+Step 2 Inspect file 2
+`cat /root/network-policies/network-policy-2.yaml`
+
+We can see this has the correct namespace selector but it also allows an additional IP which wasn't mentioned in the question so that is too permissive
+
+Step 3 Inspect file 3
+`cat /root/network-policies/network-policy-2.yaml`
+
+File three only allows frontend traffic from the frontend namespace and pods labelled front end. We need to check the labels on the frontend deployment pods
+`k get po -n frontend --show-labels`
+
+We can see they have the label app=frontend which means network-policy-3 is the least permissive and allows the traffic we want
+
+Step 4 Apply the file
+`k apply -f /root/network-policies/network-policy3.yaml`
+
+</details>
 
 ## -10- HPA
 
