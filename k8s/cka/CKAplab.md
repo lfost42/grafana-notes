@@ -43,3 +43,7 @@ In the Evaluation page, click `Current Exam` and `Connect to Session`.
 You are now free to use this environment uninterrupted!
 
 I am tinkering with the idea of loding these labs into CK-X. I just need a little more free time than I do right now!
+
+---
+
+[back to main](../../README.md)

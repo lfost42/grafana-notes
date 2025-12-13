@@ -1296,6 +1296,9 @@ k top nodes
 k top pods -n <namespace>
 ```
 
+---
+
+[back to main](../../README.md)
 
 
 

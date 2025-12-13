@@ -6,4 +6,4 @@ My favorite Kubernetes resource so far is [Cloud With VarJosh](https://www.youtu
 
 Right now, I'm working on [CKA](../cka/README.md)
 
-[back to main](https://github.com/lfost42/grafana-notes)
+[back to main](../README.md)

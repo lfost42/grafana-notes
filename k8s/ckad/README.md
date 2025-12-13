@@ -4,4 +4,6 @@ While I completed CKAD, I didn't need a lot of learning notes as I had previous 
 
 I'm currently working on [CKA](../cka/README.md)
 
-[back to main](https://github.com/lfost42/grafana-notes)
+---
+
+[back to main](../../README.md)

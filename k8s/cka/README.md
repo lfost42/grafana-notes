@@ -26,3 +26,7 @@ Planned:
 Youtube:
 - [JayDemy](https://www.youtube.com/playlist?list=PLSsEvm2nF_8nGkhMyD1sq-DqjwQq8fAii) - This is usually mentioned a long with IT Kiddie and DumbItGuy but I couldn't find any accompanying labs to go with it so I'll watch it once I'm done with labs. 
 - [Atla3](https://www.youtube.com/watch?v=eGv6iPWQKyo) - This covers some gotchas that were added to CKA recently. I'll add notes when I give it a rewatch. 
+
+---
+
+[back to main](../../README.md)
