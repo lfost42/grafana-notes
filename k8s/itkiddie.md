@@ -937,6 +937,8 @@ We should see pods, deployments and replicasets
 
 ## -12- Persistent Volume
 
+Something happened with the deployment so I had to create and apply it from the setup file. 
+
 ```bash
 chmod +x Question-12/LabSetUp.bash
 ./Question-12/LabSetUp.bash
@@ -957,6 +959,124 @@ Storage = 250Mi
 - Ensure the MariaDB Deployment is running and Stable
 
 Video lnk: https://youtu.be/0h2Dik_OTvw?si=9hU6-xzCW7AUsmEj
+
+#### Solution
+
+<details>
+
+Step 1 - check the pv exists
+`k get pv`
+`k describe pv`
+
+Step 2 - Clear existing claim. We can see that the PV has a RELEASED status as it has a claim from the previous PVC, we need to edit the PV to remove the claim reference. We can also see the PV has an empty storage class which we need to keep in mind for creating our PVC
+`k edit pv mariadb-pv`
+
+We need to remove this section
+```yaml
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: mariadb
+    namespace: mariadb
+    resourceVersion: "11228"
+    uid: ffa27d96-5199-4785-8ad9-562e8f5d5f53
+```
+
+Check the PV is now available
+`k get pv mariadb-pv`
+
+PV should now have status AVAILABLE
+
+Step 3 Create the PVC (Remember the storage class for the PV is empty)
+`vim pvc.yaml`
+
+Use the docs
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb
+  namespace: mariadb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 250Mi
+  storageClassName: "" # This will allow it to bind to the existing PV with ono SC
+```
+
+Apply it
+`k apply pvc.yaml`
+
+Check it has bound
+`k -n mariadb get pvc`
+Status should show bound
+
+Double check it has bound to the PV
+`k -n mariadb get pv`
+This should show as bound with mariadb claim name
+
+Note: in case you're not accessing this doc from your lab, you can grab the deployment yaml by running `cat Question-12/LabSetUp.bash`. I recommend doing this from a separate terminal sincen tmux doesn't scroll. 
+`vim maria-deploy.yaml`
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  namespace: mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:10.6
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: rootpass
+        volumeMounts:
+        - name: mariadb-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mariadb-storage
+        persistentVolumeClaim:
+          claimName: mariadb
+```
+
+Step 4 Ensure the deployment looks as expected and specifically it uses your PVC
+```yaml
+volumes:
+        - name: mariadb-storage
+          persistentVolumeClaim:
+            claimName: mariadb
+```
+
+Apply it
+`k apply -f mariadb-deploy.yaml`
+
+Step 5: final checks
+`k get po -n mariadb`
+
+Pod should be running, we want to check it is using the PVC
+`k -n mariadb describe po`
+
+We should see this:
+```
+Volumes:
+  mariadb-storage:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  mariadb
+```
+
+</details>
 
 ## -13- Cri-Dockerd
 
