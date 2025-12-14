@@ -2,70 +2,16 @@
 
 This is another highly recommended [Youtube playlist](https://www.youtube.com/playlist?list=PLkDZsCgo3Isr4NB5cmyqG7OZwYEx5XOjM) for CKA. 
 
-### Setup for sailor-sh
-
-Expand this section if you do not currently have sailor-sh set up.
-
-<details>
-
-As an fyi, CK-X started a [hosted version](https://sailor.sh/) but I haven't touched it. These are instructions to run this on your local machine. 
-
-GitHub Instructions: https://github.com/sailor-sh/CK-X
-
-Linux & macOS:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install.sh | bash
-```
-
-If on Windows, enable `WSL2` in `docker destop` and run:
-
-```bash
-irm https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install.ps1 | iex`
-```
-
-`http://localhost:30080` should load automatically. 
-
-Click `Start Exam` and `Start Exam`. It will default to the CKAD practice exam which is fine, we're not using it anyway. 
-
-Wait until environment loads (will take a few minutes).
-
-Click `Start` until the exam starts. 
-
-</details>
-
-### Setting up CK-X for labwork
-
-On the left side panel, click `ssh ckad9999` to copy and [ctrl+shift+v to] paste in a terminal. 
-
-Run `apt-get update`
-and `apt-get install -y tmux`
-
-Now we need to do something about that timer ...
-
-Navigate to `Exam Controls` and click `End Exam` and `End Exam` (we're not using this!). 
-
-In the Evaluation page, click `Current Exam` and `Connect to Session`. 
-
-You are now free to use this environment uninterrupted!
-
-I am tinkering with the idea of loding these labs into CK-X. I just need a little more free time than I do right now!
-
-For this set of labs, run the following to download lab files and enable the run script:
+### Lab Setup
 
 ```bash
 git clone https://github.com/vj2201/CKA-PREP-2025-v2.git
-chmod +x CKA-PREP-2025-v2/scripts/run-question.sh` # note: use autocomplete!
+chmod +x CKA-PREP-2025-v2/scripts/run-question.sh`
 cd CKA-PREP-2025-v2
 chmod +x scripts/run-question.sh
 ```
 
-I like to keep this in case I want to save any copy/paste variables, functions, or even specific question notes. 
-
-To create your working tab: `[ctrl + b] c`
-To toggle back and forth between tabs, `[ctrol + b] l`
-
-### Question-1 MariaDB-Persistent volume
+## Question-1 MariaDB-Persistent volume
 
 ```bash
 ./scripts run-question.sh Question-1\ *
@@ -128,7 +74,7 @@ Add claimName and apply
 
 </details>
 
-### Question-2 ArgoCD
+## Question-2 ArgoCD
 
 ```bash
 ./scripts run-question.sh Question-2\ *
@@ -142,7 +88,7 @@ Install Argo CD in a kubernetes cluster using helm while ensuring the CRDs are n
 
 Video link - https://youtu.be/e0YGRSjb8CU
 
-### Question-3 Sidecar
+## Question-3 Sidecar
 
 ```bash
 ./scripts run-question.sh Question-3\ *
@@ -152,7 +98,7 @@ Update the existing wordpress deployment adding a sidecar container named sideca
 
 Video link - https://youtu.be/3xraEGGQJDY
 
-### Question-4 Resource-Allocation
+## Question-4 Resource-Allocation
 
 ```bash
 ./scripts run-question.sh Question-4\ *
@@ -169,7 +115,7 @@ Ensure both the init containers and the main containers use exactly the same res
 
 Video link - https://youtu.be/ZqGDdETii8c
 
-### Question-5 HPA
+## Question-5 HPA
 
 ```bash
 ./scripts run-question.sh Question-5\ *
@@ -184,7 +130,7 @@ Create a new HorizontalPodAutoScaler(HPA) named apache-server in the autoscale n
 
 Video Link - https://youtu.be/YGkARVFKtmM
 
-### Question-6 CRDs
+## Question-6 CRDs
 
 ```bash
 ./scripts run-question.sh Question-6\ *
@@ -195,7 +141,7 @@ Video Link - https://youtu.be/YGkARVFKtmM
 
 Video Link - https://youtu.be/SA1DzLQaDJs
 
-### Question-7 PriorityClass
+## Question-7 PriorityClass
 
 ```bash
 ./scripts run-question.sh Question-7\ *
@@ -208,7 +154,7 @@ You're working in a kubernetes cluster with an existing deployment named busybox
 
 Video Link - https://youtu.be/CZzxGyF6OHc
 
-### Question-8 CNI & Network Policy
+## Question-8 CNI & Network Policy
 
 ```bash
 ./scripts run-question.sh Question-8\ *
@@ -232,7 +178,7 @@ The CNI you choose must
 
 Video Link - https://youtu.be/Uc04Ui4x3EM
 
-### Question-9 Cri-Dockerd
+## Question-9 Cri-Dockerd
 
 ```bash
 ./scripts run-question.sh Question-9\ *
@@ -250,7 +196,7 @@ Set net.netfilter.nf_conntrack_max to 131072
 
 Video Link - https://youtu.be/ybzo1vXiqjU
 
-### Question-10 Taints-Tolerations
+## Question-10 Taints-Tolerations
 
 ```bash
 ./scripts run-question.sh Question-10\ *
@@ -261,7 +207,7 @@ Video Link - https://youtu.be/ybzo1vXiqjU
 
 Video Link - https://youtu.be/oy6Mdqt1-jk
 
-### Question-11 Gateway-API
+## Question-11 Gateway-API
 
 ```bash
 ./scripts run-question.sh Question-11\ *
@@ -277,7 +223,7 @@ Note: A GatewayClass named nginx-class is already installed in the cluster
 
 Video link - https://youtu.be/G9zispvOCHE
 
-### Question-12 Ingress
+## Question-12 Ingress
 
 ```bash
 ./scripts run-question.sh Question-12\ *
@@ -292,7 +238,7 @@ In the exam it may give you a command like `curl -o /dev/null -s -w "%{http_code
 
 Video Link - https://youtu.be/sy9zABvDedQ
 
-### Question-13 Network-Policy
+## Question-13 Network-Policy
 
 ```bash
 ./scripts run-question.sh Question-13\ *
@@ -304,7 +250,7 @@ Look at the Network Policy YAML files in /root/network-policies. Decide which of
 
 Video Link - https://youtu.be/rA8mXYTU0W8
 
-### Question-14 Storage-Class
+## Question-14 Storage-Class
 
 ```bash
 ./scripts run-question.sh Question-14\ *
@@ -319,7 +265,7 @@ Do not modify any existing Deployments or PersistentVolumeClaims
 
 Video link - https://youtu.be/di7X7OHn2fc
 
-### Question-15 Etcd-Fix
+## Question-15 Etcd-Fix
 
 ```bash
 ./scripts run-question.sh Question-15\ *
@@ -330,7 +276,7 @@ Before the migration, the etcd was external and in HA, after migration the kube-
 
 Video Link - https://youtu.be/IL448T6r8H4
 
-### Question-16 NodePort
+## Question-16 NodePort
 
 ```bash
 ./scripts run-question.sh Question-16\ *
@@ -344,7 +290,7 @@ There is a deployment named nodeport-deployment in the relative namespace
 
 Video Link - https://www.youtube.com/watch?v=UT-RZCZlUiw
 
-### Question-17 TLS-Config
+## Question-17 TLS-Config
 
 ```bash
 ./scripts run-question.sh Question-17\ *

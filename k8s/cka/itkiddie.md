@@ -2,60 +2,16 @@
 
 This is among the most highly recommended [Youtube playlist](https://www.youtube.com/playlist?list=PLkDZsCgo3Isr4NB5cmyqG7OZwYEx5XOjM) for CKA. 
 
-## Setup for sailor-sh
-</details>
-
-CK-X started a [hosted version](https://sailor.sh/) but I haven't touched it. These are instructions to run this on your local machine. 
-
-GitHub: https://github.com/sailor-sh/CK-X
-
-### Setup for CK-X
-
-If on Windows, enable `WSL2` in `docker destop` and run:
-
-```bash
-irm https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install.ps1 | iex`
-```
-
-Linux & macOS:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/nishanb/ck-x/master/scripts/install.sh | bash
-```
-
-`http://localhost:30080` should load automatically. 
-
-Click `Start Exam` and `Start Exam`. It will default to the CKAD practice exam which is fine, we're not using it anyway. 
-
-Wait until environment loads (will take a few minutes).
-
-Click `Start` until the exam starts. 
-
-On the left side panel, click `ssh ckad9999` to copy and [ctrl+shift+v to] paste in a terminal. 
-
-Run `apt-get update`
-and `apt-get tmux`
-
-Now we need to do something about that timer ...
-
-Navigate to `Exam Controls` and click `End Exam` and `End Exam` (we're not using this!). 
-
-In the Evaluation page, click `Current Exam` and `Connect to Session`. 
-
-You are now free to use this environment uninterrupted!
-
-I am tinkering with the idea of loding these labs into CK-X. I just need a little more free time than I do right now!
-
-</details>
+### Lab Setup
 
 In your lab terminal, run the following to download lab files:
 
 ```bash
-git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
+git clone https://github.com/CameronMetcalfe22/CKA-PREP # if this doesn't work, run `apt-get update` first
 cd CKA-PREP
 ```
 
-`cd CKAD-PREP`
+I like to keep this in a separate tab or terminal:  
 `vim notes`
 
 ```bash
@@ -68,9 +24,7 @@ cat Question-0/SolutionNotes.bash # to view solution notes
 %s/old_number/0/g
 ```
 
-The above includes common commands you will or may need and the last line can be used to update the question.
-
-For example, to update the above to Question 1 you would use the following in VIM (be sure you are not in insert mode):
+The last line can be used to update the question in VIM. For example, to update the above to Question 1 you would use the following in VIM (be sure you are not in insert mode):
 
 ```bash
 :%s/0/1/g
@@ -78,16 +32,11 @@ For example, to update the above to Question 1 you would use the following in VI
 
 Once you hit enter, the page will be ready to copy/paste for use in the question. 
 
-To create your working tab: `[ctrl + b] c`
-To toggle back and forth between tabs, `[ctrol + b] l`
+## Question-1 ArgoCD (no setup script needed)
 
-</details>
-
-## -1- ArgoCD (no setup needed)
-
-Setup script is not needed for this question. 
-
-### Question-1
+```bash
+cat Question-1/Questions.bash
+```
 
 Install `Argo CD` in a Kubernetes cluster using Helm while ensuring that CRDs are not installed (as they are pre-installed). 
 
@@ -100,6 +49,7 @@ Task:
 Video link: https://www.youtube.com/watch?v=8GzJ-x9ffE0
 
 #### Solution
+
 <details>
 
 Step one: add the repo
@@ -125,18 +75,14 @@ Step three: verify
 
 </details>
 
-## -2- Sidecar
+## Question-2 Sidecar
 
 ```bash
 chmod +x Question-2/LabSetUp.bash
 ./Question-2/LabSetUp.bash
+cat Question-2/Questions.bash
 ```
 
-WordPress deployment created in the `default` namespace. Edit the deployment to add a sidecar container with shared volume.
-
-### Question-2
-
-Task:
 1. Update the existing wordpress deployment adding a sidecar container named `sidecar` using the `busybox:stable` image to the existing pod. 
 2. The new sidecar container has to run the following command `"/bin/sh -c tail -f /var/log/wordpress.log"`
 3. Use a volume mounted at `/var/log` to make the log file `wordpress.log` available to the co-located container. 
@@ -149,12 +95,12 @@ Video link: https://youtu.be/2diUcaV5TXw?si=ftqiW_E-4kswuis1
 
 Step 1: Verify secret and ingress exist and describe them
 
-```
+```bash
 k get secret -n web-app
 k describe secret -n web-app web-tls
 ```
 
-```
+```bash
 k get ingress -n web-app
 k describe ingress -n web-app web
 ```
@@ -231,8 +177,8 @@ Check all fields match as expected. In the exam you may be given a curl to run t
 ```bash
 chmod +x Question-3/LabSetUp.bash
 ./Question-3/LabSetUp.bash
+cat Question-3/Questions.bash
 ```
-### Question-3 
 
 You have an existing web application deployed in a Kubernetes cluster using an Ingress resource named `web`. Migrate the existing Ingress configuration to the new Kubernetes Gateway API, maintaining the existing HTTPS access configuration. 
 
@@ -245,6 +191,7 @@ Note: A GatewayClass named `nginx-class` is already installed in the cluster.
 Video lnk: https://youtu.be/W-Rt_U8any4?si=KD_6oVewmhPgu1NZ
 
 #### Solution:
+
 <details>
 
 Step 1: Verify secret and ingress exist and describe them. 
@@ -326,18 +273,11 @@ Check all fields match as expected. In the exam you may be given a curl to run t
 
 ## -4- CPU and Memory
 
-Note: While this lab will work on CK-X, it has a very generous CPU and memory allocation so any value you enter will be correct. For this reason, I recommend running in killercoda. 
-
-The below prep command given to run in killercoda. 
-
 ```bash
-git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
-cd CKA-PREP
 chmod +x Question-4/LabSetUp.bash
 ./Question-4/LabSetUp.bash
+cat Question-4/Questions.bash
 ```
-
-### Question-4
 
 You are managing a WordPress application running in a Kubernetes cluster. Adjust the Pod resource requests and limits to ensure stable operation. 
 
@@ -352,6 +292,7 @@ Task:
 Video lnk: https://youtu.be/Hkl9XgMKxic?si=v9yI1Rz10DELN4Mf
 
 #### Solution:
+
 <details>
 
 The CK-X environment is huge so any number would work. I recommend trying this one at [killercoda]()
@@ -446,13 +387,12 @@ Once the pods are up and running describe one of the pods and make sure you see 
 
 </details>
 
-## -5- Storage Class (no setup needed)
+## Question-5 Storage Class (no setup script needed)
 
-Setup script is not needed for this question. 
+```bash
+cat Question-5/Questions.bash
+```
 
-### Question-5
-
-Task:
 1. Create a new StorageClass named `local-storage` with the provisioner `rancher.io/local-path`. Set the VolumeBindingMode to `WaitForFirstCustomer`. Do not make the SC default.
 2. Patch the StorageClass to make it the default StorageClass.
 3. Ensure `local-storage` is the only default class.
@@ -464,27 +404,6 @@ Video link: https://youtu.be/WmbIrlbqjPw?si=bYSf9dDtb4hIfKG4
 #### Solution:
 
 <details>
-
-Step 0 This lab assumes there is a default storage class so we need to create one. Copy one from the docs, update name to `local-path` and set is-default-class to "true" (the default in docs is "false").
-
-Note: In VIM Normal Mode, `A` will move to the end of the line and switch to insert mode. 
-
-```yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: local-path
-  annotations:
-    storageclass.kubernetes.io/is-default-class: "true" # update to true from the docs. 
-provisioner: csi-driver.example-vendor.example
-reclaimPolicy: Retain # default value is Delete
-allowVolumeExpansion: true
-mountOptions:
-  - discard # this might enable UNMAP / TRIM at the block storage layer
-volumeBindingMode: WaitForFirstConsumer
-parameters:
-  guaranteedReadWriteLatency: "true" # provider-specific
-```
 
 Step 1 Create the storage class
 `vim sc.yaml`
@@ -548,14 +467,14 @@ We should now only see local-storage as the default!
 
 </details>
 
-## -6- Priority Class
+## Question-6 Priority Class
 
 ```bash
 chmod +x Question-6/LabSetUp.bash
 ./Question-6/LabSetUp.bash
+cat Question-6/Questions.bash
 ```
 
-### Question-6
 You're working in a kubernetes cluster with an existing deployment named `busybox-logger` running in the `priority` namespace. The cluster already has at least one user defined Priority Class. 
 
 Task:
@@ -636,19 +555,14 @@ We should see the following
 
 </details>
 
-## -7- Ingress
-
-Note: The final curl command will not work in CK-X. The below is given to run in killercoda instead. 
+## Question-7 Ingress
 
 ```bash
-git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
-cd CKA-PREP
 chmod +x Question-7/LabSetUp.bash
 ./Question-7/LabSetUp.bash
+cat Question-7/Questions.bash
 ```
-### Question-7
 
-Task:
 1. Expose the existing deployment with a service called echo-service using Service Port `8080` `type=NodePort`
 2. Create a new ingress resource named echo in the echo-sound namespace for `http://example.org/echo`
 3. The availability of the Service echo-service can be checked using the following command
@@ -739,16 +653,14 @@ Request Body:
 
 </details>
 
-## -8- CRDs
+## Question-8 CRDs
 
 ```bash
 chmod +x Question-8/LabSetUp.bash
 ./Question-8/LabSetUp.bash
+cat Question-8/Questions.bash
 ```
 
-### Question-8
-
-Task: 
 1. Create a list of all `cert-manager` CRDs and save it to `/root/resources.yaml`
 2. Using `kubectl` extract the documentation for the subject specification field of the Certifiate Custom Resource and save it to `/root/subject.yaml`
 
@@ -780,14 +692,14 @@ Check the file matches the explain command output
 
 </details>
 
-## -9- Network Policy
+## Question-9 Network Policy
 
 ```bash
 chmod +x Question-9/LabSetUp.bash
 ./Question-9/LabSetUp.bash
+cat Question-9/Questions.bash
 ```
 
-### Question-9
 There are two deployments, `Frontend` and `Backend`. `Frontend` is in the `frontend` namespace, Backend is in the `backend` namespace.
 
 Task:
@@ -822,14 +734,14 @@ Step 4 Apply the file
 
 </details>
 
-## -10- HPA
+## Question-10 HPA
 
 ```bash
 chmod +x Question-10/LabSetUp.bash
 ./Question-10/LabSetUp.bash
+cat Question-10/Questions.bash
 ```
 
-### Question-10
 Create a new HorizontalPodAutoScaler(HPA) named apache-server in the autoscale namespace
 
 Task:
@@ -852,7 +764,7 @@ You should see the apache-deployment, check the pod(s) exist
 
 You should see apache-deployment-xxxxx-xxx
 
-Step 2 Create the HPA. Use the Kubernetes docs (https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/). Edit the template to suit your requirements
+Step 2 Create the HPA. Use the Kubernetes docs https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/. Edit the template to suit the requirements.  
 `vim hpa.yaml`
 
 ```yaml
@@ -892,9 +804,10 @@ We should see the reference is Deployment/apache-deployment. After a small amoun
 
 ## -11- CNI (no setup required)
 
-No setup required for this lab. 
+```bash
+cat Question-10/Questions.bash
+```
 
-### Question-11
 Install and configure a CNI of your choice tht meets the specified requirements,
 Choose one of the following:
 
@@ -935,14 +848,14 @@ We should see pods, deployments and replicasets
 
 <details>
 
-## -12- Persistent Volume
+## Question-12 Persistent Volume
 
 ```bash
 chmod +x Question-12/LabSetUp.bash
 ./Question-12/LabSetUp.bash
+cat Question-12/Questions.bash
 ```
 
-### Question-12
 A user accidentally deleted the MariaDB Deployment in the mariadb namespace. The deployment was configured with persistent storage. Your responsibility is to re-establish the deployment while ensuring data is preserved by reusing the available PersistentVolume.
 
 Task: 
@@ -966,7 +879,7 @@ Step 1 - check the pv exists
 `k get pv`
 `k describe pv`
 
-Step 2 - Clear existing claim. We can see that the PV has a RELEASED status as it has a claim from the previous PVC, we need to edit the PV to remove the claim reference. We can also see the PV has an empty storage class which we need to keep in mind for creating our PVC
+Step 2 - Clear existing claim. We can see that the PV has a RELEASED status as it has a claim from the previous PVC, we need to edit the PV to remove the claim reference. We can also see the PV has an empty storage class which we need to keep in mind for creating our PVC.  
 `k edit pv mariadb-pv`
 
 We need to remove this section
@@ -1045,13 +958,12 @@ Volumes:
 
 </details>
 
-## -13- Cri-Dockerd (no setup required)
+## Question-13 Cri-Dockerd (no setup required)
 
-This does not work in CK-X. Run in killercoda. No setup required. 
+```bash
+cat Question-13/Questions.bash
+```
 
-### Question-13
-
-Task:  
 - Set up `cri-dockerd`
 - Install the debian package `~/cri-dockerd.deb` using `dpkg` from https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.20/cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb
 - Enable and start the `cri-docker` service
@@ -1111,20 +1023,14 @@ You may need to add/edit files in the /etc/sysctl.d directory, if you create a f
 
 </details>
 
-## -14- Kube-apiserver
-
-CK-X isn't able to run this either so switch to killercoda for it! 
-
-The below prep command given to run in killercoda. 
+## Question-14 Kube-apiserver
 
 ```bash
-git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
-cd CKA-PREP
 chmod +x Question-14/LabSetUp.bash
 ./Question-14/LabSetUp.bash
+cat Question-14/Questions.bash
 ```
 
-### Question-14
 After a cluster migration, the controlplane kube-apiserver is not coming up. Before the migration, the etcd was external and in HA, after migration the kube-api server was pointing to etcd peer port `2380`.
 
 Task:
@@ -1173,11 +1079,11 @@ Check cert files are correct
 
 </details>
 
-## -15- Taints and Tolerations
+## QUestion-15 Taints and Tolerations
 
-No setup required
-
-### Question-15
+```bash
+cat Question-15/Questions.bash
+```
 
 Task:
 1. Add a taint to node01 so that no normal pods can be scheduled in this node. `key=PERMISSION`, `value=granted`, `Type=NoSchedule`
@@ -1251,20 +1157,14 @@ Delete nginx-fail
 
 </details>
 
-## -16- NodePort
-
-Since curl doesn't work in CK-X, I'm sending you back to killercoda for this one. 
-
-The below prep command given to run in killercoda. 
+## Question-16 NodePort
 
 ```bash
-git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
-cd CKA-PREP
 chmod +x Question-16/LabSetUp.bash
 ./Question-16/LabSetUp.bash
+cat Question-16/Questions.bash
 ```
 
-### Question-16
 There is a deployment named nodeport-deployment in the relative namespace
 
 Task:
@@ -1366,20 +1266,13 @@ working. Further configuration is required.</p>
 
 </details>
 
-## -17- TLS
-
-Since curl doesn't work in CK-X, I'm sending you back to killercoda for this one. 
-
-The below prep command given to run in killercoda. 
+## Question-17 TLS
 
 ```bash
-git clone https://github.com/CameronMetcalfe22/CKA-PREP.git
-cd CKA-PREP
 chmod +x Question-17/LabSetUp.bash
 ./Question-17/LabSetUp.bash
 ```
 
-### Question-17
 There is an existing deployment in the nginx-static namespace. The deployment contains a ConfigMap that supports `TLSv1.2` and `TLSv1.3` as well as a `Secret` for `TLS`.
 
 There is a service called `nginx-service` in the `nginx-static` namespace that is currently exposing the deployment.
