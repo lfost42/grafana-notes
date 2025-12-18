@@ -498,9 +498,7 @@ Check to see PC was created
 `k get pc`
 
 Step 2 Patch the deployment, we need to use the patch command for this for the exam, first we need to figure out where we want the priority class name to go.
-`k get deploy -n priority busybox-logger -oyaml | less`
-
-Note: Use `ctrl + u` to page down and `ctrl + d` to page up and `q` to quit. 
+`k get deploy -n priority busybox-logger -oyaml`
 
 We need to add priorityClassName in the following section:
 
