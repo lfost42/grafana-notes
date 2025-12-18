@@ -843,7 +843,7 @@ Step 3 check everything has been deployed
 
 We should see pods, deployments and replicasets
 
-<details>
+</details>
 
 ## Question-12 Persistent Volume
 
