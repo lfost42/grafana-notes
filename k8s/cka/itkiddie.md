@@ -15,11 +15,11 @@ I like to keep this in a separate tab or terminal:
 `vim notes`
 
 ```bash
-chmod +x Question-0/LabSetUp.bash
+chmod +x Question-0/LabSetUp.bash  
 ./Question-0/LabSetUp.bash
 
-ls Question-0/ #in case you need to view the question directory
-cat Question-0/SolutionNotes.bash # to view solution notes
+ls Question-0/ #in case you need to view the question directory  
+cat Question-0/SolutionNotes.bash # to view solution notes. 
 
 %s/old_number/0/g
 ```
@@ -41,10 +41,10 @@ cat Question-1/Questions.bash
 Install `Argo CD` in a Kubernetes cluster using Helm while ensuring that CRDs are not installed (as they are pre-installed). 
 
 Task:
-1. Add the official Argo CD Helm repository with the name argo: https://argoproj.github.io/argo-helm
-2. Generate a Helm template from the Argo CD chart version `7.7.3` for the `acgocd` namespace.
-3. Ensure that CRDs are not installed by configuring the chart accordingly.
-4. Save the generated YAML manifest to `/home/argo/argo-helm.yaml`.
+1. Add the official Argo CD Helm repository with the name argo: https://argoproj.github.io/argo-helm  
+2. Generate a Helm template from the Argo CD chart version `7.7.3` for the `acgocd` namespace.  
+3. Ensure that CRDs are not installed by configuring the chart accordingly.  
+4. Save the generated YAML manifest to `/home/argo/argo-helm.yaml`.  
 
 Video link: https://www.youtube.com/watch?v=8GzJ-x9ffE0
 
@@ -105,7 +105,7 @@ k get ingress -n web-app
 k describe ingress -n web-app web
 ```
 
-Step 2: Create the Gateway (use the docs)
+Step 2: Create the Gateway (use the docs)  
 `vim gw.yaml`
 
 ```yaml
@@ -128,16 +128,16 @@ spec:
          name: web-tls
 ```
 
-Apply it
+Apply it. 
 `k apply -f gw.yaml`
 
-Verify it is there
+Verify it is there. 
 `k get gateway -n web-app`
 
-Step 3: create the HTTPRoute
+Step 3: create the HTTPRoute. 
 `vim http.yaml`
 
-Use the docs for reference
+Use the docs for reference  
 
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
@@ -159,7 +159,7 @@ spec:
       port: 80.
 ```
 
-apply it. 
+apply it  
 `k apply -f http.yaml`
 
 ```bash
@@ -182,7 +182,7 @@ cat Question-3/Questions.bash
 
 You have an existing web application deployed in a Kubernetes cluster using an Ingress resource named `web`. Migrate the existing Ingress configuration to the new Kubernetes Gateway API, maintaining the existing HTTPS access configuration. 
 
-Task:
+Task:  
 1. In the `web-app` namespace, create a Gateway Resource named `web-gateway` with hostname `gateway.web.k8s.local ` that maintains the exisiting TLS and listener configuration from the existing Ingress resource named `web`. 
 2. Create a HTTPRoute resource named `web-route` with hostname `gateway.web.k8s.local` that maintains the existing routing rules from the current Ingress resource named web.
 
@@ -205,7 +205,7 @@ k get svc -n web-app
 k describe svc -n web-app
 ```
 
-Step 2: Create the Gateway (use the docs)
+Step 2: Create the Gateway (use the docs)  
 `vim gw.yaml`
 
 ```yaml
@@ -228,14 +228,13 @@ spec:
          name: web-tls
 ```
 
-Apply it. 
+Apply it  
 `k apply -f gw.yaml`
 
-Verify it's there.
+Verify it's there  
 `k get gateway -n web-app`
 
-Step 3: create the HTTPRoute
-
+Step 3: create the HTTPRoute  
 `vim http.yaml`
 
 Use the docs for reference
@@ -261,10 +260,10 @@ spec:
       port: 80
 ```
 
-apply it. 
+apply it  
 `k apply -f http.yaml`
 
-Check
+Check  
 `k describe gateway,httproute -n web-app`
 
 Check all fields match as expected. In the exam you may be given a curl to run to check this. 
@@ -298,7 +297,7 @@ Video lnk: https://youtu.be/Hkl9XgMKxic?si=v9yI1Rz10DELN4Mf
 Step 1: Check the deployment and scale it down to 0  
 `k get deploy`
 
-Scale it down
+Scale it down  
 `k scale deployment wordpress --replicas 0`
 
 Check it has scaled  
@@ -309,58 +308,52 @@ Should see 0 replicas
 Step 2: Find the allocatable CPU and memory on the node and decide how to split it between the 3 pods  
 `k describe node node01`
 
-Look at the memory and CPU that is allocatable (I will be using example numbers here, yours will be different)
-
+Look at the memory and CPU that is allocatable (I will be using example numbers here, yours will be different)  
 > cpu: 1  
 > memory: 1846652Ki
 
-
-Firstly we want memory in Mi so divide the Ki by 1024
-
+Firstly we want memory in Mi so divide the Ki by 1024. 
 `expr 1846652 / 1024`
 > 1803
 
-Next we want to look at memory already in use. 
-
+Next we want to look at memory already in use.  
 `k describe node node01`
 
-Look in the Memory Requests Column
-
+Look in the Memory Requests Column  
 > kube-system  canal-tqknq               25m (2%)  0 (0%)      0 (0%)   0 (0%)      2d23h  
 > kube-system  coredns-6ff97d97f9-h59nk  50m (5%)  0 (0%)   50Mi (2%)   170Mi (9%)  2d23h  
 > kube-system  coredns-6ff97d97f9-rpmqd  50m (5%)  0 (0%)    50Mi (2%)  170Mi (9%)  2d23h  
 
-We have 100Mi already requested so we need to take this out of our calculation
-`expr 1803 - 100`
+We have 100Mi already requested so we need to take this out of our calculation  
+`expr 1803 - 100`  
 > 1703
 
-We now need to leave ~ 10% Head room
-`expr 1703 - 170`
+We now need to leave ~ 10% Head room  
+`expr 1703 - 170`. 
 > 1533
 
-We now need to share this between 3 pods
-`expr 1533 / 3`
+We now need to share this between 3 pods  
+`expr 1533 / 3`  
 > 511Mi
 
 Looking at this a 500Mi request looks reasonable with a 600Mi limit. We now need to do the same for CPU:  
 > 1 CPU = 1000m
 
-Check CPU usage from the table we see it is 125m. 
-`expr 1000 - 125`
+Check CPU usage from the table we see it is 125m.  
+`expr 1000 - 125`  
 > 875
 
-Get ~10% headroom. 
-`875 - 87`
+Get ~10% headroom  
+`875 - 87`  
 > 788
 
-Share this between 3 pods. 
-`expr 788 / 3` 
+Share this between 3 pods  
+`expr 788 / 3`  
 > ~262
 
 Looking at this a 250m request with a 300m limit looks reasonable
 
-Step 3: Edit the deployment with the new requests and limits
-
+Step 3: Edit the deployment with the new requests and limits  
 `k edit deploy wordpress`
 
 ```yaml
@@ -403,10 +396,10 @@ Video link: https://youtu.be/WmbIrlbqjPw?si=bYSf9dDtb4hIfKG4
 
 <details>
 
-Step 1 Create the storage class
+Step 1 Create the storage class  
 `vim sc.yaml`
 
-Use the docs to create the yaml as per your spec
+Use the docs to create the yaml as per your spec  
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -419,15 +412,15 @@ provisioner: rancher.io/local-path
 volumeBindingMode: WaitForFirstConsumer
 ```
 
-apply
+apply  
 `k apply -f sc.yaml`
 
-Check
+Check  
 `k get sc`
 
-You should see your SC there and it isn't the default class
+You should see your SC there and it isn't the default class. 
 
-Step 2 patch your SC: Check where we need to patch by using
+Step 2 patch your SC: Check where we need to patch by using  
 `k get sc local-storage -oyaml`
 
 Find the default setting
@@ -447,7 +440,7 @@ We can see this is under metadata.annotations.storageclass.kubernetes.io/is-defa
 k patch sc local-storage -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 ```
 
-Check
+Check. 
 `k get sc`
 
 We should see our sc is now labelled as default
@@ -458,7 +451,7 @@ Step 3 remove other default: We can also see the local-path SC is labelled as de
 k patch sc local-path -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 ```
 
-Check
+Check  
 `k get sc`
 
 We should now only see local-storage as the default!
@@ -485,17 +478,16 @@ Video lnk: https://youtu.be/wiL_M9qbPX4?si=rOIyX45i5kON8Xr7
 
 <details>
 
-Step1 Find the user defined priority classes
-k get pc
-
-User defined PCs are appended with "user", we can see the highest is 1000 so we need to create a PC with value 999. 
-
-`k create pc high-priority --value=999 --description="high priority"`
-
-Check to see PC was created
+Step1 Find the user defined priority classes. 
 `k get pc`
 
-Step 2 Patch the deployment, we need to use the patch command for this for the exam, first we need to figure out where we want the priority class name to go.
+User defined PCs are appended with "user", we can see the highest is 1000 so we need to create a PC with value 999.  
+`k create pc high-priority --value=999 --description="high priority"`
+
+Check to see PC was created  
+`k get pc`
+
+Step 2 Patch the deployment, we need to use the patch command for this for the exam, first we need to figure out where we want the priority class name to go.  
 `k get deploy -n priority busybox-logger -oyaml`
 
 We need to add priorityClassName in the following section:
@@ -539,14 +531,13 @@ spec:
       terminationGracePeriodSeconds: 30
 ```
 
-From this we can see this is under spec:template:spec so our command will look like this
-
+From this we can see this is under spec:template:spec so our command will look like this  
 `k -n priority patch deploy busybox-logger -p '{"spec":{"template":{"spec":{"priorityClassName":"high-priority"}}}}'`
 
-Step 3 Check patch has applied successfully
+Step 3 Check patch has applied successfully  
 `k -n priority get deploy busybox-logger -oyaml`
 
-We should see the following
+We should see the following  
 > priorityClassName: high-priority
 
 </details>
@@ -564,8 +555,10 @@ cat Question-7/Questions.bash
 3. The availability of the Service echo-service can be checked using the following command
 `curl NODEIP:NODEPORT/echo`
 
-In the exam it may give you a command like `curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo`
-This requires an ingress controller, to get this to work ensure your `/etc/hosts` file has an entry for your NodeIP pointing to example.org
+In the exam it may give you a command like `curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo`.  
+This requires an ingress controller, to get this to work ensure your `/etc/hosts` file has an entry for your NodeIP pointing to example.org.  
+
+`echo 'x.x.x.x example.org/echo' >> /etc/hosts`
 
 Video lnk: https://youtu.be/mtORnV8AlI4?si=6fZq-yd8Sezg0a7v
 
@@ -573,15 +566,14 @@ Video lnk: https://youtu.be/mtORnV8AlI4?si=6fZq-yd8Sezg0a7v
 
 <details>
 
-Step 1 Expose the deployment with the given features
-`k -n echo-sound get deploy`
-
+Step 1 Expose the deployment with the given features  
+`k -n echo-sound get deploy`. 
 `k -n echo-sound expose deploy echo --name echo-service --type NodePort --port 8080 --target-port 8080`
 
-Check the service has been created
+Check the service has been created. 
 `k -n echo-sound get svc`
 
-Step 2 Create the ingress. Use the docs for a template
+Step 2 Create the ingress. Use the docs for a template. 
 `vim ingress.yaml`
 
 ```yaml
@@ -603,24 +595,26 @@ spec:
             port:
               number: 8080
 ```
-Apply
+Apply. 
 `k apply -f ingress.yaml`
 
-Check
+Check. 
 `k -n echo-sound describe ingress`
 
 Step 3 Check curl command.
 
-Find the NodeIP:
+Find the NodeIP:  
 `k get nodes -owide`
 
-Find the NodePort:
+Find the NodePort:  
 `k get svc -n echo-sound`
 
 `curl NODEIP:NODEPORT/echo`
 
-Example Output
-```Hostname: echo-84897cb55d-lk675
+Example Output  
+
+```
+Hostname: echo-84897cb55d-lk675
 
 Pod Information:
         -no pod information available-
@@ -667,22 +661,22 @@ Video lnk: https://youtu.be/mKvkcjoYzOc?si=53ob4__-b242y4K_
 
 <details>
 
-Step 1 list the cert-manager CRDs
+Step 1 list the cert-manager CRDs  
 `k get crd | grep cert-manager`
 
-Check the list you get and then output it to the file location
+Check the list you get and then output it to the file location  
 `k get crd | grep cert-manager > /root/resources.yaml`
 
-Check the file matches your first list
+Check the file matches your first list  
 `cat /root/resources.yaml`
 
-Step 2 extract the doc for subject spec, for this we want to use explain
+Step 2 extract the doc for subject spec, for this we want to use explain  
 `k explain certificate.spec.subject`
 
-We should see the doc output for the subject spec of certificates, we now want output it to the file
+We should see the doc output for the subject spec of certificates, we now want output it to the file  
 `k explain certificate.spec.subject > /root/subject.yaml`
 
-Check the file matches the explain command output
+Check the file matches the explain command output  
 `cat /root/subject.yaml`
 
 </details>
@@ -697,7 +691,7 @@ cat Question-9/Questions.bash
 
 There are two deployments, `Frontend` and `Backend`. `Frontend` is in the `frontend` namespace, Backend is in the `backend` namespace.
 
-Task:
+Task:  
 Look at the Network Policy YAML files in `/root/network-policies`. Decide which of the policies provides the functionality to allow interaction between the `frontend` and the `backend` deployments in the least permissive way and deploy that yaml.
 
 Video lnk: https://youtu.be/EIjpWA0AGG4?si=ih4IWm4wsDeIPzbM
@@ -706,25 +700,25 @@ Video lnk: https://youtu.be/EIjpWA0AGG4?si=ih4IWm4wsDeIPzbM
 
 <details>
 
-Step 1 Inspect file one
+Step 1 Inspect file one  
 `cat /root/network-policies/network-policy-1.yaml`
 
 We can see file one allows all ingress traffic which is too permissive
 
-Step 2 Inspect file 2
+Step 2 Inspect file 2. 
 `cat /root/network-policies/network-policy-2.yaml`
 
 We can see this has the correct namespace selector but it also allows an additional IP which wasn't mentioned in the question so that is too permissive
 
-Step 3 Inspect file 3
+Step 3 Inspect file 3  
 `cat /root/network-policies/network-policy-2.yaml`
 
-File three only allows frontend traffic from the frontend namespace and pods labelled front end. We need to check the labels on the frontend deployment pods
+File three only allows frontend traffic from the frontend namespace and pods labelled front end. We need to check the labels on the frontend deployment pods  
 `k get po -n frontend --show-labels`
 
 We can see they have the label app=frontend which means network-policy-3 is the least permissive and allows the traffic we want
 
-Step 4 Apply the file
+Step 4 Apply the file  
 `k apply -f /root/network-policies/network-policy3.yaml`
 
 </details>
@@ -739,7 +733,7 @@ cat Question-10/Questions.bash
 
 Create a new HorizontalPodAutoScaler(HPA) named apache-server in the autoscale namespace
 
-Task:
+Task:  
 1. The HPA must target the existing deployment called `apache-deployment` in the `autoscale` namespace
 2. Set the HPA to target for `50%` CPU usage per Pod
 3. Configure the HPA to have a minimum of `1` pod and a maximum of `4` pods
@@ -751,10 +745,10 @@ Video lnk: https://youtu.be/X0ISIy9Bd7U?si=h-GydG4EzPTug6Jt
 
 <details>
 
-Step 1 Verify the deployment
+Step 1 Verify the deployment. 
 `k -n autoscale get deploy`
 
-You should see the apache-deployment, check the pod(s) exist
+You should see the apache-deployment, check the pod(s) exist  
 `k -n autoscale get po`
 
 You should see apache-deployment-xxxxx-xxx
@@ -787,10 +781,10 @@ spec:
       stabilizationWindowSeconds: 30
 ```
 
-Apply the file
+Apply the file  
 `k apply -f hpa.yaml`
 
-Step 3 Check the HPA is working
+Step 3 Check the HPA is working. 
 `k -n autoscale get hpa`
 
 We should see the reference is Deployment/apache-deployment. After a small amount of time we should see the CPU targets with values e.g. CPU: 1%/50%. 
@@ -860,9 +854,9 @@ Create a Persistent Volume Claim (PVC) named mariadb in the mariadb namespace wi
 Access Mode = ReadWriteOnce  
 Storage = 250Mi
 
-- Edit the MariaDb Deployment file located at `~/mariadb-deploy.yaml` to use the PVC created in the previous step.
-- Apply the updated Deployment file to the cluster
-- Ensure the MariaDB Deployment is running and Stable
+- Edit the MariaDb Deployment file located at `~/mariadb-deploy.yaml` to use the PVC created in the previous step.  
+- Apply the updated Deployment file to the cluster. 
+- Ensure the MariaDB Deployment is running and Stable.  
 
 Video lnk: https://youtu.be/0h2Dik_OTvw?si=9hU6-xzCW7AUsmEj
 
@@ -870,14 +864,14 @@ Video lnk: https://youtu.be/0h2Dik_OTvw?si=9hU6-xzCW7AUsmEj
 
 <details>
 
-Step 1 - check the pv exists
-`k get pv`
-`k describe pv`
+Step 1 - check the pv exists  
+`k get pv`  
+`k describe pv`  
 
 Step 2 - Clear existing claim. We can see that the PV has a RELEASED status as it has a claim from the previous PVC, we need to edit the PV to remove the claim reference. We can also see the PV has an empty storage class which we need to keep in mind for creating our PVC.  
 `k edit pv mariadb-pv`
 
-We need to remove this section
+We need to remove this section  
 ```yaml
   claimRef:
     apiVersion: v1
@@ -888,15 +882,15 @@ We need to remove this section
     uid: ffa27d96-5199-4785-8ad9-562e8f5d5f53
 ```
 
-Check the PV is now available
+Check the PV is now available  
 `k get pv mariadb-pv`
 
 PV should now have status AVAILABLE
 
-Step 3 Create the PVC (Remember the storage class for the PV is empty)
+Step 3 Create the PVC (Remember the storage class for the PV is empty)  
 `vim pvc.yaml`
 
-Use the docs
+Use the docs. 
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -912,21 +906,21 @@ spec:
   storageClassName: "" # This will allow it to bind to the existing PV with ono SC
 ```
 
-Apply it
+Apply it. 
 `k apply pvc.yaml`
 
-Check it has bound
+Check it has bound  
 `k -n mariadb get pvc`
 Status should show bound
 
-Double check it has bound to the PV
-`k -n mariadb get pv`
+Double check it has bound to the PV  
+`k -n mariadb get pv`  
 This should show as bound with mariadb claim name
 
-`cp ~/mariadb-deploy.yaml mariadb-deploy.yaml`
+`cp ~/mariadb-deploy.yaml mariadb-deploy.yaml`  
 `vim maria-deploy.yaml`
 
-Step 4 Ensure the deployment looks as expected and specifically it uses your PVC
+Step 4 Ensure the deployment looks as expected and specifically it uses your PVC  
 ```yaml
 volumes:
         - name: mariadb-storage
@@ -934,16 +928,16 @@ volumes:
             claimName: mariadb
 ```
 
-Apply it
+Apply it  
 `k apply -f mariadb-deploy.yaml`
 
-Step 5: final checks
+Step 5: final checks  
 `k get po -n mariadb`
 
-Pod should be running, we want to check it is using the PVC
+Pod should be running, we want to check it is using the PVC  
 `k -n mariadb describe po`
 
-We should see this:
+We should see this:  
 ```
 Volumes:
   mariadb-storage:
@@ -962,6 +956,7 @@ cat Question-13/Questions.bash
 - Set up `cri-dockerd`
 - Install the debian package `~/cri-dockerd.deb` using `dpkg` from https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.20/cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb
 - Enable and start the `cri-docker` service
+
 - Configure these parameters:
 1. Set `net.bridge.bridge-nf-call-iptables` to 1
 2. Set `net.ipv6.conf.all.forwarding` to 1
@@ -974,23 +969,23 @@ Video lnk: https://youtu.be/u3kUI9lFPWE?si=Pkq74-rfFEp6dmfd
 
 <details>
 
-Step 1 install and start cri-dockerd. First we need to use dpkg to install the package
+Step 1 install and start cri-dockerd. First we need to use dpkg to install the package  
 `wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.20/cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb`
 
-Find installation file
+Find installation file  
 `ls -l | grep cri-dockerd`
 
-install
+install. 
 `sudo dpkg -i cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb`
 
-Enable the service
+Enable the service. 
 `sudo systemctl enable --now cri-docker.service`
 
-Start the service
+Start the service  
 `sudo systemctl start cri-docker.service`
 
-Verify the service is running
-`sudo systemctl status cri-docker.service`
+Verify the service is running  
+`sudo systemctl status cri-docker.service`  
 It should show as active (running)
 
 Step 2 set the system parameters. Run the following commands to set the parameters
@@ -1000,10 +995,10 @@ sudo sysctl -w net.ipv6.conf.all.forwarding=1
 sudo sysctl -w net.ipv4.ip_forward=1  
 sudo sysctl -w net.ipv4.ip_forward=1  
 
-This isn't persistent however so would be lost on reboot, to make it persistent
+This isn't persistent however so would be lost on reboot, to make it persistent  
 `vim /etc/sysctl.d/kube.conf`
 
-add the config
+add the config  
 ```
 net.bridge.bridge-nf-call-iptables=1
 net.ipv6.conf.all.forwarding=1
@@ -1011,7 +1006,7 @@ net.ipv4.ip_forward=1
 net.netfilter.nf_conntrack_max=131072
 ```
 
-Check the output and ensure it is correct
+Check the output and ensure it is correct. 
 `sudo sysctl --system`
 
 You may need to add/edit files in the /etc/sysctl.d directory, if you create a file and there are still overrides check to see if there re additional conf files there. You can give your config a lexically later name e.g. zz-cridocker.conf so it is ran last or you can edit those values in the other files.
@@ -1028,7 +1023,7 @@ cat Question-14/Questions.bash
 
 After a cluster migration, the controlplane kube-apiserver is not coming up. Before the migration, the etcd was external and in HA, after migration the kube-api server was pointing to etcd peer port `2380`.
 
-Task:
+Task:  
 - Fix it
 
 Video lnk: https://youtu.be/p1vNc1GacpI?si=lbUxoj5jOeruLy7B
@@ -1037,39 +1032,39 @@ Video lnk: https://youtu.be/p1vNc1GacpI?si=lbUxoj5jOeruLy7B
 
 <details>
 
-On getting on to the node and trying to run kubectl commands we can see that they don't work. This indicates an issue with the kube api server, we can inspect the logs to see if we can decipher any more information
+On getting on to the node and trying to run kubectl commands we can see that they don't work. This indicates an issue with the kube api server, we can inspect the logs to see if we can decipher any more information  
 `journalctl | grep kube-apiserver`
 
-We can also go to the following directory for the pod logs
+We can also go to the following directory for the pod logs  
 `cat /var/log/pods/kube-system_kube-apiserver-controlplane_..../kube-apiserver/x.log`
 
-The pod logs tell us there is an issue connecting to 127.0.0.1:2380
+The pod logs tell us there is an issue connecting to 127.0.0.1:2380  
 `vim /etc/kubernetes/manifests/kube-apiserver.yaml`
 
-Inspect the yaml, we can see there is an issue
+Inspect the yaml, we can see there is an issue. 
 `--etcd-servers=https://127.0.0.1:2380`
 
-This is the incorrect port of the etcd server it should be
+This is the incorrect port of the etcd server it should be. 
 `--etcd-servers=https://127.0.0.1:2379`
 
-Update the file and wait for the pods to come up
-k -n kube-system get all
+Update the file and wait for the pods to come up  
+`k -n kube-system get all`
 
 There are several issues that could be at play in the exam for this question, the IP could be wrong, issues with the location of the certs and keys etc.
 
-One issue mentioned is that after this the kube-scheduler is down, you may need to inspect the logs for this
-`k -n kube-system get pods | grep kube-scheduler`
-`k -n kube-system describe pod 'kube-scheduler-pod-name'`
-`k -n kube-system logs 'kube-scheduler-pod-name'`
+One issue mentioned is that after this the kube-scheduler is down, you may need to inspect the logs for this  
+`k -n kube-system get pods | grep kube-scheduler`  
+`k -n kube-system describe pod 'kube-scheduler-pod-name'`  
+`k -n kube-system logs 'kube-scheduler-pod-name'`  
 
 Usual errors will relate to not being able to connect to the API server or an incorrect config path, `sudo vim /etc/kubernetes/manifests/kube-scheduler.yaml`
 
-Key things to check:
+Key things to check:  
 --kubeconfig points to `/etc/kubernetes/scheduler.conf`
 
 No leftover --master flags pointing to old IPs
 
-Hostname/IP matches current control plane (controlplaneIP:6443)
+Hostname/IP matches current control plane (controlplaneIP:6443)  
 Check cert files are correct
 
 </details>
@@ -1093,17 +1088,17 @@ Video lnk: https://youtu.be/-rs3AoAVyXE?si=nACYrGA5h_4WL-og
 Step One - First thing we need to do is add the taint to node01. You can use
 k taint --help
 
-Examples:
-  \# Update node 'foo' with a taint with key 'dedicated' and value 'special-user' and effect 'NoSchedule'. 
-  \# If a taint with that key and effect already exists, its value is replaced as specified 
-  `kubectl taint nodes foo dedicated=special-user:NoSchedule`
+Examples:  
+  \# Update node 'foo' with a taint with key 'dedicated' and value 'special-user' and effect 'NoSchedule'.  
+  \# If a taint with that key and effect already exists, its value is replaced as specified  
+  `kubectl taint nodes foo dedicated=special-user:NoSchedule`  
 
-For the question we have
+For the question we have  
 `k taint node node01 PERMISSION=granted:NoSchedule`
 
-Step Two: We need to create a pod with the appropriate tolerations to be scheduled on `node01`
-`k run nginx --image nginx --dry-run=client -oyaml > pod.yaml`
-`vim pod.yaml`
+Step Two: We need to create a pod with the appropriate tolerations to be scheduled on `node01`  
+`k run nginx --image nginx --dry-run=client -oyaml > pod.yaml`  
+`vim pod.yaml`  
 
 Add in spec:
 ```yaml
@@ -1114,14 +1109,14 @@ Add in spec:
     effect: "NoSchedule"
 ```
 
-apply
-`k apply -f pod.yaml`
-We should see the pod has created as expected
+apply  
+`k apply -f pod.yaml`  
+We should see the pod has created as expected  
 
-Step 3: To test the taint is working as expected create a pod you know doesn't have the tolerations needed. 
-`k run nginx-fail --image nginx --dry-run=client -oyaml > fail.yaml`
+Step 3: To test the taint is working as expected create a pod you know doesn't have the tolerations needed.  
+`k run nginx-fail --image nginx --dry-run=client -oyaml > fail.yaml`  
 
-Add an alternate toleration.
+Add an alternate toleration.  
 `vim fail.yaml`
 
 ```yaml
@@ -1132,20 +1127,20 @@ Add an alternate toleration.
     effect: "NoSchedule"
 ```
 
-check
+check  
 `k get po`
 
-We should see this pod in a pending state. 
+We should see this pod in a pending state.  
 `k describe po nginx-fail | grep Events: -A10`
 
-You should see the following:
+You should see the following:  
 
-Events:
-  Type     Reason            Age   From               Message
-  ----     ------            ----  ----               -------
-  Warning  FailedScheduling  13s   default-scheduler  0/2 nodes are available ...
+Events:  
+  Type     Reason            Age   From               Message  
+  ----     ------            ----  ----               -------  
+  Warning  FailedScheduling  13s   default-scheduler  0/2 nodes are available ...  
 
-Delete nginx-fail
+Delete nginx-fail  
 `k delete po nginx-fail --force`
 
 </details>
@@ -1158,7 +1153,7 @@ chmod +x Question-16/LabSetUp.bash
 cat Question-16/Questions.bash
 ```
 
-There is a deployment named nodeport-deployment in the relative namespace
+There is a deployment named nodeport-deployment in the relative namespace. 
 
 Task:
 1. Configure the deployment so it can be exposed on port `80`, `name=http`, protocol `TCP`
@@ -1171,7 +1166,7 @@ Video lnk: https://youtu.be/t1FxX3PmYDQ?si=ryASL-G9X2FCVApQ
 
 <details>
 
-Step One - We need to edit the deployment to expose it on port 80, name it http using TCP protocol
+Step One - We need to edit the deployment to expose it on port 80, name it http using TCP protocol  
 `k -n relative edit deploy nodeport-deployment`
 
 ```yaml
@@ -1186,10 +1181,10 @@ spec:
           containerPort: 80
           protocol: TCP
 ```
-Verify the changes
+Verify the changes  
 `k describe deployment -n relative nodeport-deployment | grep -i port`
 
-We should see the following
+We should see the following  
 ```
 Name:                   nodeport-deployment
 Labels:                 app=nodeport-deployment
@@ -1200,17 +1195,17 @@ Selector:               app=nodeport-deployment
 OldReplicaSets:  nodeport-deployment-6fc449468d (0/0 replicas created)
 ```
 
-Step 2: We need to create the service as per the given requirements, we know a service will require a selector so run
+Step 2: We need to create the service as per the given requirements, we know a service will require a selector so run  
 `k -n relative get deploy nodeport-deployment --show-labels`
 
 ```
 NAME                  READY   UP-TO-DATE   AVAILABLE   AGE   LABELS
 nodeport-deployment   2/2     2            2           14m   app=nodeport-deployment
 ```
-We want to note the label for later use. Now we need to create a yaml file for our service
+We want to note the label for later use. Now we need to create a yaml file for our service  
 `k -n relative expose deploy nodeport-deployment --type NodePort --port=80 --dry-run=client -oyaml > service.yaml`
 
-Now we add the NodePort.
+Now we add the NodePort.  
 `vim service.yaml`
 
 ```yaml
@@ -1229,16 +1224,15 @@ spec:
       targetPort: 80
       nodePort: 30080 # need to add this line
 ```
-Apply the yaml file and check the service is running
-`k apply -f svc.yaml`
-`k -n relative describe svc nodeport-service`
+Apply the yaml file and check the service is running  
+`k apply -f svc.yaml`  
+`k -n relative describe svc nodeport-service`  
 
-We need to verify the service is running as expected, we know the nodeport is 30080. We need to get the IP of the node the deployment is running on and check it using a curl command
-`k get nodes -owide # Get the node IP x.x.x.x`
+We need to verify the service is running as expected, we know the nodeport is 30080. We need to get the IP of the node the deployment is running on and check it using a curl command  
+`k get nodes -owide # Get the node IP x.x.x.x`  
+`curl http://x.x.x.x:30080`  
 
-`curl http://x.x.x.x:30080`
-
-Output we should see
+Output we should see  
 ```html
 <!DOCTYPE html>
 <html>
@@ -1273,9 +1267,9 @@ There is a service called `nginx-service` in the `nginx-static` namespace that i
 Task:
 1. Configure the ConfigMap to only support `TLSv1.3`
 2. Add the IP address of the service in `/etc/hosts` and name it `ckaquestion.k8s.local`
-3. Verify everything is working using the following commands
-    `curl -vk --tls-max 1.2 https://ckaquestion.k8s.local` # should fail
-    `curl -vk --tlsv1.3 https://ckaquestion.k8s.local` # should work
+3. Verify everything is working using the following commands  
+    `curl -vk --tls-max 1.2 https://ckaquestion.k8s.local` # should fail  
+    `curl -vk --tlsv1.3 https://ckaquestion.k8s.local` # should work  
 
 Video lnk: https://youtu.be/-6QTAhprvTo?si=Rx81y2lHvK2Y_jBF
 
@@ -1283,32 +1277,32 @@ Video lnk: https://youtu.be/-6QTAhprvTo?si=Rx81y2lHvK2Y_jBF
 
 <details>
 
-Step 1: We need to get the IP of the service
+Step 1: We need to get the IP of the service  
 `k -n nginx-static get svc`
 
-We need to add this IP with the host name to /etc/hosts
+We need to add this IP with the host name to /etc/hosts  
 `echo 'x.x.x.x ckaquestion.k8s.local' >> /etc/hosts`
 
-Check the hosts file has been updated the IP and host should be added to the bottom of the file
+Check the hosts file has been updated the IP and host should be added to the bottom of the file  
 `cat /etc/hosts`
 
-Curl both tls versions
-`curl -vk --tls-max 1.2 https://ckaquestion.k8s.local`
-`curl -vk --tlsv1.3 https://ckaquestion.k8s.local`
-Both should currently work.
+Curl both tls versions  
+`curl -vk --tls-max 1.2 https://ckaquestion.k8s.local`  
+`curl -vk --tlsv1.3 https://ckaquestion.k8s.local`  
+Both should currently work.  
 
-Step 2: We want to edit the config map to remove all references to tls v1.2
-`k -n nginx-static edit cm nginx-config` # remove TLSv1.2 from SSL protocols (remove from last applied configuration for safety)
+Step 2: We want to edit the config map to remove all references to tls v1.2  
+`k -n nginx-static edit cm nginx-config` # remove TLSv1.2 from SSL protocols (remove from last applied configuration for safety)  
 
-Step 3: If we run the check commands now we see v1.2 is still working, this is because we need to restart the deployment to use the new CM config
-`k -n nginx-static rollout restart deploy/nginx-static`
+Step 3: If we run the check commands now we see v1.2 is still working, this is because we need to restart the deployment to use the new CM config  
+`k -n nginx-static rollout restart deploy/nginx-static`  
 
-Test the commands again and the v1.2 should no longer work
-`curl -vk --tls-max 1.2 https://ckaquestion.k8s.local`
-You should see: `curl: (35) OpenSSL/3.0.13: error:0A00042E:SSL routines::tlsv1 alert protocol version`
+Test the commands again and the v1.2 should no longer work  
+`curl -vk --tls-max 1.2 https://ckaquestion.k8s.local`  
+You should see: `curl: (35) OpenSSL/3.0.13: error:0A00042E:SSL routines::tlsv1 alert protocol version`  
 
-`curl -vk --tlsv1.3 https://ckaquestion.k8s.local`
-Should continue to work as expected
+`curl -vk --tlsv1.3 https://ckaquestion.k8s.local`  
+Should continue to work as   
 
 </details>
 
