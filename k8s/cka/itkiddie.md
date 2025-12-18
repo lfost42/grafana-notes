@@ -295,8 +295,6 @@ Video lnk: https://youtu.be/Hkl9XgMKxic?si=v9yI1Rz10DELN4Mf
 
 <details>
 
-The CK-X environment is huge so any number would work. I recommend trying this one at [killercoda]()
-
 Step 1: Check the deployment and scale it down to 0  
 `k get deploy`
 
@@ -1084,7 +1082,7 @@ cat Question-15/Questions.bash
 
 Task:
 1. Add a taint to node01 so that no normal pods can be scheduled in this node. `key=PERMISSION`, `value=granted`, `Type=NoSchedule`
-2. Schedule a Pod on `node01` (on CK-X, use `k3d-cluster-agent-0`) adding the correct toleration to the spec so it can be deployed.
+2. Schedule a Pod on `node01` adding the correct toleration to the spec so it can be deployed.
 
 Video lnk: https://youtu.be/-rs3AoAVyXE?si=nACYrGA5h_4WL-og
 
@@ -1101,11 +1099,9 @@ Examples:
   `kubectl taint nodes foo dedicated=special-user:NoSchedule`
 
 For the question we have
-`k taint node k3d-cluster-agent-0 PERMISSION=granted:NoSchedule`
-Note: for CK-X, we also need to taint the second node or it will accept the second pod.
-`k taint node k3d-cluster-server-0 PERMISSION=granted:NoSchedule`
+`k taint node node01 PERMISSION=granted:NoSchedule`
 
-Step Two: We need to create a pod with the appropriate tolerations to be scheduled on `k3d-cluster-agent-0` (or `node01` on killerkoda)
+Step Two: We need to create a pod with the appropriate tolerations to be scheduled on `node01`
 `k run nginx --image nginx --dry-run=client -oyaml > pod.yaml`
 `vim pod.yaml`
 
