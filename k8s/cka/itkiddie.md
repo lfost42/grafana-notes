@@ -997,10 +997,10 @@ It should show as active (running)
 
 Step 2 set the system parameters. Run the following commands to set the parameters
 
-sudo sysctl -w net.bridge.bridge-nf-call-iptables=1
-sudo sysctl -w net.ipv6.conf.all.forwarding=1
-sudo sysctl -w net.ipv4.ip_forward=1
-sudo sysctl -w net.ipv4.ip_forward=1
+sudo sysctl -w net.bridge.bridge-nf-call-iptables=1  
+sudo sysctl -w net.ipv6.conf.all.forwarding=1  
+sudo sysctl -w net.ipv4.ip_forward=1  
+sudo sysctl -w net.ipv4.ip_forward=1  
 
 This isn't persistent however so would be lost on reboot, to make it persistent
 `vim /etc/sysctl.d/kube.conf`
