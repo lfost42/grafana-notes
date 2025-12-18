@@ -621,7 +621,6 @@ Find the NodeIP:
 Find the NodePort:
 `k get svc -n echo-sound`
 
-Get the NodePort of the service (does not work in CX-X, run this in killercoda to practice this part)
 `curl NODEIP:NODEPORT/echo`
 
 Example Output

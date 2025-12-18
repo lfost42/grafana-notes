@@ -25,6 +25,8 @@ Planned:
 For Learning Concepts and general practice:  
 - [Cloud With VarJosh](https://www.youtube.com/playlist?list=PLmPit9IIdzwRjqD-l_sZBDdPlcSfKqpAt) - I sung his praises earlier. 
 
+- [DevOpsMasters](https://www.youtube.com/@DevOpsMasters) - Explanations for killer.sh questions. 
+
 Exam-specific advice and guides:  
 - [JayDemy](https://www.youtube.com/playlist?list=PLSsEvm2nF_8nGkhMyD1sq-DqjwQq8fAii) - This is usually mentioned a long with IT Kiddie and DumbItGuy but I couldn't find any accompanying labs to go with it so I'll watch it once I'm done with labs. 
 - [Atla3](https://www.youtube.com/watch?v=eGv6iPWQKyo) - This covers some gotchas that were added to CKA recently. I'll add notes when I give it a rewatch. 
