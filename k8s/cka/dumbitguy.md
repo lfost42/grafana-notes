@@ -239,6 +239,7 @@ Step 3: resume replicas
 
 ```bash
 scripts/run-question.sh Question-5\ *
+cat Question-5\ */Questions.bash
 ```
 
 Create a new HorizontalPodAutoScaler(HPA) named apache-server in the autoscale namespace
@@ -294,7 +295,7 @@ EOF
 scripts/run-question.sh Question-6\ *
 ```
 
-1. Create a list of all cert-manager [CRDs] and save it to /root/resources.yaml
+1. Create a list of all cert-manager [CRDs] and save it to `/root/resources.yaml`
 2. Using kubectl extract the documentation for the subject specification field of the Certifciate Custom Resource and save it to `/root/subject.yaml`. You may use any output format that kubectl supports
 
 Video Link - https://youtu.be/SA1DzLQaDJs
@@ -329,7 +330,7 @@ Video Link - https://youtu.be/CZzxGyF6OHc
 <details>
 
 Create PriorityClass just below existing max (e.g., 999)
-`k create priorityclass high-priority --value=999 --description="high priority"`  
+`k create pc high-priority --value=999 --description="high priority"`  
 `k get pc`
 
 Patch deployment to use it. 
@@ -379,15 +380,15 @@ Install Calico (supports NetworkPolicy).
 scripts/run-question.sh Question-9\ *
 ```
 
-Set up cri-dockerd.  
+Set up cri-dockerd - https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.20/cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb
 Install the debian package ~/cri-dockerd.deb using dpkg.  
 Enable and start the cri-docker service.  
 Configure these parameters:
 
-Set net.bridge.bridge-nf-call-iptables to 1  
-Set net.ipv6.conf.all.forwarding to 1  
-Set net.ipv4.ip_forward to 1  
-Set net.netfilter.nf_conntrack_max to 131072
+net.bridge.bridge-nf-call-iptables to 1  
+net.ipv6.conf.all.forwarding to 1  
+net.ipv4.ip_forward to 1  
+net.netfilter.nf_conntrack_max to 131072
 
 Video Link - https://youtu.be/ybzo1vXiqjU
 
@@ -397,20 +398,23 @@ Video Link - https://youtu.be/ybzo1vXiqjU
 <details>
 
 Install and run cri-dockerd  
-`sudo dpkg -i cri-dockerd.deb`
+`cd `
+`ls -l | grep cri-dockerd`  
+`sudo dpkg -i cri-dockerd.deb`  
 `sudo systemctl enable --now cri-docker.service`  
-`sudo systemctl status cri-docker.service`. 
+`sudo systemctl status cri-docker.service`  
 
-Set sysctl (make persistent)
-```bash
-sudo tee /etc/sysctl.d/kube.conf >/dev/null <<'EOF'
+Set sysctl (make persistent)  
+`vim /etc/sysctl.d/cka.conf`
+
+```
 net.bridge.bridge-nf-call-iptables=1
 net.ipv6.conf.all.forwarding=1
 net.ipv4.ip_forward=1
 net.netfilter.nf_conntrack_max=131072
-EOF
-sudo sysctl --system
 ```
+
+sudo sysctl --system
 
 </details>
 
