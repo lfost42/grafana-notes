@@ -436,42 +436,26 @@ Video Link - https://youtu.be/oy6Mdqt1-jk
 Taint node01  
 `k taint nodes node01 PERMISSION=granted:NoSchedule`
 
-Pod that tolerates the taint. 
-```bash
-cat <<'EOF' > pod.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx
-spec:
-  containers:
-  - name: nginx
-    image: nginx
+Draft a pod to add a taint.  
+`k run nginx --image=nginx --dry-run=client -oyaml`
+
+Add the toleration.  
+`vim nginx.yaml`
+
+```yaml
   tolerations:
   - key: PERMISSION
     operator: Equal
     value: granted
     effect: NoSchedule
-EOF
 ```
-`k apply -f pod.yaml`. 
+
+`k apply -f nginx.yaml`. 
 `k get pods`
 
 Negative test (optional) — should stay Pending  
-```bash
-cat <<'EOF' > podfailure.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx-fail
-spec:
-  containers:
-  - name: nginx
-    image: nginx
-EOF
-```
-`k apply -f podfailure.yaml`  
-`k describe pod nginx-fail`
+`k run nginx-fail --image=nginx`  
+`k describe pod nginx-fail` or `k get po -owide`    
 
 </details>
 
