@@ -794,7 +794,7 @@ We should see the reference is Deployment/apache-deployment. After a small amoun
 ## -11- CNI (no setup required)
 
 ```bash
-cat Question-10/Questions.bash
+cat Question-11/Questions.bash
 ```
 
 Install and configure a CNI of your choice tht meets the specified requirements,
@@ -819,23 +819,25 @@ Video lnk: https://youtu.be/SV3V5VwR2sk?si=47uiyuvMD1Vpqbm1
 
 <details>
 
-Step 1: The key defining factor in the criteria is network policies, Flannel doesn't support network policies. Calico does. We can confirm this by running the following. 
+Step 1: The key defining factor in the criteria is network policies, Flannel doesn't support network policies. Calico does. We can confirm this by running the following.  
 `curl -sL https://github.com/flannel-io/flannel/releases/download/v0.26.1/kube-flannel.yml | grep network`
 
-We see nothing relating to networks in the flannel yaml, now lets try Calico
+We see nothing relating to networks in the flannel yaml, now lets try Calico  
 `curl -sL https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/tigera-operator.yaml | grep network`
 
 We see several references to networks and network policies, therefore we know Calico is the choice
 
-Step 2 - We need to apply the Calico file (don't use `k apply` or your install will be corrupted and you will fail this portion of the test!)
+Step 2 - We need to apply the Calico file (don't use `k apply` or your install will be corrupted and you will fail this portion of the test!)  
 `k create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/tigera-operator.yaml`
 
-Step 3 check everything has been deployed
+Step 3 check everything has been deployed  
 `k -n tigera-operator get all`
 
 We should see pods, deployments and replicasets
 
 </details>
+
+
 
 ## Question-12 Persistent Volume
 
