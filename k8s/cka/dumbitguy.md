@@ -14,7 +14,7 @@ chmod +x scripts/run-question.sh
 ## Question-1 MariaDB-Persistent volume
 
 ```bash
-./scripts run-question.sh Question-1\ *
+scripts/run-question.sh Question-1\ *
 ```
 
 A user accidentally deleted the MariaDB Deployment in the mariadb namespace. The deployment was configured with persistent storage. Your responsibility is to re-establish the deployment while ensuring data is preserved by reusing the available PersistentVolume
@@ -77,7 +77,7 @@ Add claimName and apply
 ## Question-2 ArgoCD
 
 ```bash
-./scripts run-question.sh Question-2\ *
+scripts/run-question.sh Question-2\ *
 ```
 
 Install Argo CD in a kubernetes cluster using helm while ensuring the CRDs are not installed (as they are pre installed)  
@@ -102,7 +102,7 @@ Video link - https://youtu.be/e0YGRSjb8CU
 ## Question-3 Sidecar
 
 ```bash
-./scripts run-question.sh Question-3\ *
+scripts/run-question.sh Question-3\ *
 ```
 
 Update the existing wordpress deployment adding a sidecar container named sidecar using the `busybox:stable` image to the existing pod. The new sidecar container has to run the following command `/bin/sh -c tail -f /var/log/wordpress.log`. Use a volume mounted at /var/log to make the log file wordpress.log available to the co-located container.
@@ -139,7 +139,7 @@ add sidecar:
 ## Question-4 Resource-Allocation
 
 ```bash
-./scripts run-question.sh Question-4\ *
+scripts/run-question.sh Question-4\ *
 ```
 
 You are managing a WordPress application running in a Kubernetes cluster. Your task is to adjust the Pod resource requests and limits to ensure stable operation
@@ -183,7 +183,7 @@ Step 3: resume replicas
 ## Question-5 HPA
 
 ```bash
-./scripts run-question.sh Question-5\ *
+scripts/run-question.sh Question-5\ *
 ```
 
 Create a new HorizontalPodAutoScaler(HPA) named apache-server in the autoscale namespace
@@ -236,7 +236,7 @@ EOF
 ## Question-6 CRDs
 
 ```bash
-./scripts run-question.sh Question-6\ *
+scripts/run-question.sh Question-6\ *
 ```
 
 1. Create a list of all cert-manager [CRDs] and save it to /root/resources.yaml
@@ -258,7 +258,7 @@ Save spec subject explain output
 ## Question-7 PriorityClass
 
 ```bash
-./scripts run-question.sh Question-7\ *
+scripts/run-question.sh Question-7\ *
 ```
 
 You're working in a kubernetes cluster with an existing deployment named busybox-logger running in the priority namespace. The cluster already has at least one user defined Priority Class. 
@@ -286,7 +286,7 @@ Patch deployment to use it.
 ## Question-8 CNI & Network Policy
 
 ```bash
-./scripts run-question.sh Question-8\ *
+scripts/run-question.sh Question-8\ *
 ```
 
 Install and configure a CNI of your choice tht meets the specified requirements,
@@ -321,7 +321,7 @@ Install Calico (supports NetworkPolicy).
 ## Question-9 Cri-Dockerd
 
 ```bash
-./scripts run-question.sh Question-9\ *
+scripts/run-question.sh Question-9\ *
 ```
 
 Set up cri-dockerd.  
@@ -362,7 +362,7 @@ sudo sysctl --system
 ## Question-10 Taints-Tolerations
 
 ```bash
-./scripts run-question.sh Question-10\ *
+scripts/run-question.sh Question-10\ *
 ```
 
 1. Add a taint to node01 so tht no normal pods can be scheduled in this node. key=PERMISSION, value=granted, Type=NoSchedule
@@ -419,7 +419,7 @@ EOF
 ## Question-11 Gateway-API
 
 ```bash
-./scripts run-question.sh Question-11\ *
+scripts/run-question.sh Question-11\ *
 ```
 
 You have an existing web application deployed in a Kubernetes cluster using an Ingress resource named web. You must migrate the existing Ingress configuration to the new Kubernetes Gateway API, maintaining the existing HTTPS access configuration. 
@@ -443,7 +443,7 @@ Video link - https://youtu.be/G9zispvOCHE
 ## Question-12 Ingress
 
 ```bash
-./scripts run-question.sh Question-12\ *
+scripts/run-question.sh Question-12\ *
 ```
 
 1. Expose the existing deployment with a service called echo-service
@@ -496,7 +496,7 @@ Optional test (NodePort):
 ## Question-13 Network-Policy
 
 ```bash
-./scripts run-question.sh Question-13\ *
+scripts/run-question.sh Question-13\ *
 ```
 
 There are two deployments, Frontend and Backend. Frontend is in the frontend namespace, Backend is in the backend namespace. 
@@ -522,7 +522,7 @@ Compare provided policies and pick the least permissive that matches requirement
 ## Question-14 Storage-Class
 
 ```bash
-./scripts run-question.sh Question-14\ *
+scripts/run-question.sh Question-14\ *
 ```
 
 1. Create a new StorageClass named local-storage with the provisioner rancher.io/local-path. Set
@@ -565,7 +565,7 @@ Make it default, remove default from local-path
 ## Question-15 Etcd-Fix
 
 ```bash
-./scripts run-question.sh Question-15\ *
+scripts/run-question.sh Question-15\ *
 ```
 
 After a cluster migration, the controlplane kube-apiserver is not coming up
@@ -594,7 +594,7 @@ If scheduler also broken, verify its flags
 ## Question-16 NodePort
 
 ```bash
-./scripts run-question.sh Question-16\ *
+scripts/run-question.sh Question-16\ *
 ```
 
 There is a deployment named nodeport-deployment in the relative namespace
@@ -650,7 +650,7 @@ Test: `curl http://<nodeIP>:30080`
 ## Question-17 TLS-Config
 
 ```bash
-./scripts run-question.sh Question-17\ *
+scripts/run-question.sh Question-17\ *
 ```
 
 There is an existing deployment in the nginx-static namespace. The deployment contains a ConfigMap that supports TLSv1.2 and TLSv1.3 as well as a Secret for TLS.
