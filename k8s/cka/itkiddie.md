@@ -96,13 +96,13 @@ Video link: https://youtu.be/2diUcaV5TXw?si=ftqiW_E-4kswuis1
 Step 1: Verify secret and ingress exist and describe them
 
 ```bash
-k get secret -n web-app
-k describe secret -n web-app web-tls
+k -n web-app get secret
+k -n web-app describe secret web-tls
 ```
 
 ```bash
-k get ingress -n web-app
-k describe ingress -n web-app web
+k -n web-app get ingress 
+k -n web-app web describe ingress
 ```
 
 Step 2: Create the Gateway (use the docs)  
@@ -132,7 +132,7 @@ Apply it.
 `k apply -f gw.yaml`
 
 Verify it is there. 
-`k get gateway -n web-app`
+`k -n web-app get gateway`
 
 Step 3: create the HTTPRoute. 
 `vim http.yaml`
@@ -164,7 +164,7 @@ apply it
 
 ```bash
 # Check
-k describe gateway, httproute -n web-app
+k -n web-app describe gateway, httproute
 ```
 
 Check all fields match as expected. In the exam you may be given a curl to run to check this
@@ -197,12 +197,12 @@ Video lnk: https://youtu.be/W-Rt_U8any4?si=KD_6oVewmhPgu1NZ
 Step 1: Verify secret and ingress exist and describe them. 
 
 ```bash
-k get secret -n web-app
-k describe secret -n web-app
-k get ingress -n web-app
-k describe ingress -n web-app
-k get svc -n web-app
-k describe svc -n web-app
+k -n web-app get secret
+k -n web-app describe secret
+k -n web-app get ingress
+k -n web-app describe ingress
+k -n web-app get svc
+k -n web-app describe svc
 ```
 
 Step 2: Create the Gateway (use the docs)  
@@ -232,7 +232,7 @@ Apply it
 `k apply -f gw.yaml`
 
 Verify it's there  
-`k get gateway -n web-app`
+`k -n web-app get gateway`
 
 Step 3: create the HTTPRoute  
 `vim http.yaml`
@@ -264,7 +264,7 @@ apply it
 `k apply -f http.yaml`
 
 Check  
-`k describe gateway,httproute -n web-app`
+`k -n web-app describe gateway,httproute`
 
 Check all fields match as expected. In the exam you may be given a curl to run to check this. 
 
@@ -298,7 +298,7 @@ Step 1: Check the deployment and scale it down to 0
 `k get deploy`
 
 Scale it down  
-`k scale deployment wordpress --replicas 0`
+`k scale deploy wordpress --replicas 0`
 
 Check it has scaled  
 `k get deploy`
@@ -488,7 +488,7 @@ Check to see PC was created
 `k get pc`
 
 Step 2 Patch the deployment, we need to use the patch command for this for the exam, first we need to figure out where we want the priority class name to go.  
-`k get deploy -n priority busybox-logger -oyaml`
+`k -n priority get deploy busybox-logger -oyaml`
 
 We need to add priorityClassName in the following section:
 
@@ -607,7 +607,7 @@ Find the NodeIP:
 `k get nodes -owide`
 
 Find the NodePort:  
-`k get svc -n echo-sound`
+`k -n echo-sound get svc`
 
 `curl NODEIP:NODEPORT/echo`
 
@@ -714,7 +714,7 @@ Step 3 Inspect file 3
 `cat /root/network-policies/network-policy-2.yaml`
 
 File three only allows frontend traffic from the frontend namespace and pods labelled front end. We need to check the labels on the frontend deployment pods  
-`k get po -n frontend --show-labels`
+`k -n frontend get po --show-labels`
 
 We can see they have the label app=frontend which means network-policy-3 is the least permissive and allows the traffic we want
 
@@ -934,7 +934,7 @@ Apply it
 `k apply -f mariadb-deploy.yaml`
 
 Step 5: final checks  
-`k get po -n mariadb`
+`k -n mariadb get po`
 
 Pod should be running, we want to check it is using the PVC  
 `k -n mariadb describe po`
@@ -1093,7 +1093,7 @@ k taint --help
 Examples:  
   \# Update node 'foo' with a taint with key 'dedicated' and value 'special-user' and effect 'NoSchedule'.  
   \# If a taint with that key and effect already exists, its value is replaced as specified  
-  `kubectl taint nodes foo dedicated=special-user:NoSchedule`  
+  `k taint nodes foo dedicated=special-user:NoSchedule`  
 
 For the question we have  
 `k taint node node01 PERMISSION=granted:NoSchedule`
@@ -1184,7 +1184,7 @@ spec:
           protocol: TCP
 ```
 Verify the changes  
-`k describe deployment -n relative nodeport-deployment | grep -i port`
+`k -n relative describe deploy nodeport-deployment | grep -i port`
 
 We should see the following  
 ```
