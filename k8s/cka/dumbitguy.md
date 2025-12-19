@@ -6,7 +6,7 @@ This is another highly recommended [Youtube playlist](https://www.youtube.com/pl
 
 ```bash
 git clone https://github.com/vj2201/CKA-PREP-2025-v2.git
-chmod +x CKA-PREP-2025-v2/scripts/run-question.sh`
+chmod +x CKA-PREP-2025-v2/scripts/run-question.sh
 cd CKA-PREP-2025-v2
 chmod +x scripts/run-question.sh
 ```
