@@ -93,7 +93,7 @@ Video link - https://youtu.be/e0YGRSjb8CU
 
 `helm repo add argocd https://argoproj.github.io/argo-helm`  
 `helm repo update`  
-`helm -n argocd template argocd argo/argo-cd --version 7.7.3 --set crds.install=false > /root/argo-helm.yaml`  
+`helm -n argocd template argocd argocd/argo-cd --version 7.7.3 --set crds.install=false > /root/argo-helm.yaml`  
 `cat /root/argo-helm.yaml   # confirm output ` 
 
 </details>
@@ -122,7 +122,7 @@ spec.template.spec.volumes:
 main container volumeMounts:
 - mountPath: /var/log
   name: log
-add sidecar:
+# add sidecar:
 - name: sidecar
   image: busybox:stable
   command: ["/bin/sh","-c","tail -f /var/log/wordpress.log"]
