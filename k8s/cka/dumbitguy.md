@@ -94,7 +94,7 @@ Video link - https://youtu.be/e0YGRSjb8CU
 
 `helm repo add argocd https://argoproj.github.io/argo-helm`  
 `helm repo update`  
-`helm template argocd argo/argo-cd --version 7.7.3 --set crds.install=false -n argocd > /root/argo-helm.yaml`  
+`helm -n argocd template argocd argo/argo-cd --version 7.7.3 --set crds.install=false > /root/argo-helm.yaml`  
 `cat /root/argo-helm.yaml   # confirm output ` 
 
 </details>
@@ -115,7 +115,7 @@ Video link - https://youtu.be/3xraEGGQJDY
 <details>
 
 Add shared volume + sidecar to deployment  
-`kubectl edit deployment wordpress   # add emptyDir volume and mounts below`
+`k edit deploy wordpress   # add emptyDir volume and mounts below`
 ```yaml
 spec.template.spec.volumes:
 - name: log
@@ -131,8 +131,8 @@ add sidecar:
   - mountPath: /var/log
     name: log
 ```
-`kubectl rollout status deployment wordpress`  
-`kubectl get pods -l app=wordpress`
+`k rollout status deploy wordpress`  
+`k get pods -l app=wordpress`
 
 </details>
 
@@ -159,11 +159,11 @@ Video link - https://youtu.be/ZqGDdETii8c
 <details>
 
 Step 1: pause workload  
-`kubectl scale deployment wordpress --replicas 0`
+`k scale deploy wordpress --replicas 0`
 
 Step 2: set requests/limits (e.g., 250m/300m CPU, 500Mi/600Mi mem). 
 ```
-kubectl patch deployment wordpress -p '{
+k patch deploy wordpress -p '{
   "spec":{"template":{"spec":{
     "containers":[{
       "name":"wordpress",
@@ -175,8 +175,8 @@ kubectl patch deployment wordpress -p '{
   }}}}'
 ```
 Step 3: resume replicas  
-`kubectl scale deployment wordpress --replicas 3`
-`kubectl get pods -l app=wordpress`
+`k scale deploy wordpress --replicas 3`
+`k get pods -l app=wordpress`
 
 </details>
 
@@ -201,7 +201,7 @@ Video Link - https://youtu.be/YGkARVFKtmM
 <details>
 
 Create HPA for apache-deployment in autoscale namespace  
-`kubectl get deploy -n autoscale`  
+`k -n autoscale get deploy`  
 ```bash
 cat <<'EOF' > hpa.yaml
 apiVersion: autoscaling/v2
@@ -228,8 +228,8 @@ spec:
       stabilizationWindowSeconds: 30
 EOF
 ```
-`kubectl apply -f hpa.yaml`. 
-`kubectl get hpa -n autoscale`
+`k apply -f hpa.yaml`. 
+`k -n autoscale get hpa`
 
 </details>
 
@@ -249,9 +249,9 @@ Video Link - https://youtu.be/SA1DzLQaDJs
 
 <details>
 
-`kubectl get crd | grep cert-manager | tee /root/resources.yaml`
+`k get crd | grep cert-manager | tee /root/resources.yaml`
 Save spec subject explain output  
-`kubectl explain certificate.spec.subject | tee /root/subject.yaml`
+`k explain certificate.spec.subject | tee /root/subject.yaml`
 
 </details>
 
@@ -274,12 +274,12 @@ Video Link - https://youtu.be/CZzxGyF6OHc
 <details>
 
 Create PriorityClass just below existing max (e.g., 999)
-`kubectl create priorityclass high-priority --value=999 --description="high priority"`  
-`kubectl get pc`
+`k create priorityclass high-priority --value=999 --description="high priority"`  
+`k get pc`
 
 Patch deployment to use it. 
-`kubectl patch deployment busybox-logger -n priority -p '{"spec":{"template":{"spec":{"priorityClassName":"high-priority"}}}}'`  
-`kubectl describe deployment busybox-logger -n priority | grep -i "Priority Class"`
+`k -n priority patch deploy busybox-logger -p '{"spec":{"template":{"spec":{"priorityClassName":"high-priority"}}}}'`  
+`k -n priority describe deploy busybox-logger | grep -i "Priority Class"`
 
 </details>
 
@@ -313,8 +313,8 @@ Video Link - https://youtu.be/Uc04Ui4x3EM
 <details>
 
 Install Calico (supports NetworkPolicy). 
-`kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/tigera-operator.yaml`  
-`kubectl get all -n tigera-operator`
+`k create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/tigera-operator.yaml`  
+`k -n tigera-operator get all`
 
 </details>
 
@@ -375,7 +375,7 @@ Video Link - https://youtu.be/oy6Mdqt1-jk
 <details>
 
 Taint node01  
-`kubectl taint nodes node01 PERMISSION=granted:NoSchedule`
+`k taint nodes node01 PERMISSION=granted:NoSchedule`
 
 Pod that tolerates the taint. 
 ```bash
@@ -395,8 +395,8 @@ spec:
     effect: NoSchedule
 EOF
 ```
-`kubectl apply -f pod.yaml`. 
-`kubectl get pods`
+`k apply -f pod.yaml`. 
+`k get pods`
 
 Negative test (optional) — should stay Pending  
 ```bash
@@ -411,8 +411,8 @@ spec:
     image: nginx
 EOF
 ```
-`kubectl apply -f podfailure.yaml`  
-`kubectl describe pod nginx-fail`
+`k apply -f podfailure.yaml`  
+`k describe pod nginx-fail`
 
 </details>
 
@@ -460,8 +460,8 @@ Video Link - https://youtu.be/sy9zABvDedQ
 <details>
 
 Expose deployment as NodePort. 
-`kubectl expose deployment echo -n echo-sound --name echo-service --type NodePort --port 8080 --target-port 8080`  
-`kubectl get svc -n echo-sound echo-service`. 
+`k -n echo-sound expose deploy echo --name echo-service --type NodePort --port 8080 --target-port 8080`  
+`k -n echo-sound get svc echo-service`. 
 
 Create ingress. 
 ```bash
@@ -485,8 +485,8 @@ spec:
               number: 8080
 EOF
 ```
-`kubectl apply -f ingress.yaml`  
-`kubectl get ingress -n echo-sound`
+`k apply -f ingress.yaml`  
+`k -n echo-sound get ingress`
 
 Optional test (NodePort):  
 `curl http://<nodeIP>:<nodePort>/echo`
@@ -514,8 +514,8 @@ Compare provided policies and pick the least permissive that matches requirement
 `cat /root/network-policies/network-policy-1.yaml   # allows all ingress (too open)`  
 `cat /root/network-policies/network-policy-2.yaml   # extra IP allowed (too open)`. 
 `cat /root/network-policies/network-policy-3.yaml   # only frontend namespace/pods allowed`  
-`kubectl get pods -n frontend --show-labels         # confirm app=frontend label`  
-`kubectl apply -f /root/network-policies/network-policy-3.yaml`. 
+`k -n frontend get pods --show-labels    # confirm app=frontend label`  
+`k apply -f /root/network-policies/network-policy-3.yaml`. 
 
 </details>
 
@@ -552,13 +552,13 @@ provisioner: rancher.io/local-path
 volumeBindingMode: WaitForFirstConsumer
 EOF
 ```
-`kubectl apply -f sc.yaml`  
-`kubectl get sc`  
+`k apply -f sc.yaml`  
+`k get sc`  
 
 Make it default, remove default from local-path  
-`kubectl patch storageclass local-storage -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
-kubectl patch storageclass local-path -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'`  
-`kubectl get sc`  
+`k patch storageclass local-storage -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'`  
+`k patch storageclass local-path -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'`  
+`k get sc`  
 
 </details>
 
@@ -586,7 +586,7 @@ Ensure flag uses correct etcd port
 `sudo vi /etc/kubernetes/manifests/kube-apiserver.yaml   # correct port/IP, save and wait for` `static pod restart`  
 
 If scheduler also broken, verify its flags  
-`kubectl -n kube-system get pods | grep kube-scheduler`  
+`k -n kube-system get pods | grep kube-scheduler`  
 `sudo vi /etc/kubernetes/manifests/kube-scheduler.yaml   # kubeconfig path, API server endpoint, cert refs`
 
 </details>
@@ -612,14 +612,14 @@ Video Link - https://www.youtube.com/watch?v=UT-RZCZlUiw
 Add container port to deployment  
 
 ```bash
-kubectl patch deployment nodeport-deployment -n relative -p '{
+k -n relative patch deploy nodeport-deployment -p '{
   "spec":{"template":{"spec":{"containers":[{
     "name":"nginx",
     "ports":[{"name":"http","containerPort":80,"protocol":"TCP"}]
   }]}}}}'
 ```
 
-`kubectl get deploy nodeport-deployment -n relative -o wide`
+`k -n relative get deploy nodeport-deployment -o wide`
 
 Create NodePort service on 30080
 ```bash
@@ -641,8 +641,8 @@ spec:
 EOF
 ```
 
-`kubectl apply -f svc.yaml`  
-`kubectl get svc nodeport-service -n relative -o wide`  
+`k apply -f svc.yaml`  
+`k -n relative get svc nodeport-service -o wide`  
 Test: `curl http://<nodeIP>:30080`  
 
 </details>
@@ -674,11 +674,11 @@ Video Link - https://www.youtube.com/watch?v=WFTVTi8JhKc
 <details>
 
 Step one: We want to edit the config map to remove all references to tls v1.2  
-`k edit cm -n nginx-static nginx-config`  
+`k -n nginx-static edit cm nginx-config`  
 remove TLSv1.2 from SSL protocols (remove from last applied configuration for safety)
 
 Step 2: We need to get the IP of the service  
-`k get svc -n nginx-static`
+`k -n nginx-static get svc`
 
 We need to add this IP with the host name to /etc/hosts  
 `sudo echo 'x.x.x.x ckaquestion.k8s.local' >> /etc/hosts`
@@ -687,7 +687,7 @@ Check the hosts file has been updated the IP and host should be added to the bot
 `sudo cat /etc/hosts`
 
 Step 3: If we run the check commands now we see v1.2 is still working, this is because we need to restart the deployment to use the new CM config
-`k rollout restart -n nginx-static deployment nginx-static`
+`k -n nginx-static rollout restart deploy nginx-static`
 
 Test the commands again and the v1.2 should no longer work  
 `curl -vk --tls-max 1.2 https://ckaquestion.k8s.local # should fail`  
