@@ -467,11 +467,10 @@ scripts/run-question.sh Question-11\ *
 
 You have an existing web application deployed in a Kubernetes cluster using an Ingress resource named web. You must migrate the existing Ingress configuration to the new Kubernetes Gateway API, maintaining the existing HTTPS access configuration. 
 
-1. Create a Gateway Resource named web-gateway with hostname gateway.web.k8s.local that maintains the
-exisiting TLS and listener configuration from the existing Ingress resource named web
-2. Create a HTTPRoute resource named web-route with hostname gateway.web.k8s.local that maintains the
-existing routing rules from the current Ingress resource named web.
-Note: A GatewayClass named nginx-class is already installed in the cluster
+1. Create a Gateway Resource named `web-gateway` with hostname `gateway.web.k8s.local` that maintains the exisiting TLS and listener configuration from the existing Ingress resource named `web`
+2. Create a HTTPRoute resource named `web-route` with hostname `gateway.web.k8s.local` that maintains the existing routing rules from the current Ingress resource named `web`.  
+
+Note: A GatewayClass named `nginx-class` is already installed in the cluster
 
 Video link - https://youtu.be/G9zispvOCHE
 
@@ -479,7 +478,62 @@ Video link - https://youtu.be/G9zispvOCHE
 
 <details>
 
+`k describe ingress web`  
+`k describe secret web-tls`  
 
+Step 2: Create Gateway (mirrors Ingress host + TLS)  
+`vim gw.yaml`
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: web-gateway
+spec:
+  gatewayClassName: nginx-class
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: gateway.web.k8s.local
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: web-tls
+```
+
+kubectl apply -f gw.yaml
+kubectl get gateway
+
+Step 3: Create HTTPRoute (mirrors Ingress rules)  
+`vim http.yaml`
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-route
+spec:
+  parentRefs:
+  - name: web-gateway
+  hostnames:
+  - "gateway.web.k8s.local"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: web-service
+      port: 80
+```
+
+K apply -f http.yaml
+
+Step 4: Verify  
+`k describe gateway web-gateway`  
+`k describe httproute web-route`
 
 </details>
 
