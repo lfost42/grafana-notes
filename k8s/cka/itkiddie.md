@@ -94,82 +94,26 @@ Video link: https://youtu.be/2diUcaV5TXw?si=ftqiW_E-4kswuis1
 
 <details>
 
-Step 1: Verify secret and ingress exist and describe them
 
-```bash
-k -n web-app get secret
-k -n web-app describe secret web-tls
-```
-
-```bash
-k -n web-app get ingress 
-k -n web-app web describe ingress
-```
-
-Step 2: Create the Gateway (use the docs)  
-`vim gw.yaml`
-
+Add shared volume + sidecar to deployment  
+`k edit deploy wordpress   # add emptyDir volume and mounts below`
 ```yaml
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: web-gateway
-  namespace: web-app
-spec:
-  gatewayClassName: nginx-class
-  listeners:
-  - name: https
-    protocol: HTTPS
-    port: 443
-    hostname: gateway.web.k8s.local
-    tls:                              # This is the section we need to add to maintain the existing config
-      mode: Terminate                 # for the ingress resource
-      certificateRefs:
-       - kind: Secret
-         name: web-tls
+spec.template.spec.volumes:
+- name: log
+  emptyDir: {}
+main container volumeMounts:
+- mountPath: /var/log
+  name: log
+# add sidecar:
+- name: sidecar
+  image: busybox:stable
+  command: ["/bin/sh","-c","tail -f /var/log/wordpress.log"]
+  volumeMounts:
+  - mountPath: /var/log
+    name: log
 ```
-
-Apply it. 
-`k apply -f gw.yaml`
-
-Verify it is there. 
-`k -n web-app get gateway`
-
-Step 3: create the HTTPRoute. 
-`vim http.yaml`
-
-Use the docs for reference  
-
-```yaml
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: web-route
-spec:
-  parentRefs:
-  - name: web-gateway
-  hostnames:
-  - "gateway.web.k8s.local"
-  rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /                  # We see the path from the ingress description
-    backendRefs:
-    - name: web-service           # Name and port need to match the service we have
-      port: 80.
-```
-
-apply it  
-`k apply -f http.yaml`
-
-```bash
-# Check
-k -n web-app describe gateway, httproute
-```
-
-Check all fields match as expected. In the exam you may be given a curl to run to check this
-
+`k rollout status deploy wordpress`  
+`k get pods -l app=wordpress`
 
 </details>
 
