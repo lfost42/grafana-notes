@@ -1074,7 +1074,7 @@ Check cert files are correct
 
 </details>
 
-## QUestion-15 Taints and Tolerations
+## Question-15 Taints and Tolerations
 
 ```bash
 cat Question-15/Question.bash
@@ -1214,15 +1214,6 @@ Now we add the NodePort.
 `vim service.yaml`
 
 ```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: nodeport-service
-  namespace: relative
-spec:
-  type: NodePort
-  selector:
-    app: nodeport-deployment
   ports:
     - port: 80
       protocol: TCP
