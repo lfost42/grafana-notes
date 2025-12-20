@@ -2,6 +2,8 @@
 
 This is another highly recommended [Youtube playlist](https://www.youtube.com/playlist?list=PLkDZsCgo3Isr4NB5cmyqG7OZwYEx5XOjM) for CKA. 
 
+These labs can be found in his [GitHub](https://github.com/vj2201/CKA-PREP-2025-v2)
+
 ### Lab Setup
 
 ```bash

@@ -2,6 +2,8 @@
 
 This is among the most highly recommended [Youtube playlist](https://www.youtube.com/playlist?list=PLkDZsCgo3Isr4NB5cmyqG7OZwYEx5XOjM) for CKA. 
 
+These labs can be found in this [GitHub](https://github.com/CameronMetcalfe22/CKA-PREP)
+
 ### Lab Setup
 
 In your lab terminal, run the following to download lab files:

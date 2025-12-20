@@ -15,7 +15,7 @@ He is engaging and also gets excited about showing off something he thinks his a
 These are resources you can use to drop into a [killercoda playground](https://killercoda.com/playgrounds/scenario/cka) or other local machine. 
 
 - [IT Kiddie](itkiddie.md)
-- [DumbItGuy](dumbitguy.md) -- in progress
+- [DumbItGuy](dumbitguy.md)
 
 Planned:
 - [simonbbb](https://github.com/simonbbbb/CKA-Hand-on-lab) - This one creates the cluster so killercoda would not be necessary to complete it. 
@@ -28,7 +28,7 @@ For Learning Concepts and general practice:
 - [DevOpsMasters](https://www.youtube.com/@DevOpsMasters) - Explanations for killer.sh questions. 
 
 Exam-specific advice and guides:  
-- [JayDemy](https://www.youtube.com/playlist?list=PLSsEvm2nF_8nGkhMyD1sq-DqjwQq8fAii) - This is usually mentioned a long with IT Kiddie and DumbItGuy but I couldn't find any accompanying labs to go with it so I'll watch it once I'm done with labs. 
+- [JayDemy](https://www.youtube.com/playlist?list=PLSsEvm2nF_8nGkhMyD1sq-DqjwQq8fAii) - This is usually mentioned a long with IT Kiddie and DumbItGuy but I couldn't find any accompanying labs. 
 - [Atla3](https://www.youtube.com/watch?v=eGv6iPWQKyo) - This covers some gotchas that were added to CKA recently. I'll add notes when I give it a rewatch. 
 
 These are the same creators in the Lab Practice section. 
@@ -39,9 +39,7 @@ These are the same creators in the Lab Practice section.
 
 - [CK-X Simulator](https://github.com/sailor-sh/CK-X/tree/master) - This creates a local lab and had a decent variety of questions. I'm not writing too much on it because a lot of it is deprecated and for novices, you'll likely find this more trouble than its worth. For example, the HPA question required version autoscaling/v1beta.
 
-I like the way the lab simulated the testing environment (similar to killer.sh) and I performed the github labs with it at first. But at some point, not enough worked well enough to stick with it. 
-
-It's open source so I may fork it to upgrade it to make it work more faithfully or add a new set of questions but it will require more time than I have right now. 
+I like the way the lab simulated the testing environment (similar to killer.sh) and I performed the github labs with it at first. But at some point, not enough worked well enough to stick with it. It was more useful for CKAD. 
 
 ---
 
