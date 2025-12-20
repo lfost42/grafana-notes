@@ -684,11 +684,13 @@ Video Link - https://youtu.be/IL448T6r8H4
 <details>
 
 Check apiserver logs, fix etcd endpoint  
-`journalctl -u kube-apiserver | tail`  
-`sudo sed -n '1,200p' /etc/kubernetes/manifests/kube-apiserver.yaml`  
+`crictl ps -a | grep apiserver  # find the exited container`
+`crictl logs <containerid>`  
+
+`journalctl | grep kube-apiserver`  
 Ensure flag uses correct etcd port  
 `--etcd-servers=https://127.0.0.1:2379`  
-`sudo vi /etc/kubernetes/manifests/kube-apiserver.yaml   # correct port/IP, save and wait for` `static pod restart`  
+`sudo vim /etc/kubernetes/manifests/kube-apiserver.yaml   # correct port/IP, save and wait for` `static pod restart`  
 
 If scheduler also broken, verify its flags  
 `k -n kube-system get pods | grep kube-scheduler`  
@@ -702,9 +704,9 @@ If scheduler also broken, verify its flags
 scripts/run-question.sh Question-16\ *
 ```
 
-There is a deployment named nodeport-deployment in the relative namespace
+There is a deployment named `nodeport-deployment` in the `relative` namespace
 
-1. Configure the deployment so it can be exposed on port 80, name=http, protocol TCP
+1. Configure the deployment so it can be exposed on port `80`, `name=http`, `protocol TCP`
 2. Create a new Service named nodeport-service exposing the container port 80, protocol TCP, Node Port 30080
 3. Configure the new Service to also expose the individual pods using NodePort
 
@@ -714,41 +716,35 @@ Video Link - https://www.youtube.com/watch?v=UT-RZCZlUiw
 
 <details>
 
-Add container port to deployment  
+Add container port to deployment:  
+`k -n relative edit deploy nodeport-deployment`  
 
-```bash
-k -n relative patch deploy nodeport-deployment -p '{
-  "spec":{"template":{"spec":{"containers":[{
-    "name":"nginx",
-    "ports":[{"name":"http","containerPort":80,"protocol":"TCP"}]
-  }]}}}}'
+Add ports:  
+```yaml
+        - containerPort: 80
+          name: http
+          protocol: TCP
 ```
 
-`k -n relative get deploy nodeport-deployment -o wide`
 
-Create NodePort service on 30080
-```bash
-cat <<'EOF' > svc.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: nodeport-service
-  namespace: relative
-spec:
-  type: NodePort
-  selector:
-    app: nodeport-deployment
+`k -n relative expose deploy nodeport-deployment --port=80 --type=NodePort --dry-run=client -oyaml`  
+
+Create yaml and edit:  
+
+```yaml
   ports:
   - port: 80
     targetPort: 80
-    protocol: TCP
     nodePort: 30080
-EOF
+    protocol: TCP
 ```
 
 `k apply -f svc.yaml`  
+`k -n relative get deploy nodeport-deployment -o wide`  
 `k -n relative get svc nodeport-service -o wide`  
-Test: `curl http://<nodeIP>:30080`  
+Test:  
+`k get node -owide`  
+`curl http://<NODE-IP>:30080`  
 
 </details>
 
