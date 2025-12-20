@@ -12,12 +12,7 @@ He is engaging and also gets excited about showing off something he thinks his a
 
 ### Lab Practice
 
-These are resources you can use to drop into a [killercoda playground](https://killercoda.com/playgrounds/scenario/cka) or other local machine. 
-
-- [IT Kiddie](itkiddie.md)
-- [DumbItGuy](dumbitguy.md)
-
-Planned:
+- [IT Kiddie](itkiddie.md) - Clone into [killercoda playground](https://killercoda.com/playgrounds/scenario/cka) or other local lab.
 - [simonbbb](https://github.com/simonbbbb/CKA-Hand-on-lab) - This one creates the cluster so killercoda would not be necessary to complete it. 
 
 ### Youtube Playlists
@@ -30,8 +25,6 @@ For Learning Concepts and general practice:
 Exam-specific advice and guides:  
 - [JayDemy](https://www.youtube.com/playlist?list=PLSsEvm2nF_8nGkhMyD1sq-DqjwQq8fAii) - This is usually mentioned a long with IT Kiddie and DumbItGuy but I couldn't find any accompanying labs. 
 - [Atla3](https://www.youtube.com/watch?v=eGv6iPWQKyo) - This covers some gotchas that were added to CKA recently. I'll add notes when I give it a rewatch. 
-
-These are the same creators in the Lab Practice section. 
 - [IT Kiddie](https://www.youtube.com/playlist?list=PLkDZsCgo3Isr4NB5cmyqG7OZwYEx5XOjM)
 - [DumbItGuy](https://www.youtube.com/playlist?list=PLvZb3tGyqC1TOasSaN36haM5xlCxHQBlA)
 
