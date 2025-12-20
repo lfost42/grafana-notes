@@ -18,7 +18,6 @@ I like to keep this in a separate tab or terminal:
 chmod +x Question-0/LabSetUp.bash  
 ./Question-0/LabSetUp.bash
 
-ls Question-0/ #in case you need to view the question directory  
 cat Question-0/SolutionNotes.bash # to view solution notes. 
 
 %s/old_number/0/g
@@ -35,7 +34,7 @@ Once you hit enter, the page will be ready to copy/paste for use in the question
 ## Question-1 ArgoCD (no setup script needed)
 
 ```bash
-cat Question-1/Questions.bash
+cat Question-1/SolutionNotes.bash
 ```
 
 Install `Argo CD` in a Kubernetes cluster using Helm while ensuring that CRDs are not installed (as they are pre-installed). 
@@ -844,7 +843,7 @@ We should see pods, deployments and replicasets
 ```bash
 chmod +x Question-12/LabSetUp.bash
 ./Question-12/LabSetUp.bash
-cat Question-12/Questions.bash
+cat ./Question-12/Questions.bash
 ```
 
 A user accidentally deleted the MariaDB Deployment in the mariadb namespace. The deployment was configured with persistent storage. Your responsibility is to re-establish the deployment while ensuring data is preserved by reusing the available PersistentVolume.
@@ -952,6 +951,8 @@ Volumes:
 ## Question-13 Cri-Dockerd (no setup required)
 
 ```bash
+chmod +x Question-13/LabSetUp.bash
+./Question-13/LabSetUp.bash
 cat Question-13/Questions.bash
 ```
 
@@ -1020,7 +1021,6 @@ You may need to add/edit files in the /etc/sysctl.d directory, if you create a f
 ```bash
 chmod +x Question-14/LabSetUp.bash
 ./Question-14/LabSetUp.bash
-cat Question-14/Questions.bash
 ```
 
 After a cluster migration, the controlplane kube-apiserver is not coming up. Before the migration, the etcd was external and in HA, after migration the kube-api server was pointing to etcd peer port `2380`.
@@ -1074,7 +1074,7 @@ Check cert files are correct
 ## QUestion-15 Taints and Tolerations
 
 ```bash
-cat Question-15/Questions.bash
+cat Question-15/Question.bash
 ```
 
 Task:
@@ -1152,7 +1152,7 @@ Delete nginx-fail
 ```bash
 chmod +x Question-16/LabSetUp.bash
 ./Question-16/LabSetUp.bash
-cat Question-16/Questions.bash
+cat Question-16/Question.bash 
 ```
 
 There is a deployment named nodeport-deployment in the relative namespace. 
@@ -1260,6 +1260,7 @@ working. Further configuration is required.</p>
 ```bash
 chmod +x Question-17/LabSetUp.bash
 ./Question-17/LabSetUp.bash
+cat Question-17/Questions.bash
 ```
 
 There is an existing deployment in the nginx-static namespace. The deployment contains a ConfigMap that supports `TLSv1.2` and `TLSv1.3` as well as a `Secret` for `TLS`.
