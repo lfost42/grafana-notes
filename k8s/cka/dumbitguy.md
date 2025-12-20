@@ -543,10 +543,9 @@ Step 4: Verify
 scripts/run-question.sh Question-12\ *
 ```
 
-1. Expose the existing deployment with a service called echo-service
-using Service Port 8080 type=NodePort
-2. Create a new ingress resource named echo in the echo-sound namespace for http://example.org/echo
-3. The availability of the Service echo-service can be checked using the following command curl NODEIP:NODEPORT/echo
+1. Expose the existing deployment with a service called `echo-service` in the `echo-sound` namespace using Service Port `8080` `type=NodePort`
+2. Create a new ingress resource named `echo` in the `echo-sound` namespace for `http://example.org/echo`
+3. The availability of the Service echo-service can be checked using the following command `curl NODEIP:NODEPORT/echo`
 
 In the exam it may give you a command like `curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo`. This requires an ingress controller, to get this to work ensure your `/etc/hosts` file has an entry for your NodeIP pointing to example.org
 
@@ -558,11 +557,11 @@ Video Link - https://youtu.be/sy9zABvDedQ
 
 Expose deployment as NodePort. 
 `k -n echo-sound expose deploy echo --name echo-service --type NodePort --port 8080 --target-port 8080`  
-`k -n echo-sound get svc echo-service`. 
+`k -n echo-sound get svc echo-service`  
 
-Create ingress. 
-```bash
-cat <<'EOF' > ingress.yaml
+Create ingress.  
+`vim ingress.yaml`
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -580,13 +579,24 @@ spec:
             name: echo-service
             port:
               number: 8080
-EOF
 ```
 `k apply -f ingress.yaml`  
 `k -n echo-sound get ingress`
 
 Optional test (NodePort):  
 `curl http://<nodeIP>:<nodePort>/echo`
+
+to modify /etc/host: 
+`k -n echo-sound get svc -owide`  
+capture the CLUSTER-IP
+
+`vim /etc/hosts`
+
+add to file:  
+`http:<Cluster-IP> example.org`  
+
+`curl -o /dev/null -s -w "%{http_code}\n" example.org:8080/echo`  
+should return `200`
 
 </details>
 
@@ -622,8 +632,7 @@ Compare provided policies and pick the least permissive that matches requirement
 scripts/run-question.sh Question-14\ *
 ```
 
-1. Create a new StorageClass named local-storage with the provisioner rancher.io/local-path. Set
-the VolumeBindingMode to WaitForFirstCustomer. Do not make the SC default
+1. Create a new StorageClass named local-storage with the provisioner `rancher.io/local-path`. Set the VolumeBindingMode to WaitForFirstCustomer. Do not make the SC default
 2. Patch the StorageClass to make it the default StorageClass
 3. Ensure local-storage is the only default class
 
@@ -644,7 +653,7 @@ kind: StorageClass
 metadata:
   name: local-storage
   annotations:
-    storageclass.kubernetes.io/is-default-class: "false"
+    storageclass.kubernetes.io/is-default-class: "true"
 provisioner: rancher.io/local-path
 volumeBindingMode: WaitForFirstConsumer
 EOF
@@ -652,9 +661,8 @@ EOF
 `k apply -f sc.yaml`  
 `k get sc`  
 
-Make it default, remove default from local-path  
-`k patch storageclass local-storage -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'`  
-`k patch storageclass local-path -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'`  
+Make it default, remove default from local-path   
+`k patch sc local-path -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'`  
 `k get sc`  
 
 </details>
