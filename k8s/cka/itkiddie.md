@@ -1040,6 +1040,9 @@ On getting on to the node and trying to run kubectl commands we can see that the
 We can also go to the following directory for the pod logs  
 `cat /var/log/pods/kube-system_kube-apiserver-controlplane_..../kube-apiserver/x.log`
 
+`crictl ps -a | grep apiserver`  # find exited container
+`crictl logs <containerid>`  
+
 The pod logs tell us there is an issue connecting to 127.0.0.1:2380  
 `vim /etc/kubernetes/manifests/kube-apiserver.yaml`
 
@@ -1055,7 +1058,7 @@ Update the file and wait for the pods to come up
 There are several issues that could be at play in the exam for this question, the IP could be wrong, issues with the location of the certs and keys etc.
 
 One issue mentioned is that after this the kube-scheduler is down, you may need to inspect the logs for this  
-`k -n kube-system get pods | grep kube-scheduler`  
+`k -n kube-system get pods | grep scheduler`  
 `k -n kube-system describe pod 'kube-scheduler-pod-name'`  
 `k -n kube-system logs 'kube-scheduler-pod-name'`  
 
