@@ -40,7 +40,7 @@ cat Question-1/SolutionNotes.bash
 Install `Argo CD` in a Kubernetes cluster using Helm while ensuring that CRDs are not installed (as they are pre-installed). 
 
 Task:
-1. Add the official Argo CD Helm repository with the name argo: https://argoproj.github.io/argo-helm  
+1. Add the official Argo CD Helm repository with the name `argo`.
 2. Generate a Helm template from the Argo CD chart version `7.7.3` for the `acgocd` namespace.  
 3. Ensure that CRDs are not installed by configuring the chart accordingly.  
 4. Save the generated YAML manifest to `/home/argo/argo-helm.yaml`.  
@@ -54,7 +54,7 @@ Video link: https://www.youtube.com/watch?v=8GzJ-x9ffE0
 Step one: add the repo
 
 ```bash
-helm repo add argocd https://argoproj.github.io/argo-helm
+helm repo add argo https://argoproj.github.io/argo-helm
 ```
 
 Check the repo is there  
@@ -62,15 +62,15 @@ Check the repo is there
 
 ```bash
 # Step two get the template using the parameters given
-mkdir /root/argo
-cat /root/argo/argo-helm.yaml
+mkdir /home/argo
+cat /home/argo/argo-helm.yaml
 k create ns argocd
 ```
 
-`helm -n argocd template argocd argocd/argo-cd --version 7.7.3 --set crds.install=false > /root/argo-helm.yaml`
+`helm -n argocd template argocd argo/argo-cd --version 7.7.3 --skip-crds > /home/argo-helm.yaml`
 
 Step three: verify  
-`cat /root/argo-helm.yaml`
+`cat /home/argo-helm.yaml`
 
 </details>
 
