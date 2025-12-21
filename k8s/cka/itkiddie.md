@@ -480,9 +480,6 @@ Use this [killercoda](https://killercoda.com/killer-shell-cka/scenario/ingress-c
 ```bash
 git clone https://github.com/CameronMetcalfe22/CKA-PREP
 cd CKA-PREP
-```
-
-```bash
 chmod +x Question-7/LabSetUp.bash
 ./Question-7/LabSetUp.bash
 cat Question-7/Questions.bash
@@ -492,10 +489,10 @@ cat Question-7/Questions.bash
 2. Create a new ingress resource named echo in the echo-sound namespace for `http://example.org/echo`
 3. The availability of the Service echo-service can be checked using the following command
 `curl NODEIP:NODEPORT/echo`
-
-In the exam it may give you a command like `curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo`.  This requires an ingress controller.  To get this to work ensure your `/etc/hosts` file has an entry for your ingress controller' external IP pointing to example.org. Otherwise, look for an entry in the `/etc/hosts` file for a load balancer.  
-
-`echo 'x.x.x.x example.org/echo' >> /etc/hosts`
+4. Run the following to verify it works: 
+```bash
+curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo
+```
 
 Video lnk: https://youtu.be/mtORnV8AlI4?si=6fZq-yd8Sezg0a7v
 
@@ -549,11 +546,12 @@ Find the NodePort:
 Basic check:
 `curl -H "Host: gateway.web.k8s.local/echo" http://<NodeIP>:<NodePort>`
 
-Find ingress external IP:  
+Find ingress external IP (endpoint that points to port 80):  
 `k get all -A | grep ingress`  
 `k -n ingress-nginx get ep`  
-`echo '<ep that points to port 80> gateway.web.k8s.local'`  
-`curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo`
+`echo '<Enpoint-IP> gateway.web.k8s.local'`  
+
+`curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo` # should return 200
 
 </details>
 
