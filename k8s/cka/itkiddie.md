@@ -8,7 +8,7 @@ These labs can be found in this [GitHub](https://github.com/CameronMetcalfe22/CK
 
 In your lab terminal, run the following to download lab files:
 
-```bash
+```bashƒ
 git clone https://github.com/CameronMetcalfe22/CKA-PREP
 cd CKA-PREP
 ```
@@ -475,6 +475,13 @@ We should see the following
 
 ## Question-7 Ingress
 
+Use this [killercoda](https://killercoda.com/killer-shell-cka/scenario/ingress-create) to run this lab. It otherwise does not have the proper ingress resource to complete the last step. 
+
+```bash
+git clone https://github.com/CameronMetcalfe22/CKA-PREP
+cd CKA-PREP
+```
+
 ```bash
 chmod +x Question-7/LabSetUp.bash
 ./Question-7/LabSetUp.bash
@@ -486,7 +493,7 @@ cat Question-7/Questions.bash
 3. The availability of the Service echo-service can be checked using the following command
 `curl NODEIP:NODEPORT/echo`
 
-In the exam it may give you a command like `curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo`.  This requires an ingress controller.  To get this to work ensure your `/etc/hosts` file has an entry for your ingress controller IP pointing to example.org. Otherwise, look for an entry in the `/etc/hosts` file for a load balancer.  
+In the exam it may give you a command like `curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo`.  This requires an ingress controller.  To get this to work ensure your `/etc/hosts` file has an entry for your ingress controller' external IP pointing to example.org. Otherwise, look for an entry in the `/etc/hosts` file for a load balancer.  
 
 `echo 'x.x.x.x example.org/echo' >> /etc/hosts`
 
@@ -512,8 +519,6 @@ kind: Ingress
 metadata:
   name: echo
   namespace: echo-sound
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: / # need to add
 spec:
   rules:
   - host: "example.org"
@@ -539,40 +544,16 @@ Find the NodeIP:
 `k get nodes -owide`
 
 Find the NodePort:  
-`k -n echo-sound get svc`
+`k -n echo-sound get svc`  
 
+Basic check:
 `curl -H "Host: gateway.web.k8s.local/echo" http://<NodeIP>:<NodePort>`
 
-Example Output  
-
-```
-Hostname: echo-84897cb55d-lk675
-
-Pod Information:
-        -no pod information available-
-
-Server values:
-        server_version=nginx: 1.13.3 - lua: 10008
-
-Request Information:
-        client_address=172.30.2.2
-        method=GET
-        real path=/echo
-        query=
-        request_version=1.1
-        request_scheme=http
-        request_uri=http://172.30.2.2:8080/echo
-
-Request Headers:
-        accept=*/*
-        host=172.30.2.2:31999
-        user-agent=curl/8.5.0
-
-Request Body:
-        -no body in request-
-```
-
-This lab doesn't have an ingress-controller or load balancer so you won't be able to practice the curl command. Look for an Ingress controller that resolves to port 80 or an entry for a load balancer in the /etc/hosts. 
+Find ingress external IP:  
+`k get all -A | grep ingress`  
+`k -n ingress-nginx get ep`  
+`echo '<ep that points to port 80> gateway.web.k8s.local'`  
+`curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo`
 
 </details>
 
@@ -611,7 +592,7 @@ We should see the doc output for the subject spec of certificates, we now want o
 `k explain certificate.spec.subject > /root/subject.yaml`
 
 Check the file matches the explain command output  
-`cat /root/subject.yaml`
+`cat /root/subject.yaml`  
 
 </details>
 
