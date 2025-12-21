@@ -9,29 +9,11 @@ These labs can be found in this [GitHub](https://github.com/CameronMetcalfe22/CK
 In your lab terminal, run the following to download lab files:
 
 ```bash
-git clone https://github.com/CameronMetcalfe22/CKA-PREP # if this doesn't work, run `apt-get update` first
+git clone https://github.com/CameronMetcalfe22/CKA-PREP
 cd CKA-PREP
 ```
 
-I like to keep this in a separate tab or terminal:  
-`vim notes`
-
-```bash
-chmod +x Question-0/LabSetUp.bash  
-./Question-0/LabSetUp.bash
-
-cat Question-0/SolutionNotes.bash # to view solution notes. 
-
-%s/old_number/0/g
-```
-
-The last line can be used to update the question in VIM. For example, to update the above to Question 1 you would use the following in VIM (be sure you are not in insert mode):
-
-```bash
-:%s/0/1/g
-```
-
-Once you hit enter, the page will be ready to copy/paste for use in the question. 
+Note: you may need to run `apt-get update` first if on another environment.
 
 ## Question-1 ArgoCD (no setup script needed)
 
@@ -211,7 +193,23 @@ apply it
 Check  
 `k -n web-app describe gateway,httproute`
 
-Check all fields match as expected. In the exam you may be given a curl to run to check this. 
+Get Cluster-IP  
+`k -n web-app get svc`
+
+Write to /etc/hosts file
+`echo '<Cluster-IP> gateway.web.k8s.local' >> /etc/hosts`
+
+Check  
+`curl gateway.web.k8s.local`
+
+Should return html markup for nginx:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title> ...
+```
 
 </details>
 
