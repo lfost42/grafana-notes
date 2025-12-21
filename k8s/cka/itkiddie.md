@@ -56,6 +56,11 @@ k create ns argocd
 Step three: verify  
 `cat /home/argo-helm.yaml`
 
+Optional: install chart  
+`helm install argocd argo/argo-cd --namespace argocd`  
+
+*note: If the install fails, create another template with crds and install that.
+
 </details>
 
 ## Question-2 Sidecar
@@ -76,7 +81,6 @@ Video link: https://youtu.be/2diUcaV5TXw?si=ftqiW_E-4kswuis1
 
 <details>
 
-
 Add shared volume + sidecar to deployment  
 `k edit deploy wordpress   # add emptyDir volume and mounts below`
 ```yaml
@@ -94,8 +98,8 @@ main container volumeMounts:
   - mountPath: /var/log
     name: log
 ```
-`k rollout status deploy wordpress`  
-`k get pods -l app=wordpress`
+`k rollout status deploy wordpress`    
+`k get pods -l app=wordpress`  
 
 </details>
 
@@ -272,7 +276,7 @@ We have 100Mi already requested so we need to take this out of our calculation
 > 1703
 
 We now need to leave ~ 10% Head room  
-`expr 1703 - 170`. 
+`expr 1703 - 170`  
 > 1533
 
 We now need to share this between 3 pods  
@@ -297,7 +301,7 @@ Share this between 3 pods
 Looking at this a 250m request with a 300m limit looks reasonable
 
 Step 3: Edit the deployment with the new requests and limits  
-`k edit deploy wordpress`
+`k edit deploy wordpress`  
 
 ```yaml
 # ensure you add the limits to containers AND init containers
@@ -316,7 +320,7 @@ Step 4: Scale the deployment back to 3 replicas
 Describe the deployment and ensure you see the requests/limits there  
 `k describe deploy wordpress`
 
-Once the pods are up and running describe one of the pods and make sure you see the requests/limits there  
+Once the pods are up and running describe one of the pods and review the requests/limits  
 `k describe po wordpress-xxx-xxx-xxx`
 
 </details>
@@ -377,7 +381,7 @@ metadata:
     storageclass.kubernetes.io/is-default-class: "false" # This is what we want to change to true
 ```
 
-We can see this is under metadata.annotations.storageclass.kubernetes.io/is-default-class we can now build our patch command
+We can see this is under metadata.annotations.storageclass.kubernetes.io/is-default-class we can now build our patch command. 
 
 ```bash
 k patch sc local-storage -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
@@ -386,7 +390,7 @@ k patch sc local-storage -p '{"metadata":{"annotations":{"storageclass.kubernete
 Check. 
 `k get sc`
 
-We should see our sc is now labelled as default
+We should see our sc is now labelled as default. 
 
 Step 3 remove other default: We can also see the local-path SC is labelled as default, we don't want two defaults so we need to remove this. Use the command we built above to remove this editing it for the local-path SC and setting default to false. 
 
@@ -413,7 +417,7 @@ You're working in a kubernetes cluster with an existing deployment named `busybo
 
 Task:
 1. Create a new Priority Class named `high-priority` for user workloads. The value of this class should be exactly one less than the highest existing user-defined priority class. 
-2. Patch the existing deployment `busybox-logger` in the `priority` namespace to use the newly created `high-priority` class
+2. Patch the existing deployment `busybox-logger` in the `priority` namespace to use the newly created `high-priority` class. 
 
 Video lnk: https://youtu.be/wiL_M9qbPX4?si=rOIyX45i5kON8Xr7
 
@@ -421,7 +425,7 @@ Video lnk: https://youtu.be/wiL_M9qbPX4?si=rOIyX45i5kON8Xr7
 
 <details>
 
-Step1 Find the user defined priority classes. 
+Step1 Find the user defined priority classes.  
 `k get pc`
 
 User defined PCs are appended with "user", we can see the highest is 1000 so we need to create a PC with value 999.  
@@ -455,26 +459,10 @@ spec:
         app: busybox-logger
     spec:
       # We want to add priorityClassName here
-      containers:
-      - command:
-        - sh
-        - -c
-        - while true; do echo 'logging...'; sleep 5; done
-        image: busybox
-        imagePullPolicy: Always
-        name: busybox
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      # priorityClassName: high-priority
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 30
+      containers: ...
 ```
 
-From this we can see this is under spec:template:spec so our command will look like this  
+From this we can see this is under spec:template:spec: so our command will look like this  
 `k -n priority patch deploy busybox-logger -p '{"spec":{"template":{"spec":{"priorityClassName":"high-priority"}}}}'`
 
 Step 3 Check patch has applied successfully  
@@ -493,13 +481,12 @@ chmod +x Question-7/LabSetUp.bash
 cat Question-7/Questions.bash
 ```
 
-1. Expose the existing deployment with a service called echo-service using Service Port `8080` `type=NodePort`
+1. Expose the existing deployment with a service called `echo-service` using Service Port `8080` `type=NodePort`
 2. Create a new ingress resource named echo in the echo-sound namespace for `http://example.org/echo`
 3. The availability of the Service echo-service can be checked using the following command
 `curl NODEIP:NODEPORT/echo`
 
-In the exam it may give you a command like `curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo`.  
-This requires an ingress controller, to get this to work ensure your `/etc/hosts` file has an entry for your NodeIP pointing to example.org.  
+In the exam it may give you a command like `curl -o /dev/null -s -w "%{http_code}\n" http://example.org/echo`.  This requires an ingress controller.  To get this to work ensure your `/etc/hosts` file has an entry for your ingress controller IP pointing to example.org. Otherwise, look for an entry in the `/etc/hosts` file for a load balancer.  
 
 `echo 'x.x.x.x example.org/echo' >> /etc/hosts`
 
@@ -525,6 +512,8 @@ kind: Ingress
 metadata:
   name: echo
   namespace: echo-sound
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / # need to add
 spec:
   rules:
   - host: "example.org"
@@ -583,9 +572,7 @@ Request Body:
         -no body in request-
 ```
 
-You can also get the same by writing to the /etc/hosts file:  
-`echo '<NodeIP> gateway.web.k8s.local'`  
-`curl gateway.web.k8s.local:<NodePort>/echo`
+This lab doesn't have an ingress-controller or load balancer so you won't be able to practice the curl command. Look for an Ingress controller that resolves to port 80 or an entry for a load balancer in the /etc/hosts. 
 
 </details>
 
@@ -663,7 +650,7 @@ Step 3 Inspect file 3
 File three only allows frontend traffic from the frontend namespace and pods labelled front end. We need to check the labels on the frontend deployment pods  
 `k -n frontend get po --show-labels`
 
-We can see they have the label app=frontend which means network-policy-3 is the least permissive and allows the traffic we want
+We can see they have the label app=frontend which means network-policy-3 is the least permissive and allows the traffic we want. 
 
 Step 4 Apply the file  
 `k apply -f /root/network-policies/network-policy3.yaml`
@@ -692,7 +679,7 @@ Video lnk: https://youtu.be/X0ISIy9Bd7U?si=h-GydG4EzPTug6Jt
 
 <details>
 
-Step 1 Verify the deployment. 
+Step 1 Verify the deployment.  
 `k -n autoscale get deploy`
 
 You should see the apache-deployment, check the pod(s) exist  
@@ -731,10 +718,10 @@ spec:
 Apply the file  
 `k apply -f hpa.yaml`
 
-Step 3 Check the HPA is working. 
+Step 3 Check the HPA is working.  
 `k -n autoscale get hpa`
 
-We should see the reference is Deployment/apache-deployment. After a small amount of time we should see the CPU targets with values e.g. CPU: 1%/50%. 
+We should see the reference is Deployment/apache-deployment. After a small amount of time we should see the CPU targets with values e.g. CPU: 1%/50%.  
 
 </details>
 
@@ -797,8 +784,7 @@ cat ./Question-12/Questions.bash
 A user accidentally deleted the MariaDB Deployment in the mariadb namespace. The deployment was configured with persistent storage. Your responsibility is to re-establish the deployment while ensuring data is preserved by reusing the available PersistentVolume.
 
 Task: 
-A PersistentVolume already exists and is retained for reuse. Only one PV exists
-Create a Persistent Volume Claim (PVC) named mariadb in the mariadb namespace with the spec:
+A PersistentVolume already exists and is retained for reuse. Only one PV exists. Create a Persistent Volume Claim (PVC) named mariadb in the mariadb namespace with the spec:
 
 Access Mode = ReadWriteOnce  
 Storage = 250Mi
@@ -869,7 +855,7 @@ This should show as bound with mariadb claim name
 `cp ~/mariadb-deploy.yaml mariadb-deploy.yaml`  
 `vim maria-deploy.yaml`
 
-Step 4 Ensure the deployment looks as expected and specifically it uses your PVC  
+Step 4 Ensure the deployment uses your PVC.  
 ```yaml
 volumes:
         - name: mariadb-storage
@@ -887,7 +873,7 @@ Pod should be running, we want to check it is using the PVC
 `k -n mariadb describe po`
 
 We should see this:  
-```
+```bash
 Volumes:
   mariadb-storage:
     Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
@@ -923,22 +909,6 @@ Video lnk: https://youtu.be/u3kUI9lFPWE?si=Pkq74-rfFEp6dmfd
 Step 1 install and start cri-dockerd. First we need to use dpkg to install the package  
 `wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.20/cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb`
 
-Find installation file  
-`ls -l | grep cri-dockerd`
-
-install. 
-`sudo dpkg -i cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb`
-
-Enable the service. 
-`sudo systemctl enable --now cri-docker.service`
-
-Start the service  
-`sudo systemctl start cri-docker.service`
-
-Verify the service is running  
-`sudo systemctl status cri-docker.service`  
-It should show as active (running)
-
 Step 2 set the system parameters. Run the following commands to set the parameters
 
 sudo sysctl -w net.bridge.bridge-nf-call-iptables=1  
@@ -947,7 +917,7 @@ sudo sysctl -w net.ipv4.ip_forward=1
 sudo sysctl -w net.ipv4.ip_forward=1  
 
 This isn't persistent however so would be lost on reboot, to make it persistent  
-`vim /etc/sysctl.d/kube.conf`
+`vim /etc/sysctl.d/zzcka.conf`
 
 add the config  
 ```
@@ -959,6 +929,14 @@ net.netfilter.nf_conntrack_max=131072
 
 Check the output and ensure it is correct. 
 `sudo sysctl --system`
+
+Step 3 - install the CRD.  
+
+`sudo dpkg -i cri-dockerd_0.3.20.3-0.debian-bullseye_amd64.deb`  
+`sudo systemctl enable --now dockerd.service`  
+`sudo systemctl start dockerd.service`  
+`sudo systemctl status dockerd.system`  
+`q` to exit
 
 You may need to add/edit files in the /etc/sysctl.d directory, if you create a file and there are still overrides check to see if there re additional conf files there. You can give your config a lexically later name e.g. zz-cridocker.conf so it is ran last or you can edit those values in the other files.
 
@@ -994,10 +972,10 @@ We can also go to the following directory for the pod logs
 The pod logs tell us there is an issue connecting to 127.0.0.1:2380  
 `vim /etc/kubernetes/manifests/kube-apiserver.yaml`
 
-Inspect the yaml, we can see there is an issue. 
+Inspect the yaml, we can see there is an issue.  
 `--etcd-servers=https://127.0.0.1:2380`
 
-This is the incorrect port of the etcd server it should be. 
+This is the incorrect port of the etcd server it should be.  
 `--etcd-servers=https://127.0.0.1:2379`
 
 Update the file and wait for the pods to come up  
@@ -1010,7 +988,7 @@ One issue mentioned is that after this the kube-scheduler is down, you may need 
 `k -n kube-system describe pod 'kube-scheduler-pod-name'`  
 `k -n kube-system logs 'kube-scheduler-pod-name'`  
 
-Usual errors will relate to not being able to connect to the API server or an incorrect config path, `sudo vim /etc/kubernetes/manifests/kube-scheduler.yaml`
+Usual errors will relate to not being able to connect to the API server or an incorrect config path, `sudo vim /etc/kubernetes/manifests/kube-scheduler.yaml`  
 
 Key things to check:  
 --kubeconfig points to `/etc/kubernetes/scheduler.conf`
@@ -1257,3 +1235,4 @@ Should continue to work.
 ---
 
 [back to main](../../README.md)
+ 
