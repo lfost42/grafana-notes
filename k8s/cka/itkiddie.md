@@ -552,7 +552,7 @@ Find the NodeIP:
 Find the NodePort:  
 `k -n echo-sound get svc`
 
-`curl NODEIP:NODEPORT/echo`
+`curl -H "Host: gateway.web.k8s.local/echo" http://<NodeIP>:<NodePort>`
 
 Example Output  
 
@@ -582,6 +582,10 @@ Request Headers:
 Request Body:
         -no body in request-
 ```
+
+You can also get the same by writing to the /etc/hosts file:  
+`echo '<NodeIP> gateway.web.k8s.local'`  
+`curl gateway.web.k8s.local:<NodePort>/echo`
 
 </details>
 
