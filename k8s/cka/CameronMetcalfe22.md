@@ -500,13 +500,13 @@ Video lnk: https://youtu.be/mtORnV8AlI4?si=6fZq-yd8Sezg0a7v
 <details>
 
 Step 1 Expose the deployment with the given features  
-`k -n echo-sound get deploy`. 
+`k -n echo-sound get deploy`  
 `k -n echo-sound expose deploy echo --name echo-service --type NodePort --port 8080 --target-port 8080`
 
-Check the service has been created. 
+Check the service has been created.  
 `k -n echo-sound get svc`
 
-Step 2 Create the ingress. Use the docs for a template. 
+Step 2 Create the ingress. Use the docs for a template.  
 `vim ingress.yaml`
 
 ```yaml
