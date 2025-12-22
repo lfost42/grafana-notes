@@ -28,9 +28,9 @@ I'm currently working towards completing CKA. But these are the resources I'm us
 
 - [CKAD: Certified Kubernetes Application Developer](https://www.credly.com/badges/2c5458e2-0c2f-4458-9ec2-401355ee6539)
 - [KCNA: Kubernetes and Cloud Native Associate](https://www.credly.com/badges/233c3dab-168a-440d-a621-e4ffe65ab361/linked_in?t=t6u03c)
-- CKA: Certified Kubernetes Administrator - in progress ...
-- KCSA: Kubernetes and Cloud Native Security Associate
-- CKS: Certified Kubernetes Security Specialist 
+- [CKA: Certified Kubernetes Administrator](https://www.credly.com/badges/04f59b9e-8a04-4ba4-b441-1fda96a08faa)
+- KCSA: Kubernetes and Cloud Native Security Associate (in progress)
+- CKS: Certified Kubernetes Security Specialist (in progress)
 
 ---
 
